@@ -39,10 +39,16 @@
     h1 { font-size: 2.2rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
     p.sub { color: var(--muted); font-size: 1rem; line-height: 1.5; }
     .box { background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(12px); border-radius: 16px; padding: 24px; width: 100%; max-width: 600px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-    .input-group { display: flex; gap: 8px; flex-direction: column; }
-    input[type="text"] { width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    
+    .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 12px; }
+    input[type="text"] { width: 100%; padding: 14px 85px 14px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
     input[type="text"]:focus { border-color: #ff3366; }
-    .btn { padding: 14px 20px; font-size: 1rem; font-weight: 700; border-radius: 10px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s, opacity 0.2s; display: flex; justify-content: center; align-items: center; }
+    
+    .paste-btn { position: absolute; right: 8px; background: rgba(255, 255, 255, 0.12); border: 1px solid var(--border); color: #fff; padding: 7px 12px; border-radius: 7px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 4px; }
+    .paste-btn:hover { background: rgba(255, 255, 255, 0.22); }
+    .paste-btn:active { transform: scale(0.96); }
+
+    .btn { width: 100%; padding: 14px 20px; font-size: 1rem; font-weight: 700; border-radius: 10px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s, opacity 0.2s; display: flex; justify-content: center; align-items: center; }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     #result { margin-top: 24px; display: none; text-align: center; }
@@ -59,16 +65,20 @@
   </header>
 
   <main class="box">
-    <div class="input-group">
-      <input type="text" id="videoUrl" placeholder="Paste Instagram link here (e.g. https://www.instagram.com/reel/...)" autocomplete="off">
-      <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
+    <div class="input-wrapper">
+      <input type="text" id="videoUrl" placeholder="Paste Instagram link here..." autocomplete="off">
+      <button type="button" class="paste-btn" onclick="handlePaste()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+        Paste
+      </button>
     </div>
+    <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
 
     <div id="result">
       <div class="preview-card">
         <img id="thumbImg" src="" alt="Video Preview">
         <h3 id="videoTitle" style="font-size:1rem; margin-bottom:14px; font-weight:600;"></h3>
-        <button class="btn" style="width:100%;" id="dlBtn" onclick="triggerDownload()">Download HD MP4</button>
+        <button class="btn" id="dlBtn" onclick="triggerDownload()">Download HD MP4</button>
       </div>
     </div>
   </main>
@@ -79,8 +89,21 @@
 
   <script>
     let activeDownloadUrl = "";
-    // Adsterra Smartlink integrated
+    // Adsterra Smartlink
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
+
+    async function handlePaste() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById("videoUrl").value = text;
+        }
+      } catch (err) {
+        // Fallback for browsers asking permission
+        const manual = prompt("Paste your link here:");
+        if (manual) document.getElementById("videoUrl").value = manual;
+      }
+    }
 
     async function handleFetch() {
       const urlInput = document.getElementById("videoUrl").value.trim();
@@ -124,10 +147,10 @@
     function triggerDownload() {
       if (!activeDownloadUrl) return;
 
-      // 1. Monetization: Background ad window trigger
+      // Monetization: Background ad window trigger
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // 2. Direct Video Download trigger
+      // Direct Video Download trigger
       const a = document.createElement("a");
       a.href = activeDownloadUrl;
       a.target = "_blank";
