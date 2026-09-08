@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Ultimate Multi-Platform Global SEO & Universal Targeting -->
-  <title>AllSavePro - All-in-One Video Downloader - Download Instagram, Facebook, TikTok, YouTube & Pinterest HD</title>
+  <title>AllSavePro™ — Universal HD Video Downloader & Saver</title>
   <meta name="description" content="The ultimate universal video downloader. Instantly save videos, reels, and stories from Instagram, Facebook, TikTok, YouTube, and Pinterest in original 1080p Full HD quality. Fast, 100% free, and safe online media saver for all platforms.">
   <meta name="keywords" content="instagram video downloader, facebook video downloader, youtube video downloader, tiktok video downloader, pinterest video downloader, all in one video downloader, social media video saver, online hd video downloader, insta fast downloader">
   
@@ -21,25 +21,78 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="AllSavePro - All-in-One Universal Video Downloader - HD Media Saver">
   <meta property="og:description" content="Download videos, reels, and clips from Instagram, Facebook, TikTok, YouTube, and Pinterest worldwide in original Full HD quality without watermarks.">
+  <meta property="og:image" content="https://allsavepro.com/logo.png">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:title" content="AllSavePro - All-in-One Universal Video Downloader">
   <meta property="twitter:description" content="Save media from any social platform globally in 1080p HD quality with zero logs.">
+  <meta property="twitter:image" content="https://allsavepro.com/logo.png">
 
-  <!-- Google Structured Data (JSON-LD Software Schema for Multi-Platform Authority) -->
+  <!-- Favicon & Search Result Logo Integration -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png">
+  <link rel="apple-touch-icon" href="/logo.png">
+
+  <!-- Advanced Google Rich Results & Brand Authority Schema (Ad-Like SERP Display) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "AllSavePro",
-    "applicationCategory": "UtilitiesApplication",
-    "operatingSystem": "All",
-    "browser": "Requires JavaScript. Works on Chrome, Safari, Firefox, Edge, Opera",
-    "description": "Global web-based multi-platform video downloader for Instagram, Facebook, TikTok, YouTube, and Pinterest offering original 1080p HD quality.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://allsavepro.com/#organization",
+        "name": "AllSavePro",
+        "url": "https://allsavepro.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://allsavepro.com/#logo",
+          "url": "https://allsavepro.com/logo.png",
+          "caption": "AllSavePro"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://allsavepro.com/#website",
+        "url": "https://allsavepro.com/",
+        "name": "AllSavePro",
+        "publisher": {
+          "@id": "https://allsavepro.com/#organization"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "name": "AllSavePro - Universal Video Downloader",
+        "url": "https://allsavepro.com/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "description": "Global web-based multi-platform video downloader for Instagram, Facebook, TikTok, YouTube, and Pinterest.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to download videos with AllSavePro?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Copy any video or reel link from social media, paste it into the AllSavePro search box, and click Get Download Link to save it instantly in 1080p HD."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is AllSavePro video downloader free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, AllSavePro is 100% free, requires no account login, and supports unlimited high-definition downloads across all devices."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 
@@ -507,12 +560,10 @@
     // ==========================================
 
     function applyDynamicBranding() {
-      document.title = `${APP_NAME} - Universal HD Video Downloader`;
       document.querySelectorAll('.app-brand-name').forEach(el => {
         el.textContent = APP_NAME;
       });
 
-      // Pure Global English Subtitle Setup
       const subEl = document.getElementById("dynamicSubtitle");
       subEl.textContent = "Save Reels, Videos, and Stories from Instagram, Facebook, TikTok, YouTube & Pinterest in original Full HD quality without watermarks.";
     }
