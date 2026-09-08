@@ -439,7 +439,7 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Pure Native Action Button: Triggers Ad and Native Browser Prompt Instantly -->
+          <!-- Pure Native Action Button with Safe Timed Sequence -->
           <button class="btn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
@@ -487,7 +487,7 @@
             <rect x="40" y="25" width="120" height="22" rx="5" fill="#02040a" stroke="#00f3ff"/>
             <text x="48" y="39" fill="#fff" font-size="8" font-family="sans-serif">social-link/xyz...</text>
             <rect x="40" y="54" width="120" height="22" rx="5" fill="url(#stepGrad)"/>
-            <text x="66" y="68" fill="#fff" font-size="8" font-weight="bold" font-family="sans-serif">Get Download Link</text>
+            <text x="66" y="68" fill="#fff" font-weight="bold" font-family="sans-serif">Get Download Link</text>
             <defs>
               <linearGradient id="stepGrad" x1="0" y1="0" x2="1" y2="0">
                 <stop stop-color="#00f3ff"/>
@@ -720,7 +720,7 @@
       btn.innerText = "Processing HD Stream...";
 
       try {
-        const response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
+        The response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
         const data = await response.json();
 
         if (response.ok && data.success) {
@@ -748,36 +748,39 @@
       }
     }
 
-    // Pure Native Download Routing with Immediate First-Click Ad Trigger
+    // Native Download Routing with Controlled Time-Delay Sequence
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // 1. Immediately open the jumping ad link on the first direct user touch
+      // 1. First Action (Immediate): Open the jumping ad link instantly under direct user touch to prevent popup blocker restrictions
       window.open(AD_LINK, "_blank");
 
-      // 2. Simultaneously trigger the stream endpoint to force the browser's native download prompt
-      const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
+      // 2. Second Action (Controlled Delay): Give the ad page 700ms to open and settle properly, 
+      // then smoothly trigger the browser's native download prompt without flashing or disappearing.
+      setTimeout(() => {
+        const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
 
-      if (isAppleDevice()) {
-        window.location.href = streamEndpoint;
-      } else {
-        const dlFrame = document.createElement("iframe");
-        dlFrame.style.display = "none";
-        dlFrame.src = streamEndpoint;
-        document.body.appendChild(dlFrame);
+        if (isAppleDevice()) {
+          window.location.href = streamEndpoint;
+        } else {
+          const dlFrame = document.createElement("iframe");
+          dlFrame.style.display = "none";
+          dlFrame.src = streamEndpoint;
+          document.body.appendChild(dlFrame);
 
-        const a = document.createElement("a");
-        a.href = streamEndpoint;
-        a.setAttribute("download", "Instagram_Video.mp4");
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
+          const a = document.createElement("a");
+          a.href = streamEndpoint;
+          a.setAttribute("download", "Instagram_Video.mp4");
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
 
-        setTimeout(() => {
-          if (dlFrame.parentNode) document.body.removeChild(dlFrame);
-          if (a.parentNode) document.body.removeChild(a);
-        }, 5000);
-      }
+          setTimeout(() => {
+            if (dlFrame.parentNode) document.body.removeChild(dlFrame);
+            if (a.parentNode) document.body.removeChild(a);
+          }, 5000);
+        }
+      }, 700);
     }
 
     function resetDownloader() {
