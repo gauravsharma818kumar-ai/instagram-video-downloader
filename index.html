@@ -42,7 +42,7 @@
     .thumb-container img { width: 100%; max-height: 350px; border-radius: 10px; object-fit: cover; }
     .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.75); color: var(--success); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
     
-    .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; }
+    .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     
     .btn-secondary { margin-top: 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; width: 100%; font-weight: 600; }
     
@@ -131,10 +131,10 @@
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
         } else {
-          alert(data.detail || "Could not fetch video. Please make sure the account is public.");
+          alert(data.detail || "Could not fetch video. Please check the link.");
         }
       } catch (err) {
-        alert("Server connection failed. Please try again.");
+        alert("Server error. Please try again.");
       } finally {
         btn.disabled = false;
         btn.innerText = "Get Download Link";
@@ -144,12 +144,28 @@
     function triggerSmartAction() {
       if (!activeMediaUrl) return;
 
-      // 1. ADSTERRA JUMP: नया टैब तुरंत ऐड के लिए खुलेगा
+      // 1. ADSTERRA JUMP (पहली मिलीसेकंड में नए टैब में खुलेगा - कभी ब्लॉक नहीं होगा)
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // 2. FORCED FILE DOWNLOAD: हमारे सर्वर से सीधे क्रोम में फ़ाइल डाउनलोड होना शुरू हो जाएगी
-      const forcedDownloadUrl = `/api/download?url=${encodeURIComponent(activeMediaUrl)}`;
-      window.location.href = forcedDownloadUrl;
+      // 2. NATIVE CROSS-PLATFORM DOWNLOAD
+      // अदृश्य डाउनलोड लिंक
+      const dlLink = document.createElement("a");
+      dlLink.href = activeMediaUrl;
+      dlLink.setAttribute("download", "instagram_video.mp4");
+      dlLink.setAttribute("target", "_self");
+      document.body.appendChild(dlLink);
+      dlLink.click();
+
+      // Safari (iOS) बैकअप फ़ॉल-थ्रू: अगर Safari ऐंकर टैग को मिस करे तो इनविजिबल iframe फ़ाइल ट्रिगर करेगा
+      const frame = document.createElement("iframe");
+      frame.style.display = "none";
+      frame.src = activeMediaUrl;
+      document.body.appendChild(frame);
+
+      setTimeout(() => {
+        document.body.removeChild(dlLink);
+        document.body.removeChild(frame);
+      }, 3000);
     }
 
     function resetDownloader() {
