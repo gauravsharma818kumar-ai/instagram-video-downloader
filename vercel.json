@@ -15,8 +15,7 @@
       "dest": "/api/index.py"
     },
     {
-      "src": "/sitemap.xml",
-      "dest": "/sitemap.xml"
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
