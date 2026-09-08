@@ -255,7 +255,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- 🚀 होम स्क्रीन पर दोनों नेटिव बैनर दिखाने के लिए स्लॉट -->
+        <!-- 🚀 होम स्क्रीन नेटिव बैनर ऐड स्लॉट -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
@@ -387,6 +387,9 @@
     <p>© 2026 <span class="app-brand-name">InstaSaver Pro</span>. Fast, Private & Unlimited Video Downloader.</p>
   </footer>
 
+  <!-- 🚀 Social Bar Ad Script (Directly embedded for reliable loading) -->
+  <script src="https://pl31241468.profitableratecpmnetwork.com/bc/4a/fd/bc4afdeae10cc7f16c4e9628468c9434.js"></script>
+
   <script>
     // ==========================================
     // ⚙️ CENTRAL APP NAME CONFIGURATION
@@ -419,7 +422,7 @@
       iframe.scrolling = "no";
       iframe.frameBorder = "0";
       iframe.style.width = "100%";
-      iframe.style.height = "520px"; // दो बैनर के लिए पर्याप्त ऊंचाई
+      iframe.style.height = "520px";
       iframe.style.border = "none";
       iframe.style.overflow = "hidden";
       target.appendChild(iframe);
@@ -513,13 +516,6 @@
       }
     }
 
-    // 3. Social Bar Script Injector
-    function injectSocialBar() {
-      const s = document.createElement("script");
-      s.src = "https://pl31241468.profitableratecpmnetwork.com/bc/4a/fd/bc4afdeae10cc7f16c4e9628468c9434.js";
-      document.body.appendChild(s);
-    }
-
     // ऐप इनिशियलाइज़ेशन
     function setupAppEnvironment() {
       applyDynamicBranding();
@@ -531,9 +527,6 @@
 
       // होम स्क्रीन दोनों नेटिव बैनर लोड
       injectIsolatedNativeBanner("homeAdSlot");
-
-      // Social Bar लोड
-      injectSocialBar();
     }
 
     window.addEventListener('DOMContentLoaded', setupAppEnvironment);
