@@ -7,100 +7,109 @@
   <meta name="description" content="Download Instagram videos, reels, photos, and stories in high-definition (HD) MP4 for free. Super-fast, secure, and no login required.">
   <meta name="keywords" content="instagram video downloader, download instagram reels, insta story saver hd, fastest instagram downloader, save instagram video online free">
   <meta name="robots" content="index, follow">
-  
-  <!-- Structured Data for Search Engines -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Instagram Video Downloader",
-    "operatingSystem": "All",
-    "applicationCategory": "MultimediaApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  }
-  </script>
 
   <style>
     :root {
       --bg: #0b0f19;
-      --card: rgba(255, 255, 255, 0.05);
+      --card: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.1);
       --accent: linear-gradient(135deg, #ff3366, #ff6b3d, #c32aa3);
       --text: #f3f4f6;
       --muted: #9ca3af;
+      --success: #10b981;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    header { text-align: center; margin-top: 40px; margin-bottom: 30px; max-width: 650px; }
-    h1 { font-size: 2.2rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
-    p.sub { color: var(--muted); font-size: 1rem; line-height: 1.5; }
-    .box { background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(12px); border-radius: 16px; padding: 24px; width: 100%; max-width: 600px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
     
-    .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 12px; }
-    input[type="text"] { width: 100%; padding: 14px 85px 14px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    header { text-align: center; margin-top: 35px; margin-bottom: 24px; max-width: 600px; }
+    h1 { font-size: 2.2rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    p.sub { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+    
+    .box { background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(16px); border-radius: 20px; padding: 24px; width: 100%; max-width: 520px; box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+    
+    /* State 1: Input Box */
+    .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
+    input[type="text"] { width: 100%; padding: 16px 90px 16px 16px; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
     input[type="text"]:focus { border-color: #ff3366; }
     
-    .paste-btn { position: absolute; right: 8px; background: rgba(255, 255, 255, 0.12); border: 1px solid var(--border); color: #fff; padding: 7px 12px; border-radius: 7px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 4px; }
-    .paste-btn:hover { background: rgba(255, 255, 255, 0.22); }
-    .paste-btn:active { transform: scale(0.96); }
+    .paste-btn { position: absolute; right: 10px; background: rgba(255, 255, 255, 0.12); border: 1px solid var(--border); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 5px; }
+    .paste-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .paste-btn:active { transform: scale(0.95); }
 
-    .btn { width: 100%; padding: 14px 20px; font-size: 1rem; font-weight: 700; border-radius: 10px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s, opacity 0.2s; display: flex; justify-content: center; align-items: center; }
+    .btn { width: 100%; padding: 15px 20px; font-size: 1.05rem; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s, opacity 0.2s; display: flex; justify-content: center; align-items: center; }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    #result { margin-top: 24px; display: none; text-align: center; }
-    .preview-card { background: rgba(0,0,0,0.25); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
-    .preview-card img { max-width: 100%; max-height: 280px; border-radius: 8px; object-fit: cover; margin-bottom: 14px; }
-    footer { margin-top: auto; padding: 20px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
+    
+    /* State 2: Result Box */
+    #resultSection { display: none; text-align: center; }
+    .preview-card { background: rgba(0,0,0,0.3); border-radius: 14px; padding: 16px; border: 1px solid var(--border); }
+    .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 14px; }
+    .thumb-container img { width: 100%; max-height: 350px; border-radius: 10px; object-fit: cover; }
+    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.75); color: var(--success); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); }
+    
+    .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+    
+    .reset-link { margin-top: 16px; display: inline-block; color: var(--muted); font-size: 0.9rem; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+    .reset-link:hover { color: #fff; }
+    
+    footer { margin-top: auto; padding: 25px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Instagram Video Downloader</h1>
-    <p class="sub">Download reels, videos, and media instantly in full HD quality. Safe, private, and unlimited.</p>
+    <p class="sub">Download reels, videos, and stories instantly in full HD. 100% Free & Unlimited.</p>
   </header>
 
   <main class="box">
-    <div class="input-wrapper">
-      <input type="text" id="videoUrl" placeholder="Paste Instagram link here..." autocomplete="off">
-      <button type="button" class="paste-btn" onclick="handlePaste()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-        Paste
-      </button>
+    <!-- 1. SEARCH SECTION (Input + Initial Button) -->
+    <div id="searchSection">
+      <div class="input-wrapper">
+        <input type="text" id="videoUrl" placeholder="Paste Instagram video/reel link..." autocomplete="off">
+        <button type="button" class="paste-btn" onclick="handlePaste()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+          Paste
+        </button>
+      </div>
+      <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
     </div>
-    <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
 
-    <div id="result">
+    <!-- 2. RESULT SECTION (Preview + Monitized Download Only) -->
+    <div id="resultSection">
       <div class="preview-card">
-        <img id="thumbImg" src="" alt="Video Preview">
-        <h3 id="videoTitle" style="font-size:1rem; margin-bottom:14px; font-weight:600;"></h3>
-        <button class="btn" id="dlBtn" onclick="triggerDownload()">Download HD MP4</button>
+        <div class="thumb-container">
+          <img id="thumbImg" src="" alt="Video Preview">
+          <span class="quality-badge">1080p Full HD</span>
+        </div>
+        <div class="video-info" id="videoTitle">Instagram Reel</div>
+        
+        <button class="btn" id="dlBtn" onclick="executeSmartDownload()">
+          Download HD MP4
+        </button>
+        
+        <div>
+          <a class="reset-link" onclick="resetDownloader()">← Download Another Video</a>
+        </div>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>© 2026 Insta Video Downloader. Zero logs, high-speed direct stream.</p>
+    <p>© 2026 Insta Video Downloader. Fast, safe & direct streams.</p>
   </footer>
 
   <script>
-    let activeDownloadUrl = "";
-    // Adsterra Smartlink
+    let activeMediaUrl = "";
+    // Adsterra Smartlink (Jumping Monetization Link)
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
     async function handlePaste() {
       try {
         const text = await navigator.clipboard.readText();
-        if (text) {
-          document.getElementById("videoUrl").value = text;
-        }
+        if (text) document.getElementById("videoUrl").value = text;
       } catch (err) {
-        // Fallback for browsers asking permission
-        const manual = prompt("Paste your link here:");
+        const manual = prompt("Paste your Instagram link here:");
         if (manual) document.getElementById("videoUrl").value = manual;
       }
     }
@@ -108,56 +117,75 @@
     async function handleFetch() {
       const urlInput = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
-      const resultDiv = document.getElementById("result");
 
       if (!urlInput) {
-        alert("Please paste a valid link first.");
+        alert("Please paste a valid Instagram link first.");
         return;
       }
 
       btn.disabled = true;
-      btn.innerText = "Processing...";
-      resultDiv.style.display = "none";
+      btn.innerText = "Extracting HD Video...";
 
       try {
         const response = await fetch(`/api/info?url=${encodeURIComponent(urlInput)}`);
         const data = await response.json();
 
         if (response.ok && data.success) {
-          activeDownloadUrl = data.download_url;
+          activeMediaUrl = data.download_url;
           document.getElementById("videoTitle").innerText = data.title || "Instagram Video";
+          
           if (data.thumbnail) {
             document.getElementById("thumbImg").src = data.thumbnail;
-            document.getElementById("thumbImg").style.display = "inline-block";
-          } else {
-            document.getElementById("thumbImg").style.display = "none";
           }
-          resultDiv.style.display = "block";
+
+          // UI Flow: Search Section hide, Result Section Show
+          document.getElementById("searchSection").style.display = "none";
+          document.getElementById("resultSection").style.display = "block";
         } else {
-          alert(data.detail || "Unable to extract video. Please check the link.");
+          alert(data.detail || "Could not fetch video. Please make sure the account is public.");
         }
       } catch (err) {
-        alert("Network error. Please try again.");
+        alert("Server connection failed. Please try again.");
       } finally {
         btn.disabled = false;
         btn.innerText = "Get Download Link";
       }
     }
 
-    function triggerDownload() {
-      if (!activeDownloadUrl) return;
+    function executeSmartDownload() {
+      if (!activeMediaUrl) return;
 
-      // Monetization: Background ad window trigger
-      window.open(ADSTERRA_DIRECT_LINK, "_blank");
+      // 1. ADSTERRA JUMP: Opens directly in a clean new tab instantly (Passes Chrome pop-up blocker)
+      const adWindow = window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // Direct Video Download trigger
-      const a = document.createElement("a");
-      a.href = activeDownloadUrl;
-      a.target = "_blank";
-      a.download = "instagram_video.mp4";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      // 2. INTERNAL CHROME BACKGROUND DOWNLOAD:
+      // Using an invisible iframe pointing directly to the download stream
+      // This forces Chrome to capture it into the device's native Download Manager
+      const dlFrame = document.createElement("iframe");
+      dlFrame.style.display = "none";
+      dlFrame.src = activeMediaUrl;
+      document.body.appendChild(dlFrame);
+
+      // Fallback anchor tag click in background
+      const fallbackAnchor = document.createElement("a");
+      fallbackAnchor.href = activeMediaUrl;
+      fallbackAnchor.setAttribute("download", "instagram_video.mp4");
+      fallbackAnchor.style.display = "none";
+      document.body.appendChild(fallbackAnchor);
+      fallbackAnchor.click();
+
+      // Clean memory
+      setTimeout(() => {
+        if (dlFrame) document.body.removeChild(dlFrame);
+        if (fallbackAnchor) document.body.removeChild(fallbackAnchor);
+      }, 4000);
+    }
+
+    function resetDownloader() {
+      document.getElementById("videoUrl").value = "";
+      document.getElementById("resultSection").style.display = "none";
+      document.getElementById("searchSection").style.display = "block";
+      activeMediaUrl = "";
     }
   </script>
 </body>
