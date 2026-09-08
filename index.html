@@ -4,24 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VidSaver Pro - Universal Multi-Platform HD Video Downloader</title>
-  <meta name="description" content="Download high-definition videos from Instagram, Facebook, and more without watermarks. Ultra-fast, secure, and compatible with all devices.">
+  <meta name="description" content="Download high-definition videos from Instagram Reels, Stories, Facebook, and more without watermarks. 100% free, fast, and secure.">
   <meta name="robots" content="index, follow">
 
   <style>
     :root {
-      --bg: #070a13;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --card-hover: rgba(255, 255, 255, 0.05);
+      --bg: #0b0f19;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-hover: rgba(255, 255, 255, 0.07);
       --border: rgba(255, 255, 255, 0.08);
       --accent: linear-gradient(135deg, #ff3366, #ff6b3d, #c32aa3);
-      --accent-glow: rgba(255, 51, 102, 0.25);
+      --accent-glow: rgba(255, 51, 102, 0.3);
       --text: #f9fafb;
       --muted: #9ca3af;
       --success: #10b981;
       --radius: 16px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     
     body {
       background-color: var(--bg);
@@ -30,87 +30,89 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 16px;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 10% 20%, rgba(195, 42, 163, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(255, 107, 61, 0.08) 0%, transparent 40%);
+        radial-gradient(circle at 15% 15%, rgba(195, 42, 163, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(255, 107, 61, 0.1) 0%, transparent 45%);
     }
 
-    /* Top Navbar */
+    /* Navbar */
     .navbar {
       width: 100%;
-      max-width: 1140px;
-      height: 70px;
+      max-width: 1180px;
+      height: 75px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
-    .brand { font-size: 1.3rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; }
-    .nav-badge { background: rgba(255, 255, 255, 0.06); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; color: var(--muted); border: 1px solid var(--border); }
+    .brand { font-size: 1.4rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; }
+    .nav-badge { background: rgba(255, 255, 255, 0.06); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; color: var(--muted); border: 1px solid var(--border); }
 
-    /* Layout Wrapper: Mobile me 1 column, Desktop me 2 columns */
+    /* Core Content Grid */
     .main-container {
       width: 100%;
-      max-width: 1140px;
+      max-width: 1180px;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 30px;
-      margin-bottom: 60px;
+      gap: 28px;
+      margin-bottom: 40px;
     }
 
-    @media (min-width: 900px) {
+    @media (min-width: 920px) {
       .main-container {
-        grid-template-columns: 1.2fr 0.8fr;
-        align-items: start;
+        grid-template-columns: 1.35fr 0.85fr;
+        align-items: stretch;
       }
     }
 
-    /* Core Box (Left Column on Desktop) */
+    /* Primary Card */
     .box {
       background: var(--card-bg);
       border: 1px solid var(--border);
       backdrop-filter: blur(20px);
       border-radius: var(--radius);
-      padding: 30px;
+      padding: 32px;
       box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .header-text { margin-bottom: 24px; }
-    h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 10px; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 10px; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     p.sub { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
 
-    /* Input Styling */
+    /* Input & Action Buttons */
     .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 16px; }
     input[type="text"] {
       width: 100%;
-      padding: 18px 100px 18px 18px;
-      background: rgba(0, 0, 0, 0.4);
+      padding: 18px 105px 18px 18px;
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--border);
       border-radius: 12px;
       color: #fff;
       font-size: 1rem;
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s;
     }
-    input[type="text"]:focus { border-color: #ff3366; box-shadow: 0 0 15px var(--accent-glow); }
+    input[type="text"]:focus { border-color: #ff3366; box-shadow: 0 0 16px var(--accent-glow); }
 
     .paste-btn {
       position: absolute;
-      right: 12px;
-      background: rgba(255, 255, 255, 0.1);
+      right: 10px;
+      background: rgba(255, 255, 255, 0.12);
       border: 1px solid var(--border);
       color: #fff;
-      padding: 8px 16px;
+      padding: 9px 16px;
       border-radius: 8px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
     }
-    .paste-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .paste-btn:hover { background: rgba(255, 255, 255, 0.22); }
 
     .btn {
       width: 100%;
@@ -122,7 +124,7 @@
       cursor: pointer;
       color: white;
       background: var(--accent);
-      transition: transform 0.1s, opacity 0.2s;
+      transition: transform 0.1s;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -130,7 +132,7 @@
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* Result Preview Section */
+    /* Result Preview Area */
     #resultSection { display: none; text-align: center; }
     .preview-card { background: rgba(0,0,0,0.35); border-radius: 14px; padding: 20px; border: 1px solid var(--border); }
     .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 16px; border-radius: 12px; overflow: hidden; }
@@ -139,9 +141,8 @@
     
     .video-info { font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     .btn-secondary { margin-top: 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; width: 100%; font-weight: 600; }
-    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
 
-    /* Ad Container (Responsive & Centered) */
+    /* Centered Ad Slot */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
@@ -152,12 +153,8 @@
       overflow: hidden;
     }
 
-    /* Right Column: Platform Capabilities Card (Desktop Space Filler) */
-    .side-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+    /* Right Panel (Desktop Balance) */
+    .side-panel { display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
     .info-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -165,8 +162,8 @@
       padding: 24px;
       backdrop-filter: blur(15px);
     }
-    .info-card h3 { font-size: 1.15rem; margin-bottom: 14px; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .platform-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .info-card h3 { font-size: 1.1rem; margin-bottom: 14px; color: #fff; }
+    .platform-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .platform-item {
       display: flex;
       align-items: center;
@@ -175,59 +172,104 @@
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--border);
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
-    .platform-name { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-    .status-tag { font-size: 0.75rem; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+    .status-tag { font-size: 0.72rem; color: var(--success); background: rgba(16, 185, 129, 0.12); padding: 3px 8px; border-radius: 4px; font-weight: 700; }
 
-    /* Lower Section: Features Grid (Makes the page look filled & authoritative) */
+    /* Features Row */
     .features-grid {
       width: 100%;
-      max-width: 1140px;
+      max-width: 1180px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
     }
     .feature-box {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 24px;
-      text-align: left;
+      transition: background 0.2s;
     }
+    .feature-box:hover { background: var(--card-hover); }
     .feature-icon { font-size: 1.8rem; margin-bottom: 12px; }
-    .feature-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .feature-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .feature-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+    /* Step Guide Section (Fills Page Body) */
+    .section-container {
+      width: 100%;
+      max-width: 1180px;
+      margin-bottom: 45px;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+    }
+    .step-number {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: var(--accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .step-text { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+
+    /* FAQ Section */
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 22px;
+    }
+    .faq-q { font-weight: 600; color: #fff; margin-bottom: 6px; font-size: 0.95rem; }
+    .faq-a { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
 
     footer {
       width: 100%;
-      max-width: 1140px;
+      max-width: 1180px;
       border-top: 1px solid var(--border);
-      padding: 30px 0;
+      padding: 30px 0 40px 0;
       color: var(--muted);
       font-size: 0.85rem;
       text-align: center;
-      margin-top: auto;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navbar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="brand">⚡ VidSaver Pro</div>
     <div class="nav-badge">v2.4 Core Online</div>
   </nav>
 
-  <!-- 2-Column Responsive Layout -->
+  <!-- Main Conversion Area -->
   <div class="main-container">
     
-    <!-- Left Column: Primary Downloader Engine -->
+    <!-- Left Box: Downloader Engine -->
     <main class="box">
       <div class="header-text">
         <h1>Universal Video Downloader</h1>
-        <p class="sub">Download high-definition videos instantly from Instagram Reels, Facebook, and more directly to your device storage.</p>
+        <p class="sub">Download high-definition videos instantly from Instagram Reels, Facebook, and more directly to device storage without watermarks.</p>
       </div>
 
       <!-- Search Section -->
@@ -263,26 +305,26 @@
       </div>
     </main>
 
-    <!-- Right Column: Supported Media & Device Status (Fills Empty Desktop Space) -->
+    <!-- Right Box: Supported Platforms & Optimization -->
     <aside class="side-panel">
       <div class="info-card">
         <h3>Supported Media Types</h3>
         <ul class="platform-list">
           <li class="platform-item">
-            <span class="platform-name">📸 Instagram Reels & Posts</span>
+            <span>📸 Instagram Reels & Posts</span>
             <span class="status-tag">Active</span>
           </li>
           <li class="platform-item">
-            <span class="platform-name">📘 Facebook Watch & Shorts</span>
+            <span>📘 Facebook Watch & Shorts</span>
             <span class="status-tag">Active</span>
           </li>
           <li class="platform-item">
-            <span class="platform-name">⏱️ Instagram Stories</span>
+            <span>⏱️ Instagram Stories</span>
             <span class="status-tag">Active</span>
           </li>
           <li class="platform-item">
-            <span class="platform-name">🎵 Original Audio MP3</span>
-            <span class="status-tag">High-Fi</span>
+            <span>🎵 Original Audio MP3</span>
+            <span class="status-tag">100% Free</span>
           </li>
         </ul>
       </div>
@@ -290,7 +332,7 @@
       <div class="info-card">
         <h3>System Optimization</h3>
         <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">
-          Hardware-accelerated processing engine auto-formats files natively for Apple iOS Photos & Android Downloads folder without third-party apps.
+          Hardware-accelerated processing engine auto-formats files natively for Apple iOS Photos and Android Downloads folder without third-party apps.
         </p>
         <div style="font-size: 0.8rem; color: var(--success); font-weight: 600;">
           ● End-to-End SSL Proxy Encryption
@@ -300,12 +342,12 @@
 
   </div>
 
-  <!-- Bottom Section: 3-Pillar Enterprise Features -->
+  <!-- Features Grid -->
   <section class="features-grid">
     <div class="feature-box">
       <div class="feature-icon">🚀</div>
       <div class="feature-title">Ultra-Fast Processing</div>
-      <div class="feature-desc">Cloud proxy extracts direct media stream urls in under 200ms without server bandwidth throttling.</div>
+      <div class="feature-desc">Cloud proxy extracts direct media stream URLs in under 200ms without server bandwidth throttling.</div>
     </div>
     <div class="feature-box">
       <div class="feature-icon">💎</div>
@@ -315,7 +357,48 @@
     <div class="feature-box">
       <div class="feature-icon">🔒</div>
       <div class="feature-title">100% Secure & Private</div>
-      <div class="feature-desc">We never store your downloaded files or personal browsing logs. Every request is processed anonymously.</div>
+      <div class="feature-desc">No personal browsing logs are stored. Every video request is processed anonymously through our proxy.</div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Guide Section (Solves Empty Page Issue) -->
+  <section class="section-container">
+    <h2 class="section-title">How to Download Videos in 3 Easy Steps</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <h3 style="color:#fff; font-size:1.05rem; margin-bottom:6px;">Copy Video Link</h3>
+        <p class="step-text">Open Instagram or Facebook, click share on the reel or post, and copy the link to your clipboard.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h3 style="color:#fff; font-size:1.05rem; margin-bottom:6px;">Paste into VidSaver</h3>
+        <p class="step-text">Paste the copied URL into the box above and tap "Get Download Link" to retrieve original HD streams.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h3 style="color:#fff; font-size:1.05rem; margin-bottom:6px;">Save to Device</h3>
+        <p class="step-text">Click "Download HD MP4" to save the file directly to your camera roll or downloads folder.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section (Authoritative Structure) -->
+  <section class="section-container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Do I need to install any app or extension?</div>
+        <div class="faq-a">No. VidSaver Pro works entirely in your web browser across Android, iPhone, iPad, PC, and Mac without installations.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Are downloaded videos saved in maximum quality?</div>
+        <div class="faq-a">Yes. We deliver the original MP4 video stream uploaded by the creator, up to 1080p Full HD resolution.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is there a limit on how many videos I can download?</div>
+        <div class="faq-a">No. You can download unlimited videos completely free of charge.</div>
+      </div>
     </div>
   </section>
 
@@ -327,17 +410,17 @@
     let activeMediaUrl = "";
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
-    // 1. शुद्ध Apple/iOS हार्डवेयर डिटेक्शन (Strict Non-Apple Rule)
+    // 1. शुद्ध Apple/iOS डिटेक्शन
     function isAppleDevice() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // 2. सख्त नियम: सिर्फ Android/गैर-Apple होने पर ही Adsterra लोड होगा
+    // 2. सख्त नियम: केवल Android/non-Apple पर ही Adsterra लोड होगा
     function injectAndroidBanner() {
       if (isAppleDevice()) {
         const adSlot = document.getElementById("midAdSlot");
-        if (adSlot) adSlot.remove(); // iOS पर कंटेनर को DOM से पूरी तरह हटा देगा
+        if (adSlot) adSlot.remove();
         return;
       }
 
@@ -404,11 +487,10 @@
       }
     }
 
-    // 3. पृथक डाउनलोड निष्पादन
+    // 3. डाउनलोड रूटिंग
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // Smartlink विज्ञापन
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
       const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
