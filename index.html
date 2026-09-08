@@ -52,7 +52,7 @@
     .nav-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
     .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; }
 
-    /* Universal Hardware Compatibility Strip */
+    /* Universal Compatibility Indicator */
     .device-support-bar {
       display: flex;
       justify-content: center;
@@ -144,7 +144,7 @@
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
-      margin: 14px auto;
+      margin: 16px auto;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -155,7 +155,7 @@
     .content-section {
       width: 100%;
       max-width: 900px;
-      margin-bottom: 50px;
+      margin-bottom: 25px;
     }
     .section-header { text-align: center; margin-bottom: 28px; }
     .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
@@ -255,7 +255,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- HOME SCREEN ANDROID NATIVE AD (High CPM Slot) -->
+        <!-- 🚀 AD 1: पहली तस्वीर के अनुसार इनपुट बॉक्स और बटन के बीच वाला ऐड -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
@@ -270,9 +270,6 @@
           </div>
           
           <div class="video-info" id="videoTitle">Instagram Video</div>
-
-          <!-- RESULT SCREEN ANDROID NATIVE AD (Pre-Download Slot) -->
-          <div class="ad-slot-container" id="midAdSlot"></div>
           
           <button class="btn" id="dlBtn" onclick="routeOsSpecificDownload()">
             Download HD MP4
@@ -349,6 +346,9 @@
     </div>
   </section>
 
+  <!-- 🚀 AD 2: दूसरी तस्वीर के अनुसार STEP 3 के ठीक नीचे और WHY CHOOSE के ठीक ऊपर वाला ऐड -->
+  <div class="ad-slot-container" id="guideAdSlot"></div>
+
   <!-- Complete User Benefits & Privacy Protection Policy -->
   <section class="content-section">
     <div class="section-header">
@@ -389,7 +389,7 @@
 
   <script>
     // ==========================================
-    // ⚙️ CENTRAL APP NAME (नाम बदलना हो तो सिर्फ यहाँ बदलें)
+    // ⚙️ 1. CENTRAL APP NAME (नाम बदलना हो तो सिर्फ यहाँ बदलें)
     // ==========================================
     const APP_NAME = "InstaSaver Pro"; 
     // ==========================================
@@ -426,18 +426,21 @@
       target.appendChild(script);
     }
 
-    // ऐप इनिशियलाइज़ेशन
+    // ऐप इनिशियलाइज़ेशन (Android पर दोनों विज्ञापन लोड होंगे)
     function setupAppEnvironment() {
       applyDynamicBranding();
 
       if (isAppleDevice()) {
-        // iOS पर विज्ञापन स्लॉट पूरी तरह हटा दिए जाते हैं
+        // iOS पर दोनों विज्ञापन स्लॉट पूरी तरह हटा दिए जाते हैं
         document.querySelectorAll('.ad-slot-container').forEach(slot => slot.remove());
         return;
       }
 
-      // Android होम स्क्रीन पर ऐड लोड करना (High Viewability)
+      // 1. होम स्क्रीन पर पहला ऐड (इनपुट बॉक्स और बटन के बीच)
       injectNativeBanner("homeAdSlot");
+
+      // 2. होम स्क्रीन पर दूसरा ऐड (स्टेप 3 के ठीक नीचे)
+      injectNativeBanner("guideAdSlot");
     }
 
     window.addEventListener('DOMContentLoaded', setupAppEnvironment);
@@ -452,7 +455,7 @@
       }
     }
 
-    // मुख्य मीडिया फ़ेच लॉजिक (बिना किसी छेड़छाड़ के)
+    // मुख्य मीडिया फ़ेच लॉजिक
     async function handleFetch() {
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
@@ -479,11 +482,6 @@
 
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
-
-          // रिज़ल्ट स्क्रीन पर Android ऐड लोड करना
-          if (!isAppleDevice()) {
-            injectNativeBanner("midAdSlot");
-          }
         } else {
           alert(data.detail || "Unable to extract media. Verify link visibility.");
         }
@@ -495,7 +493,7 @@
       }
     }
 
-    // Dual-OS Architecture: स्मूथ और सुरक्षित डाउनलोडिंग
+    // Dual-OS Architecture: स्मूथ डाउनलोडिंग
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
