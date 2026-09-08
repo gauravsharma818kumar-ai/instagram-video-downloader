@@ -5,6 +5,10 @@
       "use": "@vercel/python"
     },
     {
+      "src": "sitemap.xml",
+      "use": "@vercel/static"
+    },
+    {
       "src": "index.html",
       "use": "@vercel/static"
     }
