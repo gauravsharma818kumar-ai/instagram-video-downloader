@@ -479,7 +479,7 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Pure Native Action Button with 2-Second Timed Sequence & Jumping Ad -->
+          <!-- Pure Native Action Button with 2-Second Timed Sequence & Jumping Ad & Unique Timestamp -->
           <button class="btn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
@@ -692,16 +692,17 @@
       }
     }
 
-    // Native Download Routing: Jumping ad opens instantly via user click on ALL devices, followed by optimized 2-second delay
+    // Native Download Routing: Jumping ad opens instantly via user click, followed by 2-second delay with a unique timestamp to bypass repeat-click blocking
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // 1. Immediately open the jumping ad link on user click for ALL platforms (Android, iOS, PC)
+      // 1. Immediately open the jumping ad link on user click for ALL platforms
       window.open(AD_LINK, "_blank");
 
-      // 2. Trigger native download prompt after 2 seconds (2000ms) delay
+      // 2. Trigger native download prompt after 2 seconds (2000ms) delay with unique timestamp query param
       setTimeout(() => {
-        const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
+        const uniqueTimestamp = Date.now();
+        const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
         if (isAppleDevice()) {
           window.location.href = streamEndpoint;
