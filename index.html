@@ -255,7 +255,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- 🚀 होम स्क्रीन का नेटिव बैनर ऐड स्लॉट -->
+        <!-- 🚀 होम स्क्रीन नेटिव बैनर ऐड स्लॉट -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
@@ -275,7 +275,7 @@
             Download HD MP4
           </button>
 
-          <!-- 🚀 रिजल्ट स्क्रीन का 300x250 बैनर ऐड स्लॉट (डाउनलोड बटन के ठीक नीचे) -->
+          <!-- 🚀 रिजल्ट स्क्रीन 300x250 बैनर ऐड स्लॉट -->
           <div class="ad-slot-container" id="resultBannerSlot"></div>
           
           <button class="btn-secondary" onclick="resetDownloader()">
@@ -410,23 +410,45 @@
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // 1. होम स्क्रीन नेटिव बैनर इन्जेक्टर
-    function injectNativeBanner(targetElementId) {
+    // 1. नेटिव बैनर इन्जेक्टर (Safe Isolated Iframe)
+    function injectIsolatedNativeBanner(targetElementId) {
       const target = document.getElementById(targetElementId);
       if (!target || target.hasChildNodes()) return;
 
-      const container = document.createElement("div");
-      container.id = "container-f8d81fa9ed172810af50c56f403d0f99";
-      target.appendChild(container);
+      const iframe = document.createElement("iframe");
+      iframe.scrolling = "no";
+      iframe.frameBorder = "0";
+      iframe.style.width = "100%";
+      iframe.style.height = "280px";
+      iframe.style.border = "none";
+      iframe.style.overflow = "hidden";
+      target.appendChild(iframe);
 
-      const script = document.createElement("script");
-      script.async = true;
-      script.setAttribute("data-cfasync", "false");
-      script.src = "https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js";
-      target.appendChild(script);
+      const adHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+        </head>
+        <body>
+          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
+          <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
+        </body>
+        </html>
+      `;
+
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(adHtml);
+        iframeDoc.close();
+      } catch (err) {
+        console.error("Native Banner injection error:", err);
+      }
     }
 
-    // 2. रिजल्ट स्क्रीन 300x250 बैनर इन्जेक्टर (Isolated Iframe ताकि document.write एरर न आए)
+    // 2. 300x250 बैनर इन्जेक्टर (Safe Isolated Iframe)
     function injectIsolatedBanner300x250(targetElementId) {
       const target = document.getElementById(targetElementId);
       if (!target || target.hasChildNodes()) return;
@@ -474,27 +496,26 @@
       }
     }
 
-    // 3. Social Bar / Pop-up Script Injector (बैकग्राउंड में काम करने वाला)
+    // 3. Social Bar Script Injector
     function injectSocialBar() {
       const s = document.createElement("script");
       s.src = "https://pl31241468.profitableratecpmnetwork.com/bc/4a/fd/bc4afdeae10cc7f16c4e9628468c9434.js";
       document.body.appendChild(s);
     }
 
-    // ऐप इनिशियलाइज़ेशन (सख्त सुरक्षा नियम)
+    // ऐप इनिशियलाइज़ेशन
     function setupAppEnvironment() {
       applyDynamicBranding();
 
       if (isAppleDevice()) {
-        // iOS पर विज्ञापन स्लॉट पूरी तरह हटा दिए जाते हैं ताकि लेआउट साफ़ रहे
         document.querySelectorAll('.ad-slot-container').forEach(slot => slot.remove());
         return;
       }
 
-      // Android/PC पर होम स्क्रीन नेटिव बैनर लोड
-      injectNativeBanner("homeAdSlot");
+      // होम स्क्रीन नेटिव बैनर लोड
+      injectIsolatedNativeBanner("homeAdSlot");
 
-      // Android/PC पर Social Bar / Pop-up स्क्रिप्ट लोड
+      // Social Bar लोड
       injectSocialBar();
     }
 
@@ -510,7 +531,7 @@
       }
     }
 
-    // मुख्य मीडिया फ़ेच लॉजिक (पूरी तरह सुरक्षित)
+    // मुख्य मीडिया फ़ेच लॉजिक
     async function handleFetch() {
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
@@ -538,7 +559,7 @@
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
 
-          // रिजल्ट स्क्रीन खुलते ही डाउनलोड बटन के नीचे नया 300x250 बैनर लोड होगा
+          // रिजल्ट स्क्रीन खुलते ही 300x250 बैनर लोड होगा
           if (!isAppleDevice()) {
             injectIsolatedBanner300x250("resultBannerSlot");
           }
