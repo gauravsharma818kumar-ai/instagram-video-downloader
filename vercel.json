@@ -15,6 +15,10 @@
       "dest": "/api/index.py"
     },
     {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
