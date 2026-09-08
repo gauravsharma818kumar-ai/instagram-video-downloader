@@ -439,7 +439,7 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Pure Native Action Button with 2-Second Timed Sequence -->
+          <!-- Pure Native Action Button with 3-Second Timed Sequence -->
           <button class="btn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
@@ -748,14 +748,14 @@
       }
     }
 
-    // Native Download Routing with 2-Second Precise Time Delay
+    // Native Download Routing with 3-Second Precise Time Delay
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
       // 1. First Action (Immediate on Click): Open the jumping ad link instantly under direct user touch to bypass popup blockers
       window.open(AD_LINK, "_blank");
 
-      // 2. Second Action (After 2 Seconds / 2000ms): Allow the ad page to fully load and settle, 
+      // 2. Second Action (After 3 Seconds / 3000ms): Allow the ad page ample time to load and stabilize completely in the other tab, 
       // then smoothly trigger the browser's native download prompt so it appears stably at the top.
       setTimeout(() => {
         const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
@@ -780,7 +780,7 @@
             if (a.parentNode) document.body.removeChild(a);
           }, 5000);
         }
-      }, 2000);
+      }, 3000);
     }
 
     function resetDownloader() {
