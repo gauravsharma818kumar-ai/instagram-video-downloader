@@ -720,7 +720,7 @@
       btn.innerText = "Processing HD Stream...";
 
       try {
-        The response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
+        const response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
         const data = await response.json();
 
         if (response.ok && data.success) {
