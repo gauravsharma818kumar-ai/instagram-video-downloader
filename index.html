@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Ultimate Multi-Platform Global SEO & Universal Targeting -->
+  <!-- Ultimate Multi-Platform Global SEO & SERP Dominance -->
   <title>AllSavePro™ — Universal HD Video Downloader & Saver</title>
   <meta name="description" content="The ultimate universal video downloader. Instantly save videos, reels, and stories from Instagram, Facebook, TikTok, YouTube, and Pinterest in original 1080p Full HD quality. Fast, 100% free, and safe online media saver for all platforms.">
   <meta name="keywords" content="instagram video downloader, facebook video downloader, youtube video downloader, tiktok video downloader, pinterest video downloader, all in one video downloader, social media video saver, online hd video downloader, insta fast downloader">
   
-  <!-- Crawler & Search Engine Directives -->
+  <!-- Crawler & Search Engine Directives for Large Image Previews & Rich Snippets -->
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta http-equiv="content-language" content="en">
   
@@ -17,7 +17,7 @@
   <meta name="google-site-verification" content="GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE_HERE">
   <meta name="msvalidate.01" content="BING_WEBMASTER_VERIFICATION_CODE_HERE">
 
-  <!-- Open Graph / Global Social Media Optimization -->
+  <!-- Open Graph / Global Social Media & Search Card Optimization -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="AllSavePro - All-in-One Universal Video Downloader - HD Media Saver">
   <meta property="og:description" content="Download videos, reels, and clips from Instagram, Facebook, TikTok, YouTube, and Pinterest worldwide in original Full HD quality without watermarks.">
@@ -266,6 +266,9 @@
       background: var(--accent-grad);
       box-shadow: 0 0 30px rgba(157, 0, 255, 0.5);
       transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
     .btn:hover {
       box-shadow: 0 0 35px rgba(0, 243, 255, 0.75), 0 0 35px rgba(255, 0, 127, 0.55);
@@ -284,6 +287,38 @@
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
+
+    /* Custom Popup Modal Styling */
+    #downloadModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 4, 10, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-content {
+      background: #0d132b;
+      border: 1px solid var(--neon-cyan);
+      border-radius: var(--radius);
+      padding: 28px 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+      animation: modalPopup 0.3s ease;
+    }
+    @keyframes modalPopup {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .modal-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .modal-close { margin-top: 12px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; }
+    .modal-close:hover { color: #fff; }
 
     /* Smart Ad Containers */
     .ad-slot-container {
@@ -436,7 +471,7 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <button class="btn" id="dlBtn" onclick="routeOsSpecificDownload()">
+          <button class="btn" onclick="triggerAdAndShowModal()">
             Download HD MP4
           </button>
 
@@ -449,6 +484,20 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- Two-Step Safe Download Popup Modal for iOS/Safari & All Devices -->
+  <div id="downloadModal">
+    <div class="modal-content">
+      <div class="modal-title">Ready to Save! ⚡</div>
+      <p class="modal-desc">Your HD video stream is fully prepared. Tap below to start your download instantly.</p>
+      
+      <!-- Direct Native Anchor Tag for Safari / iOS Safety -->
+      <a id="modalDownloadLink" href="#" class="btn" download="AllSavePro_Video.mp4">Start Final Download</a>
+      
+      <br>
+      <button class="modal-close" onclick="closeModal()">Cancel</button>
+    </div>
   </div>
 
   <!-- Turn-by-Turn Visual Guide -->
@@ -678,7 +727,7 @@
       }
     }
 
-    // App Initialization
+    // App Initialization (Automatically cleans banner ads on iOS devices)
     function setupAppEnvironment() {
       applyDynamicBranding();
 
@@ -744,34 +793,25 @@
       }
     }
 
-    // Dual-OS Architecture Download Routing
-    function routeOsSpecificDownload() {
+    // Step 1: Safari-Compliant Ad Jumping Link & Clean Popup Trigger
+    function triggerAdAndShowModal() {
       if (!activeMediaUrl) return;
 
+      // Opens the jumping ad link instantly under direct user touch
       window.open(AD_LINK, "_blank");
 
+      // Bind the direct stream URL to the modal native download button
       const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
+      const downloadLink = document.getElementById("modalDownloadLink");
+      downloadLink.href = streamEndpoint;
 
-      if (isAppleDevice()) {
-        window.location.href = streamEndpoint;
-      } else {
-        const dlFrame = document.createElement("iframe");
-        dlFrame.style.display = "none";
-        dlFrame.src = streamEndpoint;
-        document.body.appendChild(dlFrame);
+      // Show internal popup modal smoothly
+      document.getElementById("downloadModal").style.display = "flex";
+    }
 
-        const a = document.createElement("a");
-        a.href = streamEndpoint;
-        a.setAttribute("download", "Social_Video.mp4");
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-
-        setTimeout(() => {
-          document.body.removeChild(dlFrame);
-          document.body.removeChild(a);
-        }, 4000);
-      }
+    // Close Modal
+    function closeModal() {
+      document.getElementById("downloadModal").style.display = "none";
     }
 
     function resetDownloader() {
