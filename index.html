@@ -3,9 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="dynamicPageTitle">CyberInsta Pro - Cinematic HD Instagram Downloader</title>
-  <meta name="description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality with a futuristic cyber neon liquid glass interface. 100% Free, Zero Logs.">
-  <meta name="robots" content="index, follow">
+  
+  <!-- 🌍 Global SEO Title & International Targeting -->
+  <title>CyberInsta Pro - Global HD Instagram Video & Reels Downloader</title>
+  <meta name="description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality worldwide. Fast, 100% free, and safe multi-device Instagram downloader for global users.">
+  <meta name="keywords" content="Instagram video downloader, reels downloader, instagram story saver, download instagram hd videos, free online video downloader, instagram reel saver online, global insta downloader">
+  
+  <!-- Crawler & Search Engine Directives -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta http-equiv="content-language" content="en">
+  
+  <!-- Global Search Console & Webmaster Verification Placeholders -->
+  <meta name="google-site-verification" content="GOOGLE_SEARCH_CONSOLE_VERIFICATION_CODE_HERE">
+  <meta name="msvalidate.01" content="BING_WEBMASTER_VERIFICATION_CODE_HERE">
+
+  <!-- Open Graph / Global Social Media Optimization -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CyberInsta Pro - Global HD Instagram Video Downloader">
+  <meta property="og:description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality worldwide without watermarks. 100% Free & Safe.">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="CyberInsta Pro - HD Instagram Downloader">
+  <meta property="twitter:description" content="Save Reels and Videos from Instagram globally in 1080p HD quality with zero logs.">
+
+  <!-- 🤖 Google Structured Data (JSON-LD Software Schema for Global Search Authority) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CyberInsta Pro",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "browser": "Requires JavaScript. Works on Chrome, Safari, Firefox, Edge, Opera",
+    "description": "Global web-based Instagram video, reels, and story downloader providing original 1080p HD quality without watermarks.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
 
   <style>
     :root {
@@ -196,7 +232,7 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Smart Ad Containers (विज्ञापन टेक्स्ट को 100% साफ़ और स्पष्ट दिखाने के लिए प्रीमियम फ्रेम) */
+    /* Smart Ad Containers */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
@@ -322,7 +358,7 @@
   <div class="core-wrapper">
     <main class="box">
       <h1>Instagram Video Downloader</h1>
-      <p class="sub">Save Reels, Videos, and Stories in original Full HD quality without watermarks.</p>
+      <p class="sub" id="dynamicSubtitle">Save Reels, Videos, and Stories in original Full HD quality without watermarks.</p>
 
       <!-- Input Area (Home Screen) -->
       <div id="searchSection">
@@ -471,10 +507,22 @@
     // ==========================================
 
     function applyDynamicBranding() {
-      document.title = `${APP_NAME} - Cinematic HD Instagram Downloader`;
+      document.title = `${APP_NAME} - Global HD Instagram Video & Reels Downloader`;
       document.querySelectorAll('.app-brand-name').forEach(el => {
         el.textContent = APP_NAME;
       });
+
+      // 🧠 Smart Browser Language Detection & Adaptation
+      const userLang = navigator.language || navigator.userLanguage || "en";
+      const subEl = document.getElementById("dynamicSubtitle");
+      
+      if (userLang.startsWith('ta')) {
+        // यदि यूज़र का ब्राउज़र तमिल है, तो स्मार्टली तमिल सबटाइटल दिखाएं
+        subEl.textContent = "Instagram Reels, Videos, மற்றும் Stories-ஐ அசல் Full HD தரத்தில் வாட்டர்மார்க் இல்லாமல் பதிவிறக்கம் செய்யுங்கள்.";
+      } else {
+        // पूरी दुनिया के लिए ग्लोबल इंग्लिश डिफ़ॉल्ट रूप से काम करेगी
+        subEl.textContent = "Save Reels, Videos, and Stories in original Full HD quality without watermarks.";
+      }
     }
 
     let activeMediaUrl = "";
@@ -509,7 +557,7 @@
             body { 
               margin: 0; 
               padding: 0; 
-              background: #ffffff; /* विज्ञापन के काले टेक्स्ट को 100% स्पष्ट दिखाने के लिए iframe का बैकग्राउंड सफेद रखा गया है */
+              background: #ffffff; 
               display: flex; 
               flex-direction: column; 
               justify-content: center; 
