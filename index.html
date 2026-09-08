@@ -288,38 +288,6 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Custom Popup Modal Styling */
-    #downloadModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 4, 10, 0.85);
-      backdrop-filter: blur(10px);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-    }
-    .modal-content {
-      background: #0d132b;
-      border: 1px solid var(--neon-cyan);
-      border-radius: var(--radius);
-      padding: 28px 20px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
-      animation: modalPopup 0.3s ease;
-    }
-    @keyframes modalPopup {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .modal-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
-    .modal-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
-    .modal-close { margin-top: 12px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; }
-    .modal-close:hover { color: #fff; }
-
     /* Smart Ad Containers */
     .ad-slot-container {
       width: 100%;
@@ -471,7 +439,8 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <button class="btn" onclick="triggerAdAndShowModal()">
+          <!-- Pure Native Action Button: Triggers Ad and Native Browser Prompt Instantly -->
+          <button class="btn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
 
@@ -484,20 +453,6 @@
         </div>
       </div>
     </main>
-  </div>
-
-  <!-- Two-Step Safe Download Popup Modal for iOS/Safari & All Devices -->
-  <div id="downloadModal">
-    <div class="modal-content">
-      <div class="modal-title">Ready to Save! ⚡</div>
-      <p class="modal-desc">Your HD video stream is fully prepared. Tap below to start your download instantly.</p>
-      
-      <!-- Direct Native Anchor Tag for Safari / iOS Safety -->
-      <a id="modalDownloadLink" href="#" class="btn" download="AllSavePro_Video.mp4">Start Final Download</a>
-      
-      <br>
-      <button class="modal-close" onclick="closeModal()">Cancel</button>
-    </div>
   </div>
 
   <!-- Turn-by-Turn Visual Guide -->
@@ -727,7 +682,7 @@
       }
     }
 
-    // App Initialization (Automatically cleans banner ads on iOS devices)
+    // App Initialization
     function setupAppEnvironment() {
       applyDynamicBranding();
 
@@ -793,25 +748,36 @@
       }
     }
 
-    // Step 1: Safari-Compliant Ad Jumping Link & Clean Popup Trigger
-    function triggerAdAndShowModal() {
+    // Pure Native Download Routing with Immediate First-Click Ad Trigger
+    function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // Opens the jumping ad link instantly under direct user touch
+      // 1. Immediately open the jumping ad link on the first direct user touch
       window.open(AD_LINK, "_blank");
 
-      // Bind the direct stream URL to the modal native download button
+      // 2. Simultaneously trigger the stream endpoint to force the browser's native download prompt
       const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
-      const downloadLink = document.getElementById("modalDownloadLink");
-      downloadLink.href = streamEndpoint;
 
-      // Show internal popup modal smoothly
-      document.getElementById("downloadModal").style.display = "flex";
-    }
+      if (isAppleDevice()) {
+        window.location.href = streamEndpoint;
+      } else {
+        const dlFrame = document.createElement("iframe");
+        dlFrame.style.display = "none";
+        dlFrame.src = streamEndpoint;
+        document.body.appendChild(dlFrame);
 
-    // Close Modal
-    function closeModal() {
-      document.getElementById("downloadModal").style.display = "none";
+        const a = document.createElement("a");
+        a.href = streamEndpoint;
+        a.setAttribute("download", "Instagram_Video.mp4");
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+
+        setTimeout(() => {
+          if (dlFrame.parentNode) document.body.removeChild(dlFrame);
+          if (a.parentNode) document.body.removeChild(a);
+        }, 5000);
+      }
     }
 
     function resetDownloader() {
