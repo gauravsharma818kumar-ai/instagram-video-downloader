@@ -9,26 +9,26 @@
 
   <style>
     :root {
-      --bg: #03030c;
-      --glass-bg: rgba(10, 14, 28, 0.75);
-      --glass-border: rgba(0, 243, 255, 0.25);
-      --glass-border-hover: rgba(0, 243, 255, 0.6);
+      --bg-deep: #02040a;
+      --glass-surface: rgba(13, 19, 43, 0.75);
+      --glass-border: rgba(0, 243, 255, 0.4);
+      --glass-border-hover: rgba(0, 243, 255, 0.85);
       --neon-cyan: #00f3ff;
-      --neon-pink: #ff007f;
-      --neon-purple: #9d00ff;
-      --accent: linear-gradient(135deg, #00f3ff, #9d00ff, #ff007f);
-      --accent-glow: rgba(0, 243, 255, 0.35);
-      --text: #ffffff;
-      --muted: #8a99ad;
-      --success: #00ff66;
+      --neon-magenta: #ff007f;
+      --neon-violet: #9d00ff;
+      --accent-grad: linear-gradient(135deg, #00f3ff, #9d00ff, #ff007f);
+      --accent-glow: rgba(0, 243, 255, 0.5);
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      --success-green: #00ff66;
       --radius: 18px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     
     body {
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-deep);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -36,9 +36,11 @@
       padding: 0 16px;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 50% 5%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 85% 90%, rgba(157, 0, 255, 0.07) 0%, transparent 45%),
-        linear-gradient(rgba(3, 3, 12, 0.9), rgba(3, 3, 12, 0.95));
+        radial-gradient(circle at 12% 15%, rgba(0, 243, 255, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 88% 85%, rgba(157, 0, 255, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 50% 45%, rgba(255, 0, 127, 0.1) 0%, transparent 60%),
+        linear-gradient(180deg, #02040a 0%, #060c1f 50%, #02040a 100%);
+      background-attachment: fixed;
     }
 
     /* Top Navbar */
@@ -55,18 +57,18 @@
     .brand { 
       font-size: 1.4rem; 
       font-weight: 800; 
-      background: var(--accent); 
+      background: var(--accent-grad); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       display: flex; 
       align-items: center; 
       gap: 8px;
-      text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+      text-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
     }
     .nav-badge { 
-      background: rgba(0, 255, 102, 0.08); 
-      border: 1px solid rgba(0, 255, 102, 0.3); 
-      color: var(--success); 
+      background: rgba(0, 255, 102, 0.12); 
+      border: 1px solid rgba(0, 255, 102, 0.4); 
+      color: var(--success-green); 
       padding: 6px 14px; 
       border-radius: 20px; 
       font-size: 0.78rem; 
@@ -74,9 +76,9 @@
       display: flex; 
       align-items: center; 
       gap: 6px;
-      box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.25);
     }
-    .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--success); }
+    .status-dot { width: 7px; height: 7px; background: var(--success-green); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--success-green); }
 
     /* Universal Compatibility Indicator */
     .device-support-bar {
@@ -86,14 +88,15 @@
       gap: 14px;
       flex-wrap: wrap;
       margin-bottom: 24px;
-      padding: 10px 22px;
-      background: var(--glass-bg);
+      padding: 12px 24px;
+      background: var(--glass-surface);
       border: 1px solid var(--glass-border);
       border-radius: 30px;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
-    .device-chip { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
-    .device-chip strong { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3); }
+    .device-chip { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+    .device-chip strong { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.4); }
 
     /* Core Downloader Box */
     .core-wrapper {
@@ -103,38 +106,38 @@
     }
 
     .box {
-      background: var(--glass-bg);
+      background: var(--glass-surface);
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(25px);
       border-radius: var(--radius);
       padding: 32px 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 25px rgba(0, 243, 255, 0.04);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 30px rgba(0, 243, 255, 0.08);
       text-align: center;
       position: relative;
     }
     .box::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
     }
 
     h1 { 
       font-size: 2.1rem; 
       font-weight: 800; 
       margin-bottom: 8px; 
-      background: var(--accent); 
+      background: var(--accent-grad); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+      text-shadow: 0 0 35px rgba(0, 243, 255, 0.4);
     }
-    p.sub { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 22px; }
+    p.sub { color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 22px; }
 
     .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
     input[type="text"] {
       width: 100%;
       padding: 16px 95px 16px 16px;
-      background: rgba(2, 4, 10, 0.75);
+      background: rgba(2, 4, 10, 0.85);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
       color: #fff;
@@ -144,14 +147,14 @@
     }
     input[type="text"]:focus { 
       border-color: var(--neon-cyan); 
-      box-shadow: 0 0 18px var(--accent-glow), inset 0 0 8px rgba(0, 243, 255, 0.1); 
+      box-shadow: 0 0 22px var(--accent-glow), inset 0 0 10px rgba(0, 243, 255, 0.2); 
     }
 
     .paste-btn {
       position: absolute;
       right: 10px;
-      background: rgba(0, 243, 255, 0.1);
-      border: 1px solid rgba(0, 243, 255, 0.3);
+      background: rgba(0, 243, 255, 0.15);
+      border: 1px solid rgba(0, 243, 255, 0.4);
       color: var(--neon-cyan);
       padding: 8px 14px;
       border-radius: 8px;
@@ -160,7 +163,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .paste-btn:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+    .paste-btn:hover { background: rgba(0, 243, 255, 0.3); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
 
     .btn {
       width: 100%;
@@ -171,29 +174,29 @@
       border: none;
       cursor: pointer;
       color: white;
-      background: var(--accent);
-      box-shadow: 0 0 25px rgba(157, 0, 255, 0.4);
+      background: var(--accent-grad);
+      box-shadow: 0 0 30px rgba(157, 0, 255, 0.5);
       transition: all 0.3s ease;
     }
     .btn:hover {
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.6), 0 0 30px rgba(255, 0, 127, 0.4);
-      filter: brightness(1.1);
+      box-shadow: 0 0 35px rgba(0, 243, 255, 0.75), 0 0 35px rgba(255, 0, 127, 0.55);
+      filter: brightness(1.15);
     }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; filter: none; box-shadow: none; }
 
     /* Result Preview Area */
     #resultSection { display: none; text-align: center; }
-    .preview-card { background: rgba(2, 4, 10, 0.7); border-radius: 14px; padding: 20px; border: 1px solid var(--glass-border); }
+    .preview-card { background: rgba(2, 4, 10, 0.85); border-radius: 14px; padding: 20px; border: 1px solid var(--glass-border); }
     .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); }
     .thumb-container img { width: 100%; max-height: 350px; object-fit: cover; display: block; }
-    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(3, 3, 12, 0.85); border: 1px solid rgba(0, 255, 102, 0.4); color: var(--success); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; box-shadow: 0 0 10px rgba(0, 255, 102, 0.2); }
+    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(2, 4, 10, 0.9); border: 1px solid rgba(0, 255, 102, 0.5); color: var(--success-green); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; box-shadow: 0 0 12px rgba(0, 255, 102, 0.3); }
     
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-    .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
-    .btn-secondary:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); color: var(--neon-cyan); }
+    .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
+    .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Smart Ad Containers (বিজ্ঞपनों के लिए साफ़ और कंट्रास्टेड ग्लास फ्रेम ताकि टेक्स्ट कभी न छुपे) */
+    /* Smart Ad Containers (विज्ञापन टेक्स्ट को 100% साफ़ और स्पष्ट दिखाने के लिए प्रीमियम फ्रेम) */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
@@ -202,11 +205,11 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      background: #f8f9fa; /* विज्ञापन के अंदर के काले टेक्स्ट को पूरी तरह स्पष्ट दिखाने के लिए क्लीन लेयर */
+      background: #ffffff; 
       border-radius: 14px;
       padding: 10px;
-      border: 1px solid var(--neon-cyan);
-      box-shadow: 0 8px 30px rgba(0, 243, 255, 0.2);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
     }
 
     /* Content Layout */
@@ -216,8 +219,8 @@
       margin-bottom: 35px;
     }
     .section-header { text-align: center; margin-bottom: 28px; }
-    .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
-    .section-sub { font-size: 0.9rem; color: var(--muted); }
+    .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 20px rgba(0, 243, 255, 0.3); }
+    .section-sub { font-size: 0.9rem; color: var(--text-muted); }
 
     /* Visual Turn-by-Turn Guide Cards */
     .steps-grid {
@@ -226,7 +229,7 @@
       gap: 20px;
     }
     .step-card {
-      background: var(--glass-bg);
+      background: var(--glass-surface);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius);
       padding: 22px;
@@ -239,24 +242,24 @@
     }
     .step-card:hover {
       border-color: var(--glass-border-hover);
-      box-shadow: 0 10px 30px rgba(0, 243, 255, 0.12);
+      box-shadow: 0 12px 35px rgba(0, 243, 255, 0.25);
       transform: translateY(-2px);
     }
     .step-img-box {
       width: 100%;
       height: 130px;
-      background: rgba(2, 4, 10, 0.6);
+      background: rgba(2, 4, 10, 0.7);
       border-radius: 10px;
-      border: 1px solid rgba(0, 243, 255, 0.15);
+      border: 1px solid rgba(0, 243, 255, 0.2);
       margin-bottom: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 10px;
     }
-    .step-badge { font-size: 0.75rem; font-weight: 700; color: var(--neon-pink); text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
+    .step-badge { font-size: 0.75rem; font-weight: 700; color: var(--neon-magenta); text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 0 10px rgba(255, 0, 127, 0.5); }
     .step-heading { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .step-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
     /* User Benefits Grid */
     .benefits-grid {
@@ -265,7 +268,7 @@
       gap: 20px;
     }
     .benefit-card {
-      background: var(--glass-bg);
+      background: var(--glass-surface);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius);
       padding: 24px;
@@ -275,24 +278,24 @@
     }
     .benefit-card:hover {
       border-color: var(--glass-border-hover);
-      box-shadow: 0 10px 30px rgba(255, 0, 127, 0.1);
+      box-shadow: 0 12px 35px rgba(255, 0, 127, 0.2);
       transform: translateY(-2px);
     }
     .benefit-icon {
       font-size: 1.8rem;
       margin-bottom: 12px;
       display: inline-block;
-      filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.4));
+      filter: drop-shadow(0 0 12px rgba(0, 243, 255, 0.5));
     }
     .benefit-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .benefit-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.55; }
+    .benefit-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.55; }
 
     footer {
       width: 100%;
       max-width: 900px;
       border-top: 1px solid var(--glass-border);
       padding: 30px 0 40px 0;
-      color: var(--muted);
+      color: var(--text-muted);
       font-size: 0.82rem;
       text-align: center;
     }
@@ -371,11 +374,11 @@
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#02040a" stroke="#00f3ff55"/>
             <circle cx="50" cy="30" r="7" fill="#ff007f"/>
-            <rect x="64" y="27" width="50" height="6" rx="3" fill="#ffffff30"/>
-            <rect x="40" y="50" width="120" height="26" rx="5" fill="#ffffff0d" stroke="#00f3ff44"/>
-            <text x="48" y="66" fill="#8a99ad" font-size="8" font-family="sans-serif">instagram.com/reel/...</text>
+            <rect x="64" y="27" width="50" height="6" rx="3" fill="#ffffff50"/>
+            <rect x="40" y="50" width="120" height="26" rx="5" fill="#ffffff0d" stroke="#00f3ff66"/>
+            <text x="48" y="66" fill="#94a3b8" font-size="8" font-family="sans-serif">instagram.com/reel/...</text>
           </svg>
         </div>
         <span class="step-badge">Step 1</span>
@@ -387,7 +390,7 @@
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#02040a" stroke="#00f3ff55"/>
             <rect x="40" y="25" width="120" height="22" rx="5" fill="#02040a" stroke="#00f3ff"/>
             <text x="48" y="39" fill="#fff" font-size="8" font-family="sans-serif">instagram.com/reel/xyz...</text>
             <rect x="40" y="54" width="120" height="22" rx="5" fill="url(#stepGrad)"/>
@@ -409,7 +412,7 @@
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#02040a" stroke="#00f3ff55"/>
             <circle cx="100" cy="40" r="18" fill="#00ff6620" stroke="#00ff66"/>
             <path d="M100 32 L100 46 M94 41 L100 47 L106 41" stroke="#00ff66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <text x="65" y="74" fill="#00ff66" font-size="8" font-weight="bold" font-family="sans-serif">Saved Directly</text>
@@ -506,7 +509,7 @@
             body { 
               margin: 0; 
               padding: 0; 
-              background: #f8f9fa; /* विज्ञापन के काले टेक्स्ट को पूरी तरह स्पष्ट दिखाने के लिए iframe के अंदर का बैकग्राउंड लाइट रखा गया है */
+              background: #ffffff; /* विज्ञापन के काले टेक्स्ट को 100% स्पष्ट दिखाने के लिए iframe का बैकग्राउंड सफेद रखा गया है */
               display: flex; 
               flex-direction: column; 
               justify-content: center; 
@@ -559,7 +562,7 @@
         <html>
         <head>
           <meta charset="utf-8">
-          <style>body { margin: 0; padding: 0; background: #f8f9fa; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+          <style>body { margin: 0; padding: 0; background: #ffffff; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
         </head>
         <body>
           <script type="text/javascript">
@@ -611,7 +614,7 @@
       }
     }
 
-    // मुख्य मीडिया फ़ेच लॉजिक (बैकएंड सुरक्षित)
+    // मुख्य मीडिया फ़ेच लॉजिक (बैकएंड पूर्णतः सुरक्षित)
     async function handleFetch() {
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
@@ -654,7 +657,7 @@
       }
     }
 
-    // Dual-OS Architecture: स्मूथ डाउनलोडिंग (बैकएंड सुरक्षित)
+    // Dual-OS Architecture: स्मूथ डाउनलोडिंग (बैकएंड पूर्णतः सुरक्षित)
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
