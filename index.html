@@ -254,6 +254,35 @@
     }
     .paste-btn:hover { background: rgba(0, 243, 255, 0.3); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
 
+    /* Premium Compact Search Button Style */
+    .btn-search {
+      display: inline-block;
+      width: auto;
+      min-width: 240px;
+      max-width: 100%;
+      margin: 4px auto 16px auto;
+      padding: 12px 28px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-radius: 30px;
+      border: 1px solid rgba(0, 243, 255, 0.5);
+      cursor: pointer;
+      color: white;
+      background: var(--accent-grad);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.35);
+      transition: all 0.3s ease;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+    .btn-search:hover {
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.7), 0 0 20px rgba(255, 0, 127, 0.5);
+      border-color: var(--neon-cyan);
+      transform: translateY(-1px);
+    }
+    .btn-search:active { transform: scale(0.98); }
+    .btn-search:disabled { opacity: 0.6; cursor: not-allowed; filter: none; box-shadow: none; }
+
+    /* Standard Result Action Button */
     .btn {
       width: 100%;
       padding: 15px 20px;
@@ -424,16 +453,16 @@
       <p class="sub" id="dynamicSubtitle">Save Reels, Videos, and Stories from Instagram, Facebook, TikTok, YouTube & Pinterest in original Full HD quality without watermarks.</p>
 
       <!-- Input Area (Home Screen) -->
-      <div id="searchSection">
+      <div id="searchSection" style="text-align: center;">
         <div class="input-wrapper">
           <input type="text" id="videoUrl" placeholder="Paste video or reel link here..." autocomplete="off" maxlength="300">
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- Search / Get Download Link Button moved ABOVE the ad -->
-        <button class="btn" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
+        <!-- Premium Compact Search Button -->
+        <button class="btn-search" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
 
-        <!-- Home Screen Native Banner Ad Slot moved BELOW the search button -->
+        <!-- Home Screen Native Banner Ad Slot -->
         <div class="ad-slot-container" id="homeAdSlot">
           <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
           <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"></script>
