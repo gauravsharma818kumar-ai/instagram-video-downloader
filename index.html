@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Video Downloader - Fast & Free HD Reels Saver</title>
-  <meta name="description" content="Download Instagram videos, reels, photos, and stories in high-definition (HD) MP4 for free. Super-fast, secure, and no login required.">
+  <title>Universal Video Downloader - Fast & Secure HD Saver</title>
+  <meta name="description" content="Download high-definition videos securely across mobile and desktop devices.">
   <meta name="robots" content="index, follow">
 
   <style>
@@ -20,10 +20,22 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
     
-    header { text-align: center; margin-top: 35px; margin-bottom: 24px; max-width: 600px; }
-    h1 { font-size: 2.2rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    header { text-align: center; margin-top: 25px; margin-bottom: 20px; max-width: 600px; }
+    h1 { font-size: 2.1rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
     p.sub { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
     
+    /* RESERVED AD SLOTS */
+    .ad-slot-container {
+      width: 100%;
+      max-width: 520px;
+      margin: 12px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      min-height: 0px;
+    }
+
     .box { background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(16px); border-radius: 20px; padding: 24px; width: 100%; max-width: 520px; box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
     
     .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
@@ -32,7 +44,6 @@
     
     .paste-btn { position: absolute; right: 10px; background: rgba(255, 255, 255, 0.12); border: 1px solid var(--border); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
     .paste-btn:hover { background: rgba(255, 255, 255, 0.2); }
-    .paste-btn:active { transform: scale(0.96); }
 
     .btn { width: 100%; padding: 15px 20px; font-size: 1.05rem; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s; display: flex; justify-content: center; align-items: center; }
     .btn:active { transform: scale(0.98); }
@@ -47,7 +58,6 @@
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     
     .btn-secondary { margin-top: 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; width: 100%; font-weight: 600; }
-    .btn-secondary:active { transform: scale(0.98); }
     
     footer { margin-top: auto; padding: 25px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
   </style>
@@ -55,19 +65,21 @@
 <body>
 
   <header>
-    <h1>Instagram Video Downloader</h1>
-    <p class="sub">Download reels, videos, and stories instantly in full HD. 100% Free & Unlimited.</p>
+    <h1>Video Downloader</h1>
+    <p class="sub">High-Speed Multi-Platform HD Video Downloader Engine.</p>
   </header>
+
+  <!-- TOP BANNER AD SLOT -->
+  <div class="ad-slot-container" id="topAdSlot">
+    <!-- BANNER_PLACEHOLDER_TOP -->
+  </div>
 
   <main class="box">
     <!-- SEARCH SECTION -->
     <div id="searchSection">
       <div class="input-wrapper">
-        <input type="text" id="videoUrl" placeholder="Paste Instagram link here..." autocomplete="off">
-        <button type="button" class="paste-btn" onclick="handlePaste()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-          Paste
-        </button>
+        <input type="text" id="videoUrl" placeholder="Paste video link here..." autocomplete="off" maxlength="300">
+        <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
       </div>
       <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
     </div>
@@ -76,12 +88,19 @@
     <div id="resultSection">
       <div class="preview-card">
         <div class="thumb-container">
-          <img id="thumbImg" src="" alt="Video Preview">
+          <img id="thumbImg" src="" alt="Media Preview">
           <span class="quality-badge">1080p Full HD</span>
         </div>
-        <div class="video-info" id="videoTitle">Instagram Reel</div>
         
-        <button class="btn" id="dlBtn" onclick="executeSmartAction()">
+        <!-- XSS-Safe Label -->
+        <div class="video-info" id="videoTitle">Social Video</div>
+
+        <!-- MID BANNER AD SLOT -->
+        <div class="ad-slot-container" id="midAdSlot">
+          <!-- BANNER_PLACEHOLDER_MID -->
+        </div>
+        
+        <button class="btn" id="dlBtn" onclick="routeOsSpecificDownload()">
           Download HD MP4
         </button>
         
@@ -92,21 +111,43 @@
     </div>
   </main>
 
+  <!-- BOTTOM BANNER AD SLOT -->
+  <div class="ad-slot-container" id="bottomAdSlot">
+    <!-- BANNER_PLACEHOLDER_BOTTOM -->
+  </div>
+
   <footer>
-    <p>© 2026 Insta Video Downloader. Cross-Platform Engine.</p>
+    <p>© 2026 Universal Media Downloader. Enterprise Secure Core.</p>
   </footer>
 
   <script>
     let activeMediaUrl = "";
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
+    // 1. शुद्ध मोबाइल डिटेक्शन इंजन (iOS Safari vs Android Chrome)
+    function isAppleDevice() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      // iPhone, iPad, iPod या iPadOS Safari Desktop मोड की अचूक पहचान
+      return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+    }
+
+    // 2. विज्ञापन स्लॉट प्रबंधन (iOS पर ब्लैंक बॉक्स से बचाव)
+    function configureAdSlots() {
+      if (isAppleDevice()) {
+        document.querySelectorAll('.ad-slot-container').forEach(slot => {
+          slot.style.display = 'none';
+        });
+      }
+    }
+    window.addEventListener('DOMContentLoaded', configureAdSlots);
+
     async function handlePaste() {
       try {
         const text = await navigator.clipboard.readText();
-        if (text) document.getElementById("videoUrl").value = text;
+        if (text) document.getElementById("videoUrl").value = text.trim();
       } catch (err) {
-        const manual = prompt("Paste your Instagram link here:");
-        if (manual) document.getElementById("videoUrl").value = manual;
+        const manual = prompt("Paste your video link here:");
+        if (manual) document.getElementById("videoUrl").value = manual.trim();
       }
     }
 
@@ -114,23 +155,23 @@
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
 
-      if (!rawUrl) {
-        alert("Please paste a valid Instagram link first.");
+      if (!rawUrl || rawUrl.length > 300) {
+        alert("Please provide a valid URL.");
         return;
       }
 
-      const cleanUrl = rawUrl.split("?")[0].split("&")[0];
-
       btn.disabled = true;
-      btn.innerText = "Extracting HD Video...";
+      btn.innerText = "Processing HD Stream...";
 
       try {
-        const response = await fetch(`/api/info?url=${encodeURIComponent(cleanUrl)}`);
+        const response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
         const data = await response.json();
 
         if (response.ok && data.success) {
           activeMediaUrl = data.download_url;
-          document.getElementById("videoTitle").innerText = data.title || "Instagram Video";
+          
+          // सुरक्षित DOM असाइनमेंट (XSS सुरक्षा)
+          document.getElementById("videoTitle").textContent = data.title || "Social Video";
           if (data.thumbnail) {
             document.getElementById("thumbImg").src = data.thumbnail;
           }
@@ -138,63 +179,49 @@
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
         } else {
-          alert(data.detail || "Could not fetch video. Please check the link.");
+          alert(data.detail || "Unable to extract media. Verify link visibility.");
         }
       } catch (err) {
-        alert("Server error. Please try again.");
+        alert("Network or verification error. Please retry.");
       } finally {
         btn.disabled = false;
         btn.innerText = "Get Download Link";
       }
     }
 
-    // 100% गारंटीड डाउनलोड + ऐड जंप
-    async function executeSmartAction() {
+    // 3. पृथक डाउनलोड निष्पादन (Dual-OS Architecture)
+    function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      const btn = document.getElementById("dlBtn");
-      btn.innerText = "Saving to Device...";
-      btn.disabled = true;
-
-      // 1. ADSTERRA JUMP: यूज़र के क्लिक के 0ms पर नए टैब में ऐड खुलेगा (पॉप-अप ब्लॉक नहीं होगा)
+      // पहली मिलीसेकंड में Adsterra स्मार्टलिंक (पॉप-अप ब्लॉकर बाईपास)
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // 2. GUARANTEED NATIVE FILE DOWNLOAD:
-      try {
-        // डायरेक्ट CDN फ़ाइल को Blob बनाकर सीधे मेमोरी में डाउनलोड करना
-        const response = await fetch(activeMediaUrl);
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
+      const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
+
+      if (isAppleDevice()) {
+        // [iOS Safari Pipeline]:
+        // Safari पर डायरेक्ट लोकेशन नेविगेशन अनिवार्य है ताकि Safari का नेटिव 
+        // "Do you want to download?" सिस्टम प्रॉम्प्ट ट्रिगर हो और फाइल सीधे Files App में जाए।
+        window.location.href = streamEndpoint;
+      } else {
+        // [Android / Chrome Pipeline]:
+        // बैकग्राउंड इनविजिबल फ्रेम + एंकर टैग क्रोम डाउनलोड मैनेजर को सीधे नोटिफिकेशन ट्रे में ट्रिगर करता है।
+        const dlFrame = document.createElement("iframe");
+        dlFrame.style.display = "none";
+        dlFrame.src = streamEndpoint;
+        document.body.appendChild(dlFrame);
 
         const a = document.createElement("a");
+        a.href = streamEndpoint;
+        a.setAttribute("download", "Social_Video.mp4");
         a.style.display = "none";
-        a.href = blobUrl;
-        a.download = "Instagram_Video_" + Date.now() + ".mp4";
         document.body.appendChild(a);
         a.click();
 
-        // सफ़ाई
         setTimeout(() => {
+          document.body.removeChild(dlFrame);
           document.body.removeChild(a);
-          window.URL.revokeObjectURL(blobUrl);
-          btn.innerText = "Download HD MP4";
-          btn.disabled = false;
-        }, 2000);
-
-      } catch (err) {
-        // अगर CDN डायरेक्ट blob ब्लॉक करे, तो बैकअप फ़ोर्स्ड ऐंकर चलाएँ
-        const fallback = document.createElement("a");
-        fallback.href = activeMediaUrl;
-        fallback.setAttribute("download", "Instagram_Video.mp4");
-        fallback.setAttribute("target", "_blank");
-        document.body.appendChild(fallback);
-        fallback.click();
-        
-        setTimeout(() => {
-          document.body.removeChild(fallback);
-          btn.innerText = "Download HD MP4";
-          btn.disabled = false;
-        }, 2000);
+        }, 4000);
       }
     }
 
