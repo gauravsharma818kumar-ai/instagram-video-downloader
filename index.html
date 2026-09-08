@@ -288,10 +288,11 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Smart Ad Containers */
+    /* Smart Ad Containers with Guaranteed Minimum Dimensions */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
+      min-height: 90px;
       margin: 16px auto;
       display: flex;
       justify-content: center;
@@ -302,6 +303,10 @@
       padding: 10px;
       border: 2px solid var(--neon-cyan);
       box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+    }
+    #resultBannerSlot {
+      min-height: 250px;
+      width: 300px;
     }
 
     /* Content Layout */
@@ -424,7 +429,10 @@
         </div>
 
         <!-- Home Screen Native Banner Ad Slot -->
-        <div class="ad-slot-container" id="homeAdSlot"></div>
+        <div class="ad-slot-container" id="homeAdSlot">
+          <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
+          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"></script>
+        </div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
       </div>
@@ -439,13 +447,24 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Pure Native Action Button with 3-Second Timed Sequence -->
+          <!-- Pure Native Action Button with 3-Second Timed Sequence & Jumping Ad -->
           <button class="btn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
 
           <!-- Result Screen 300x250 Banner Ad Slot -->
-          <div class="ad-slot-container" id="resultBannerSlot"></div>
+          <div class="ad-slot-container" id="resultBannerSlot">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '66c9a9d6d12860055170ed709f8ebe86',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js"></script>
+          </div>
           
           <button class="btn-secondary" onclick="resetDownloader()">
             ↻ Download Another Video
@@ -581,117 +600,14 @@
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // Safe Isolated Native Banner Injector
-    function injectIsolatedNativeBanner(targetElementId) {
-      const target = document.getElementById(targetElementId);
-      if (!target || target.hasChildNodes()) return;
-
-      const iframe = document.createElement("iframe");
-      iframe.scrolling = "no";
-      iframe.frameBorder = "0";
-      iframe.style.width = "100%";
-      iframe.style.height = "520px";
-      iframe.style.border = "none";
-      iframe.style.overflow = "hidden";
-      target.appendChild(iframe);
-
-      const adHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <style>
-            body { 
-              margin: 0; 
-              padding: 0; 
-              background: #ffffff; 
-              display: flex; 
-              flex-direction: column; 
-              justify-content: center; 
-              align-items: center; 
-              overflow: hidden; 
-              gap: 15px; 
-            }
-          </style>
-        </head>
-        <body>
-          <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
-          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
-
-          <div id="container-f8d81fa9ed172810af50c56f403d0f99_2"></div>
-          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
-        </body>
-        </html>
-      `;
-
-      try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(adHtml);
-        iframeDoc.close();
-      } catch (err) {
-        console.error("Native Banner injection error:", err);
-      }
-    }
-
-    // Safe Isolated 300x250 Banner Injector
-    function injectIsolatedBanner300x250(targetElementId) {
-      const target = document.getElementById(targetElementId);
-      if (!target || target.hasChildNodes()) return;
-
-      const iframe = document.createElement("iframe");
-      iframe.scrolling = "no";
-      iframe.frameBorder = "0";
-      iframe.style.width = "300px";
-      iframe.style.height = "250px";
-      iframe.style.border = "none";
-      iframe.style.overflow = "hidden";
-      iframe.style.display = "block";
-      iframe.style.margin = "0 auto";
-      target.appendChild(iframe);
-
-      const adHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <style>body { margin: 0; padding: 0; background: #ffffff; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
-        </head>
-        <body>
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '66c9a9d6d12860055170ed709f8ebe86',
-              'format' : 'iframe',
-              'height' : 250,
-              'width' : 300,
-              'params' : {}
-            };
-          <\/script>
-          <script type="text/javascript" src="https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js"><\/script>
-        </body>
-        </html>
-      `;
-
-      try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(adHtml);
-        iframeDoc.close();
-      } catch (err) {
-        console.error("Banner injection error:", err);
-      }
-    }
-
-    // App Initialization
+    // App Initialization: Use device detection ONLY to turn off/remove banner ads on Apple/iOS devices
     function setupAppEnvironment() {
       applyDynamicBranding();
 
       if (isAppleDevice()) {
-        document.querySelectorAll('.ad-slot-container').forEach(slot => slot.remove());
-        return;
+        // Remove banner ad containers completely on iOS to keep the interface pristine
+        document.querySelectorAll('.ad-slot-container').forEach(el => el.remove());
       }
-
-      injectIsolatedNativeBanner("homeAdSlot");
     }
 
     window.addEventListener('DOMContentLoaded', setupAppEnvironment);
@@ -733,10 +649,6 @@
 
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
-
-          if (!isAppleDevice()) {
-            injectIsolatedBanner300x250("resultBannerSlot");
-          }
         } else {
           alert(data.detail || "Unable to extract media. Verify link visibility.");
         }
@@ -748,15 +660,14 @@
       }
     }
 
-    // Native Download Routing with 3-Second Precise Time Delay
+    // Native Download Routing: Jumping ad opens instantly via user click on ALL devices, followed by 3-second download delay
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // 1. First Action (Immediate on Click): Open the jumping ad link instantly under direct user touch to bypass popup blockers
+      // 1. Immediately open the jumping ad link on user click for ALL platforms (Android, iOS, PC)
       window.open(AD_LINK, "_blank");
 
-      // 2. Second Action (After 3 Seconds / 3000ms): Allow the ad page ample time to load and stabilize completely in the other tab, 
-      // then smoothly trigger the browser's native download prompt so it appears stably at the top.
+      // 2. Trigger native download prompt after 3 seconds delay
       setTimeout(() => {
         const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}`;
 
