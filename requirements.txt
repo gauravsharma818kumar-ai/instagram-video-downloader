@@ -1,4 +1,4 @@
 fastapi
 uvicorn
-yt-dlp
 requests
+yt-dlp
