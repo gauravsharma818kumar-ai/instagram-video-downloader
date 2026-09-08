@@ -275,7 +275,7 @@
             Download HD MP4
           </button>
 
-          <!-- 🚀 2. नया 300x250 बैनर ऐड (डाउनलोड बटन के ठीक नीचे) -->
+          <!-- 🚀 2. 300x250 बैनर ऐड (डाउनलोड बटन के ठीक नीचे - Isolated Iframe के साथ) -->
           <div class="ad-slot-container" id="resultBannerSlot"></div>
           
           <button class="btn-secondary" onclick="resetDownloader()">
@@ -415,38 +415,77 @@
       const target = document.getElementById(targetElementId);
       if (!target || target.hasChildNodes()) return;
 
-      const container = document.createElement("div");
-      container.id = "container-f8d81fa9ed172810af50c56f403d0f99";
-      target.appendChild(container);
+      const iframe = document.createElement("iframe");
+      iframe.scrolling = "no";
+      iframe.frameBorder = "0";
+      iframe.style.width = "100%";
+      iframe.style.height = "280px";
+      iframe.style.border = "none";
+      iframe.style.overflow = "hidden";
+      target.appendChild(iframe);
 
-      const script = document.createElement("script");
-      script.async = true;
-      script.setAttribute("data-cfasync", "false");
-      script.src = "https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js";
-      target.appendChild(script);
+      const adHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+        </head>
+        <body>
+          <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
+          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
+        </body>
+        </html>
+      `;
+
+      const doc = iframe.contentWindow || iframe.contentDocument.document || iframe.contentDocument;
+      doc.document.open();
+      doc.document.write(adHtml);
+      doc.document.close();
     }
 
-    // 2. नया 300x250 बैनर इन्जेक्टर (रिजल्ट स्क्रीन के लिए)
-    function injectBanner300x250(targetElementId) {
+    // 2. 300x250 बैनर इन्जेक्टर (Isolated Iframe के साथ ताकि document.write एरर न दे)
+    function injectIsolatedBanner300x250(targetElementId) {
       const target = document.getElementById(targetElementId);
       if (!target || target.hasChildNodes()) return;
 
-      const script1 = document.createElement("script");
-      script1.text = `
-        atOptions = {
-          'key' : '66c9a9d6d12860055170ed709f8ebe86',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      `;
-      target.appendChild(script1);
+      const iframe = document.createElement("iframe");
+      iframe.scrolling = "no";
+      iframe.frameBorder = "0";
+      iframe.style.width = "300px";
+      iframe.style.height = "250px";
+      iframe.style.border = "none";
+      iframe.style.overflow = "hidden";
+      iframe.style.display = "block";
+      iframe.style.margin = "0 auto";
+      target.appendChild(iframe);
 
-      const script2 = document.createElement("script");
-      script2.async = true;
-      script2.src = "https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js";
-      target.appendChild(script2);
+      const adHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+        </head>
+        <body>
+          <script type="text/javascript">
+            atOptions = {
+              'key' : '66c9a9d6d12860055170ed709f8ebe86',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+            };
+          <\/script>
+          <script type="text/javascript" src="https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js"><\/script>
+        </body>
+        </html>
+      `;
+
+      const doc = iframe.contentWindow || iframe.contentDocument.document || iframe.contentDocument;
+      doc.document.open();
+      doc.document.write(adHtml);
+      doc.document.close();
     }
 
     // 3. Social Bar Injector
@@ -512,9 +551,9 @@
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
 
-          // रिजल्ट स्क्रीन खुलते ही डाउनलोड बटन के नीचे नया 300x250 बैनर लोड होगा
+          // रिजल्ट स्क्रीन खुलते ही डाउनलोड बटन के नीचे नया 300x250 बैनर सुरक्षित iframe में लोड होगा
           if (!isAppleDevice()) {
-            injectBanner300x250("resultBannerSlot");
+            injectIsolatedBanner300x250("resultBannerSlot");
           }
         } else {
           alert(data.detail || "Unable to extract media. Verify link visibility.");
