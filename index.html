@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InstaSaver Pro - Multi-Device HD Instagram Downloader</title>
+  <title id="dynamicPageTitle">InstaSaver Pro - Multi-Device HD Instagram Downloader</title>
   <meta name="description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality. 100% Free, Zero Logs, and Compatible with iOS, Android, and PC.">
   <meta name="robots" content="index, follow">
 
@@ -229,7 +229,7 @@
 
   <!-- Header -->
   <nav class="navbar">
-    <div class="brand">⚡ InstaSaver Pro</div>
+    <div class="brand">⚡ <span class="app-brand-name">InstaSaver Pro</span></div>
     <div class="nav-badge">
       <span class="status-dot"></span> 100% Free & Safe
     </div>
@@ -325,7 +325,7 @@
         </div>
         <span class="step-badge">Step 2</span>
         <h3 class="step-heading">Paste & Fetch</h3>
-        <p class="step-desc">Paste the copied URL in the input field above and click <strong>Get Download Link</strong> to extract the original stream.</p>
+        <p class="step-desc">Paste the copied URL in the input field of <span class="app-brand-name">InstaSaver Pro</span> and click <strong>Get Download Link</strong>.</p>
       </div>
 
       <!-- Step 3 -->
@@ -348,7 +348,7 @@
   <!-- Complete User Benefits & Privacy Protection Policy -->
   <section class="content-section">
     <div class="section-header">
-      <h2 class="section-title">Your Privacy & User Benefits</h2>
+      <h2 class="section-title">Why Choose <span class="app-brand-name">InstaSaver Pro</span></h2>
       <p class="section-sub">Built with a commitment to original quality, data protection, and complete device security.</p>
     </div>
 
@@ -380,10 +380,25 @@
   </section>
 
   <footer>
-    <p>© 2026 InstaSaver Pro. Fast, Private & Unlimited Video Downloader.</p>
+    <p>© 2026 <span class="app-brand-name">InstaSaver Pro</span>. Fast, Private & Unlimited Video Downloader.</p>
   </footer>
 
   <script>
+    // ==========================================
+    // ⚙️ CENTRAL APP CONFIGURATION
+    // अगर आप भविष्य में कोई भी नाम बदलना चाहें, तो सिर्फ नीचे वाली एक लाइन बदलें:
+    // ==========================================
+    const APP_NAME = "InstaSaver Pro"; 
+    // ==========================================
+
+    // ऑटोमैटिक नाम अपडेट इंजन (पूरे पेज पर एक साथ नाम बदलता है)
+    function applyDynamicBranding() {
+      document.title = `${APP_NAME} - Multi-Device HD Instagram Downloader`;
+      document.querySelectorAll('.app-brand-name').forEach(el => {
+        el.textContent = APP_NAME;
+      });
+    }
+
     let activeMediaUrl = "";
     const AD_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
@@ -395,6 +410,8 @@
 
     // 2. सख्त नियम: iOS पर कंटेनर डिलीट, सिर्फ Android/गैर-Apple पर Adsterra लोड
     function setupAppEnvironment() {
+      applyDynamicBranding(); // पेज लोड होते ही हर जगह नाम सेट करेगा
+
       if (isAppleDevice()) {
         const slot = document.getElementById("midAdSlot");
         if (slot) slot.remove();
