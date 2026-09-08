@@ -27,10 +27,12 @@
     .box { background: var(--card); border: 1px solid var(--border); backdrop-filter: blur(16px); border-radius: 20px; padding: 24px; width: 100%; max-width: 520px; box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
     
     .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
-    input[type="text"] { width: 100%; padding: 16px 90px 16px 16px; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 0.95rem; outline: none; }
+    input[type="text"] { width: 100%; padding: 16px 90px 16px 16px; background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
     input[type="text"]:focus { border-color: #ff3366; }
     
     .paste-btn { position: absolute; right: 10px; background: rgba(255, 255, 255, 0.12); border: 1px solid var(--border); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .paste-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .paste-btn:active { transform: scale(0.96); }
 
     .btn { width: 100%; padding: 15px 20px; font-size: 1.05rem; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; color: white; background: var(--accent); transition: transform 0.1s; display: flex; justify-content: center; align-items: center; }
     .btn:active { transform: scale(0.98); }
@@ -45,6 +47,7 @@
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     
     .btn-secondary { margin-top: 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; width: 100%; font-weight: 600; }
+    .btn-secondary:active { transform: scale(0.98); }
     
     footer { margin-top: auto; padding: 25px 0; color: var(--muted); font-size: 0.85rem; text-align: center; }
   </style>
@@ -61,7 +64,10 @@
     <div id="searchSection">
       <div class="input-wrapper">
         <input type="text" id="videoUrl" placeholder="Paste Instagram link here..." autocomplete="off">
-        <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
+        <button type="button" class="paste-btn" onclick="handlePaste()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+          Paste
+        </button>
       </div>
       <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
     </div>
@@ -75,7 +81,7 @@
         </div>
         <div class="video-info" id="videoTitle">Instagram Reel</div>
         
-        <button class="btn" id="dlBtn" onclick="triggerSmartAction()">
+        <button class="btn" id="dlBtn" onclick="executeSmartAction()">
           Download HD MP4
         </button>
         
@@ -87,12 +93,12 @@
   </main>
 
   <footer>
-    <p>© 2026 Insta Video Downloader. Fast, safe & direct streams.</p>
+    <p>© 2026 Insta Video Downloader. Cross-Platform Engine.</p>
   </footer>
 
   <script>
     let activeMediaUrl = "";
-    // Adsterra Smartlink
+    // Adsterra Smartlink (Monetization)
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
     async function handlePaste() {
@@ -106,19 +112,22 @@
     }
 
     async function handleFetch() {
-      const urlInput = document.getElementById("videoUrl").value.trim();
+      let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
 
-      if (!urlInput) {
+      if (!rawUrl) {
         alert("Please paste a valid Instagram link first.");
         return;
       }
+
+      // Automatically clean query parameters (?igsh=...)
+      const cleanUrl = rawUrl.split("?")[0].split("&")[0];
 
       btn.disabled = true;
       btn.innerText = "Extracting HD Video...";
 
       try {
-        const response = await fetch(`/api/info?url=${encodeURIComponent(urlInput)}`);
+        const response = await fetch(`/api/info?url=${encodeURIComponent(cleanUrl)}`);
         const data = await response.json();
 
         if (response.ok && data.success) {
@@ -141,31 +150,33 @@
       }
     }
 
-    function triggerSmartAction() {
+    // CROSS-PLATFORM DUAL ACTION: ADSTERRA JUMP + NATIVE DOWNLOAD
+    function executeSmartAction() {
       if (!activeMediaUrl) return;
 
-      // 1. ADSTERRA JUMP (पहली मिलीसेकंड में नए टैब में खुलेगा - कभी ब्लॉक नहीं होगा)
+      // 1. ADSTERRA JUMP: बिना किसी देरी के पहली ही लाइन में नए टैब में लोड होगा
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // 2. NATIVE CROSS-PLATFORM DOWNLOAD
-      // अदृश्य डाउनलोड लिंक
-      const dlLink = document.createElement("a");
-      dlLink.href = activeMediaUrl;
-      dlLink.setAttribute("download", "instagram_video.mp4");
-      dlLink.setAttribute("target", "_self");
-      document.body.appendChild(dlLink);
-      dlLink.click();
+      // 2. DEVICE AWARE DOWNLOAD ENGINE
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const downloadEndpoint = `/api/download?url=${encodeURIComponent(activeMediaUrl)}`;
 
-      // Safari (iOS) बैकअप फ़ॉल-थ्रू: अगर Safari ऐंकर टैग को मिस करे तो इनविजिबल iframe फ़ाइल ट्रिगर करेगा
-      const frame = document.createElement("iframe");
-      frame.style.display = "none";
-      frame.src = activeMediaUrl;
-      document.body.appendChild(frame);
+      if (isIOS) {
+        // iOS Safari Engine: direct navigation forces Safari's native download prompt
+        window.location.href = downloadEndpoint;
+      } else {
+        // Android / Desktop Engine: background frame + anchor
+        const tempLink = document.createElement("a");
+        tempLink.href = downloadEndpoint;
+        tempLink.setAttribute("download", "Instagram_Video.mp4");
+        tempLink.style.display = "none";
+        document.body.appendChild(tempLink);
+        tempLink.click();
 
-      setTimeout(() => {
-        document.body.removeChild(dlLink);
-        document.body.removeChild(frame);
-      }, 3000);
+        setTimeout(() => {
+          document.body.removeChild(tempLink);
+        }, 3000);
+      }
     }
 
     function resetDownloader() {
