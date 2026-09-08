@@ -255,7 +255,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- 🚀 होम स्क्रीन नेटिव बैनर ऐड स्लॉट -->
+        <!-- 🚀 होम स्क्रीन पर दोनों नेटिव बैनर दिखाने के लिए स्लॉट -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
@@ -410,7 +410,7 @@
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // 1. नेटिव बैनर इन्जेक्टर (Safe Isolated Iframe)
+    // 1. दोनों नेटिव बैनर दिखाने के लिए Safe Isolated Iframe इन्जेक्टर
     function injectIsolatedNativeBanner(targetElementId) {
       const target = document.getElementById(targetElementId);
       if (!target || target.hasChildNodes()) return;
@@ -419,7 +419,7 @@
       iframe.scrolling = "no";
       iframe.frameBorder = "0";
       iframe.style.width = "100%";
-      iframe.style.height = "280px";
+      iframe.style.height = "520px"; // दो बैनर के लिए पर्याप्त ऊंचाई
       iframe.style.border = "none";
       iframe.style.overflow = "hidden";
       target.appendChild(iframe);
@@ -429,11 +429,28 @@
         <html>
         <head>
           <meta charset="utf-8">
-          <style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+          <style>
+            body { 
+              margin: 0; 
+              padding: 0; 
+              background: transparent; 
+              display: flex; 
+              flex-direction: column; 
+              justify-content: center; 
+              align-items: center; 
+              overflow: hidden; 
+              gap: 15px; 
+            }
+          </style>
         </head>
         <body>
-          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
+          <!-- पहला नेटिव बैनर -->
           <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
+          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
+
+          <!-- दूसरा नेटिव बैनर -->
+          <div id="container-f8d81fa9ed172810af50c56f403d0f99_2"></div>
+          <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
         </body>
         </html>
       `;
@@ -512,7 +529,7 @@
         return;
       }
 
-      // होम स्क्रीन नेटिव बैनर लोड
+      // होम स्क्रीन दोनों नेटिव बैनर लोड
       injectIsolatedNativeBanner("homeAdSlot");
 
       // Social Bar लोड
