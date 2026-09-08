@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="dynamicPageTitle">InstaSaver Pro - Multi-Device HD Instagram Downloader</title>
-  <meta name="description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality. 100% Free, Zero Logs, and Compatible with iOS, Android, and PC.">
+  <title id="dynamicPageTitle">CyberInsta Pro - Cinematic HD Instagram Downloader</title>
+  <meta name="description" content="Download Instagram Reels, Videos, and Stories in original Full HD quality with a futuristic cyber neon liquid glass interface. 100% Free, Zero Logs.">
   <meta name="robots" content="index, follow">
 
   <style>
     :root {
-      --bg: #070a13;
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --card-hover: rgba(255, 255, 255, 0.07);
-      --border: rgba(255, 255, 255, 0.08);
-      --accent: linear-gradient(135deg, #ff3366, #ff6b3d, #c32aa3);
-      --accent-glow: rgba(255, 51, 102, 0.25);
-      --text: #f9fafb;
-      --muted: #9ca3af;
-      --success: #10b981;
-      --radius: 16px;
+      --bg: #03030c;
+      --glass-bg: rgba(10, 14, 28, 0.75);
+      --glass-border: rgba(0, 243, 255, 0.25);
+      --glass-border-hover: rgba(0, 243, 255, 0.6);
+      --neon-cyan: #00f3ff;
+      --neon-pink: #ff007f;
+      --neon-purple: #9d00ff;
+      --accent: linear-gradient(135deg, #00f3ff, #9d00ff, #ff007f);
+      --accent-glow: rgba(0, 243, 255, 0.35);
+      --text: #ffffff;
+      --muted: #8a99ad;
+      --success: #00ff66;
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -33,8 +36,9 @@
       padding: 0 16px;
       overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 50% 10%, rgba(195, 42, 163, 0.12) 0%, transparent 60%),
-        radial-gradient(circle at 80% 90%, rgba(255, 107, 61, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 50% 5%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 85% 90%, rgba(157, 0, 255, 0.07) 0%, transparent 45%),
+        linear-gradient(rgba(3, 3, 12, 0.9), rgba(3, 3, 12, 0.95));
     }
 
     /* Top Navbar */
@@ -45,12 +49,34 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--glass-border);
       margin-bottom: 25px;
     }
-    .brand { font-size: 1.35rem; font-weight: 800; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; }
-    .nav-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-    .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; }
+    .brand { 
+      font-size: 1.4rem; 
+      font-weight: 800; 
+      background: var(--accent); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    }
+    .nav-badge { 
+      background: rgba(0, 255, 102, 0.08); 
+      border: 1px solid rgba(0, 255, 102, 0.3); 
+      color: var(--success); 
+      padding: 6px 14px; 
+      border-radius: 20px; 
+      font-size: 0.78rem; 
+      font-weight: 600; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
+    }
+    .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--success); }
 
     /* Universal Compatibility Indicator */
     .device-support-bar {
@@ -61,12 +87,13 @@
       flex-wrap: wrap;
       margin-bottom: 24px;
       padding: 10px 22px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       border-radius: 30px;
+      backdrop-filter: blur(12px);
     }
     .device-chip { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
-    .device-chip strong { color: #fff; }
+    .device-chip strong { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 243, 255, 0.3); }
 
     /* Core Downloader Box */
     .core-wrapper {
@@ -76,44 +103,64 @@
     }
 
     .box {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(20px);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(25px);
       border-radius: var(--radius);
       padding: 32px 24px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 25px rgba(0, 243, 255, 0.04);
       text-align: center;
+      position: relative;
+    }
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
     }
 
-    h1 { font-size: 2.1rem; font-weight: 800; margin-bottom: 8px; background: var(--accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h1 { 
+      font-size: 2.1rem; 
+      font-weight: 800; 
+      margin-bottom: 8px; 
+      background: var(--accent); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+    }
     p.sub { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 22px; }
 
     .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
     input[type="text"] {
       width: 100%;
       padding: 16px 95px 16px 16px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--border);
+      background: rgba(2, 4, 10, 0.75);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
       color: #fff;
       font-size: 0.95rem;
       outline: none;
-      transition: 0.2s;
+      transition: all 0.3s ease;
     }
-    input[type="text"]:focus { border-color: #ff3366; box-shadow: 0 0 14px var(--accent-glow); }
+    input[type="text"]:focus { 
+      border-color: var(--neon-cyan); 
+      box-shadow: 0 0 18px var(--accent-glow), inset 0 0 8px rgba(0, 243, 255, 0.1); 
+    }
 
     .paste-btn {
       position: absolute;
       right: 10px;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid var(--border);
-      color: #fff;
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      color: var(--neon-cyan);
       padding: 8px 14px;
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .paste-btn:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
 
     .btn {
       width: 100%;
@@ -125,30 +172,41 @@
       cursor: pointer;
       color: white;
       background: var(--accent);
-      transition: transform 0.1s;
+      box-shadow: 0 0 25px rgba(157, 0, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.6), 0 0 30px rgba(255, 0, 127, 0.4);
+      filter: brightness(1.1);
     }
     .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; filter: none; box-shadow: none; }
 
     /* Result Preview Area */
     #resultSection { display: none; text-align: center; }
-    .preview-card { background: rgba(0,0,0,0.35); border-radius: 14px; padding: 20px; border: 1px solid var(--border); }
-    .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 16px; border-radius: 12px; overflow: hidden; }
+    .preview-card { background: rgba(2, 4, 10, 0.7); border-radius: 14px; padding: 20px; border: 1px solid var(--glass-border); }
+    .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); }
     .thumb-container img { width: 100%; max-height: 350px; object-fit: cover; display: block; }
-    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: var(--success); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(3, 3, 12, 0.85); border: 1px solid rgba(0, 255, 102, 0.4); color: var(--success); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; box-shadow: 0 0 10px rgba(0, 255, 102, 0.2); }
     
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-    .btn-secondary { margin-top: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; }
+    .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
+    .btn-secondary:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Centered Ad Containers */
+    /* Smart Ad Containers (বিজ্ঞपनों के लिए साफ़ और कंट्रास्टेड ग्लास फ्रेम ताकि टेक्स्ट कभी न छुपे) */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
-      margin: 14px auto;
+      margin: 16px auto;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      background: #f8f9fa; /* विज्ञापन के अंदर के काले टेक्स्ट को पूरी तरह स्पष्ट दिखाने के लिए क्लीन लेयर */
+      border-radius: 14px;
+      padding: 10px;
+      border: 1px solid var(--neon-cyan);
+      box-shadow: 0 8px 30px rgba(0, 243, 255, 0.2);
     }
 
     /* Content Layout */
@@ -158,7 +216,7 @@
       margin-bottom: 35px;
     }
     .section-header { text-align: center; margin-bottom: 28px; }
-    .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
     .section-sub { font-size: 0.9rem; color: var(--muted); }
 
     /* Visual Turn-by-Turn Guide Cards */
@@ -168,48 +226,63 @@
       gap: 20px;
     }
     .step-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius);
       padding: 22px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(15px);
+    }
+    .step-card:hover {
+      border-color: var(--glass-border-hover);
+      box-shadow: 0 10px 30px rgba(0, 243, 255, 0.12);
+      transform: translateY(-2px);
     }
     .step-img-box {
       width: 100%;
       height: 130px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(2, 4, 10, 0.6);
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.15);
       margin-bottom: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 10px;
     }
-    .step-badge { font-size: 0.75rem; font-weight: 700; color: #ff6b3d; text-transform: uppercase; margin-bottom: 6px; }
+    .step-badge { font-size: 0.75rem; font-weight: 700; color: var(--neon-pink); text-transform: uppercase; margin-bottom: 6px; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); }
     .step-heading { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .step-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
 
-    /* User Benefits & Privacy Security Policy Grid */
+    /* User Benefits Grid */
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
     }
     .benefit-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius);
       padding: 24px;
       text-align: left;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(15px);
+    }
+    .benefit-card:hover {
+      border-color: var(--glass-border-hover);
+      box-shadow: 0 10px 30px rgba(255, 0, 127, 0.1);
+      transform: translateY(-2px);
     }
     .benefit-icon {
       font-size: 1.8rem;
       margin-bottom: 12px;
       display: inline-block;
+      filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.4));
     }
     .benefit-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .benefit-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.55; }
@@ -217,7 +290,7 @@
     footer {
       width: 100%;
       max-width: 900px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--glass-border);
       padding: 30px 0 40px 0;
       color: var(--muted);
       font-size: 0.82rem;
@@ -229,7 +302,7 @@
 
   <!-- Header -->
   <nav class="navbar">
-    <div class="brand">⚡ <span class="app-brand-name">InstaSaver Pro</span></div>
+    <div class="brand">⚡ <span class="app-brand-name">CyberInsta Pro</span></div>
     <div class="nav-badge">
       <span class="status-dot"></span> 100% Free & Safe
     </div>
@@ -298,11 +371,11 @@
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#141926" stroke="#ffffff1a"/>
-            <circle cx="50" cy="30" r="7" fill="#ff3366"/>
-            <rect x="64" y="27" width="50" height="6" rx="3" fill="#ffffff20"/>
-            <rect x="40" y="50" width="120" height="26" rx="5" fill="#ffffff0d" stroke="#ffffff20"/>
-            <text x="48" y="66" fill="#9ca3af" font-size="8" font-family="sans-serif">instagram.com/reel/...</text>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <circle cx="50" cy="30" r="7" fill="#ff007f"/>
+            <rect x="64" y="27" width="50" height="6" rx="3" fill="#ffffff30"/>
+            <rect x="40" y="50" width="120" height="26" rx="5" fill="#ffffff0d" stroke="#00f3ff44"/>
+            <text x="48" y="66" fill="#8a99ad" font-size="8" font-family="sans-serif">instagram.com/reel/...</text>
           </svg>
         </div>
         <span class="step-badge">Step 1</span>
@@ -314,32 +387,32 @@
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#141926" stroke="#ffffff1a"/>
-            <rect x="40" y="25" width="120" height="22" rx="5" fill="#0b0f19" stroke="#ff3366"/>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <rect x="40" y="25" width="120" height="22" rx="5" fill="#02040a" stroke="#00f3ff"/>
             <text x="48" y="39" fill="#fff" font-size="8" font-family="sans-serif">instagram.com/reel/xyz...</text>
             <rect x="40" y="54" width="120" height="22" rx="5" fill="url(#stepGrad)"/>
             <text x="66" y="68" fill="#fff" font-size="8" font-weight="bold" font-family="sans-serif">Get Download Link</text>
             <defs>
               <linearGradient id="stepGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop stop-color="#ff3366"/>
-                <stop offset="1" stop-color="#c32aa3"/>
+                <stop stop-color="#00f3ff"/>
+                <stop offset="1" stop-color="#9d00ff"/>
               </linearGradient>
             </defs>
           </svg>
         </div>
         <span class="step-badge">Step 2</span>
         <h3 class="step-heading">Paste & Fetch</h3>
-        <p class="step-desc">Paste the copied URL in the input field of <span class="app-brand-name">InstaSaver Pro</span> and click <strong>Get Download Link</strong>.</p>
+        <p class="step-desc">Paste the copied URL in the input field of <span class="app-brand-name">CyberInsta Pro</span> and click <strong>Get Download Link</strong>.</p>
       </div>
 
       <!-- Step 3 -->
       <div class="step-card">
         <div class="step-img-box">
           <svg width="100%" height="100%" viewBox="0 0 200 100" fill="none">
-            <rect x="25" y="10" width="150" height="80" rx="8" fill="#141926" stroke="#ffffff1a"/>
-            <circle cx="100" cy="40" r="18" fill="#10b98120" stroke="#10b981"/>
-            <path d="M100 32 L100 46 M94 41 L100 47 L106 41" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="65" y="74" fill="#10b981" font-size="8" font-weight="bold" font-family="sans-serif">Saved Directly</text>
+            <rect x="25" y="10" width="150" height="80" rx="8" fill="#03030c" stroke="#00f3ff33"/>
+            <circle cx="100" cy="40" r="18" fill="#00ff6620" stroke="#00ff66"/>
+            <path d="M100 32 L100 46 M94 41 L100 47 L106 41" stroke="#00ff66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="65" y="74" fill="#00ff66" font-size="8" font-weight="bold" font-family="sans-serif">Saved Directly</text>
           </svg>
         </div>
         <span class="step-badge">Step 3</span>
@@ -352,7 +425,7 @@
   <!-- Complete User Benefits & Privacy Protection Policy -->
   <section class="content-section">
     <div class="section-header">
-      <h2 class="section-title">Why Choose <span class="app-brand-name">InstaSaver Pro</span></h2>
+      <h2 class="section-title">Why Choose <span class="app-brand-name">CyberInsta Pro</span></h2>
       <p class="section-sub">Built with a commitment to original quality, data protection, and complete device security.</p>
     </div>
 
@@ -384,18 +457,18 @@
   </section>
 
   <footer>
-    <p>© 2026 <span class="app-brand-name">InstaSaver Pro</span>. Fast, Private & Unlimited Video Downloader.</p>
+    <p>© 2026 <span class="app-brand-name">CyberInsta Pro</span>. Fast, Private & Unlimited Video Downloader.</p>
   </footer>
 
   <script>
     // ==========================================
     // ⚙️ CENTRAL APP NAME CONFIGURATION
     // ==========================================
-    const APP_NAME = "InstaSaver Pro"; 
+    const APP_NAME = "CyberInsta Pro"; 
     // ==========================================
 
     function applyDynamicBranding() {
-      document.title = `${APP_NAME} - Multi-Device HD Instagram Downloader`;
+      document.title = `${APP_NAME} - Cinematic HD Instagram Downloader`;
       document.querySelectorAll('.app-brand-name').forEach(el => {
         el.textContent = APP_NAME;
       });
@@ -433,7 +506,7 @@
             body { 
               margin: 0; 
               padding: 0; 
-              background: transparent; 
+              background: #f8f9fa; /* विज्ञापन के काले टेक्स्ट को पूरी तरह स्पष्ट दिखाने के लिए iframe के अंदर का बैकग्राउंड लाइट रखा गया है */
               display: flex; 
               flex-direction: column; 
               justify-content: center; 
@@ -486,7 +559,7 @@
         <html>
         <head>
           <meta charset="utf-8">
-          <style>body { margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
+          <style>body { margin: 0; padding: 0; background: #f8f9fa; display: flex; justify-content: center; align-items: center; overflow: hidden; }</style>
         </head>
         <body>
           <script type="text/javascript">
@@ -538,7 +611,7 @@
       }
     }
 
-    // मुख्य मीडिया फ़ेच लॉजिक
+    // मुख्य मीडिया फ़ेच लॉजिक (बैकएंड सुरक्षित)
     async function handleFetch() {
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
@@ -581,7 +654,7 @@
       }
     }
 
-    // Dual-OS Architecture: स्मूथ डाउनलोडिंग
+    // Dual-OS Architecture: स्मूथ डाउनलोडिंग (बैकएंड सुरक्षित)
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
