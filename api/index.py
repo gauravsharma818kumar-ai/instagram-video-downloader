@@ -1,11 +1,11 @@
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import yt_dlp
-import re
+import requests
 
 app = FastAPI()
 
-# Enable CORS for browser access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,44 +14,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def is_valid_url(url: str) -> bool:
-    regex = r"^(https?:\/\/)?(www\.)?(instagram\.com|threads\.net)\/.+$"
-    return bool(re.match(regex, url))
-
 @app.get("/api/info")
-def extract_media(url: str = Query(..., description="Media URL to parse")):
-    if not is_valid_url(url):
-        raise HTTPException(status_code=400, detail="Invalid URL. Only valid links are permitted.")
-
+def get_video_info(url: str = Query(...)):
     ydl_opts = {
         'format': 'best',
         'quiet': True,
         'no_warnings': True,
-        'extract_flat': False,
-        'skip_download': True,
-        'socket_timeout': 15,
     }
-
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-            if not info:
-                raise HTTPException(status_code=404, detail="Media not found or private.")
-
-            # Direct stream extraction without holding on server
             video_url = info.get('url')
-            if not video_url and 'formats' in info:
-                for f in reversed(info['formats']):
-                    if f.get('ext') == 'mp4':
-                        video_url = f.get('url')
-                        break
-
+            title = info.get('title', 'Instagram Video')
+            thumbnail = info.get('thumbnail', '')
+            
             return {
                 "success": True,
-                "title": info.get("title", "Instagram Video"),
-                "thumbnail": info.get("thumbnail"),
-                "download_url": video_url or info.get("webpage_url"),
-                "duration": info.get("duration"),
+                "download_url": video_url,
+                "title": title,
+                "thumbnail": thumbnail
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to fetch media. Please verify link accessibility.")
+        raise HTTPException(status_code=400, detail="Invalid link or private video.")
+
+# नया डायरेक्ट डाउनलोड फ़ीचर (जो फ़ोन में फ़ाइल सेव कराएगा)
+@app.get("/api/download")
+def download_file(url: str = Query(...)):
+    try:
+        req = requests.get(url, stream=True, headers={"User-Agent": "Mozilla/5.0"})
+        return StreamingResponse(
+            req.iter_content(chunk_size=1024 * 1024),
+            media_type="video/mp4",
+            headers={"Content-Disposition": 'attachment; filename="instagram_video.mp4"'}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Failed to stream file.")
