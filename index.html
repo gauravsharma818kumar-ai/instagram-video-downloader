@@ -52,7 +52,7 @@
     .nav-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
     .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; }
 
-    /* Universal Device Compatibility Indicator */
+    /* Universal Hardware Compatibility Strip */
     .device-support-bar {
       display: flex;
       justify-content: center;
@@ -140,7 +140,7 @@
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     .btn-secondary { margin-top: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; }
 
-    /* Centered Ad Container */
+    /* Centered Responsive Ad Containers */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
@@ -248,16 +248,20 @@
       <h1>Instagram Video Downloader</h1>
       <p class="sub">Save Reels, Videos, and Stories in original Full HD quality without watermarks.</p>
 
-      <!-- Input Area -->
+      <!-- Input Area (Home Screen) -->
       <div id="searchSection">
         <div class="input-wrapper">
           <input type="text" id="videoUrl" placeholder="Paste Instagram video or reel link here..." autocomplete="off" maxlength="300">
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
+
+        <!-- HOME SCREEN ANDROID NATIVE AD (High CPM Slot) -->
+        <div class="ad-slot-container" id="homeAdSlot"></div>
+
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
       </div>
 
-      <!-- Preview Area -->
+      <!-- Preview Area (Result Screen) -->
       <div id="resultSection">
         <div class="preview-card">
           <div class="thumb-container">
@@ -267,7 +271,7 @@
           
           <div class="video-info" id="videoTitle">Instagram Video</div>
 
-          <!-- DYNAMIC NATIVE AD SLOT -->
+          <!-- RESULT SCREEN ANDROID NATIVE AD (Pre-Download Slot) -->
           <div class="ad-slot-container" id="midAdSlot"></div>
           
           <button class="btn" id="dlBtn" onclick="routeOsSpecificDownload()">
@@ -385,13 +389,11 @@
 
   <script>
     // ==========================================
-    // ⚙️ CENTRAL APP CONFIGURATION
-    // अगर आप भविष्य में कोई भी नाम बदलना चाहें, तो सिर्फ नीचे वाली एक लाइन बदलें:
+    // ⚙️ CENTRAL APP NAME (नाम बदलना हो तो सिर्फ यहाँ बदलें)
     // ==========================================
     const APP_NAME = "InstaSaver Pro"; 
     // ==========================================
 
-    // ऑटोमैटिक नाम अपडेट इंजन (पूरे पेज पर एक साथ नाम बदलता है)
     function applyDynamicBranding() {
       document.title = `${APP_NAME} - Multi-Device HD Instagram Downloader`;
       document.querySelectorAll('.app-brand-name').forEach(el => {
@@ -402,34 +404,40 @@
     let activeMediaUrl = "";
     const AD_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
-    // 1. शुद्ध Apple/iOS हार्डवेयर डिटेक्शन
+    // शुद्ध Apple/iOS हार्डवेयर डिटेक्शन (Strict iPhone/iPad Isolation)
     function isAppleDevice() {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // 2. सख्त नियम: iOS पर कंटेनर डिलीट, सिर्फ Android/गैर-Apple पर Adsterra लोड
+    // Adsterra Native Banner Injector (केवल Android के लिए)
+    function injectNativeBanner(targetElementId) {
+      const target = document.getElementById(targetElementId);
+      if (!target || target.hasChildNodes()) return;
+
+      const container = document.createElement("div");
+      container.id = "container-f8d81fa9ed172810af50c56f403d0f99";
+      target.appendChild(container);
+
+      const script = document.createElement("script");
+      script.async = true;
+      script.setAttribute("data-cfasync", "false");
+      script.src = "https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js";
+      target.appendChild(script);
+    }
+
+    // ऐप इनिशियलाइज़ेशन
     function setupAppEnvironment() {
-      applyDynamicBranding(); // पेज लोड होते ही हर जगह नाम सेट करेगा
+      applyDynamicBranding();
 
       if (isAppleDevice()) {
-        const slot = document.getElementById("midAdSlot");
-        if (slot) slot.remove();
+        // iOS पर विज्ञापन स्लॉट पूरी तरह हटा दिए जाते हैं
+        document.querySelectorAll('.ad-slot-container').forEach(slot => slot.remove());
         return;
       }
 
-      const slot = document.getElementById("midAdSlot");
-      if (slot && !slot.hasChildNodes()) {
-        const containerDiv = document.createElement("div");
-        containerDiv.id = "container-f8d81fa9ed172810af50c56f403d0f99";
-        slot.appendChild(containerDiv);
-
-        const script = document.createElement("script");
-        script.async = true;
-        script.setAttribute("data-cfasync", "false");
-        script.src = "https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js";
-        slot.appendChild(script);
-      }
+      // Android होम स्क्रीन पर ऐड लोड करना (High Viewability)
+      injectNativeBanner("homeAdSlot");
     }
 
     window.addEventListener('DOMContentLoaded', setupAppEnvironment);
@@ -444,6 +452,7 @@
       }
     }
 
+    // मुख्य मीडिया फ़ेच लॉजिक (बिना किसी छेड़छाड़ के)
     async function handleFetch() {
       let rawUrl = document.getElementById("videoUrl").value.trim();
       const btn = document.getElementById("fetchBtn");
@@ -470,6 +479,11 @@
 
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
+
+          // रिज़ल्ट स्क्रीन पर Android ऐड लोड करना
+          if (!isAppleDevice()) {
+            injectNativeBanner("midAdSlot");
+          }
         } else {
           alert(data.detail || "Unable to extract media. Verify link visibility.");
         }
@@ -481,7 +495,7 @@
       }
     }
 
-    // 3. डायरेक्ट और स्मूथ डाउनलोड निष्पादन (Dual-OS Architecture)
+    // Dual-OS Architecture: स्मूथ और सुरक्षित डाउनलोडिंग
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
