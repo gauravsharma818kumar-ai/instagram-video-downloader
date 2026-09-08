@@ -1,8 +1,6 @@
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import yt_dlp
-import requests
 
 app = FastAPI()
 
@@ -16,7 +14,7 @@ app.add_middleware(
 
 @app.get("/api/info")
 def get_video_info(url: str = Query(...)):
-    # Clean URL (Remove query parameters like ?igsh=...)
+    # ट्रैकिंग पैरामीटर्स साफ़ करना
     clean_url = url.split("?")[0]
 
     ydl_opts = {
@@ -24,7 +22,7 @@ def get_video_info(url: str = Query(...)):
         'quiet': True,
         'no_warnings': True,
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
             'Accept-Language': 'en-US,en;q=0.9',
         }
     }
@@ -34,9 +32,9 @@ def get_video_info(url: str = Query(...)):
             video_url = info.get('url')
             title = info.get('title', 'Instagram Video')
             thumbnail = info.get('thumbnail', '')
-            
+
             if not video_url:
-                raise Exception("No direct stream URL found")
+                raise Exception("Stream not found")
 
             return {
                 "success": True,
@@ -46,18 +44,3 @@ def get_video_info(url: str = Query(...)):
             }
     except Exception as e:
         raise HTTPException(status_code=400, detail="Instagram block or invalid link. Please try another reel.")
-
-@app.get("/api/download")
-def download_file(url: str = Query(...)):
-    try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
-        req = requests.get(url, stream=True, headers=headers, timeout=15)
-        return StreamingResponse(
-            req.iter_content(chunk_size=1024 * 1024),
-            media_type="video/mp4",
-            headers={"Content-Disposition": 'attachment; filename="instagram_video.mp4"'}
-        )
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Failed to stream file.")
