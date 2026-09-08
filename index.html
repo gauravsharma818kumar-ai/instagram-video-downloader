@@ -269,6 +269,7 @@
       text-decoration: none;
       display: inline-block;
       text-align: center;
+      margin-bottom: 14px;
     }
     .btn:hover {
       box-shadow: 0 0 35px rgba(0, 243, 255, 0.75), 0 0 35px rgba(255, 0, 127, 0.55);
@@ -293,7 +294,7 @@
       width: 100%;
       max-width: 360px;
       min-height: 90px;
-      margin: 16px auto;
+      margin: 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -307,6 +308,7 @@
     #resultBannerSlot {
       min-height: 250px;
       width: 300px;
+      margin: 16px auto;
     }
 
     /* Content Layout */
@@ -428,13 +430,14 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- Home Screen Native Banner Ad Slot -->
+        <!-- Search / Get Download Link Button moved ABOVE the ad -->
+        <button class="btn" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
+
+        <!-- Home Screen Native Banner Ad Slot moved BELOW the search button -->
         <div class="ad-slot-container" id="homeAdSlot">
           <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
           <script async="async" data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"></script>
         </div>
-
-        <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
       </div>
 
       <!-- Preview Area (Result Screen) -->
@@ -600,7 +603,7 @@
       return (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
     }
 
-    // App Initialization: Use device detection ONLY to turn off/remove banner ads on Apple/iOS devices
+    // App Initialization: Use device detection to control/hide banner ads on Apple/iOS devices
     function setupAppEnvironment() {
       applyDynamicBranding();
 
@@ -656,7 +659,7 @@
         alert("Network error. Please verify the URL and try again.");
       } finally {
         btn.disabled = false;
-        btn.innerText = "Get Download Link";
+        btn.innerText = "🔍 Search & Get Download Link";
       }
     }
 
