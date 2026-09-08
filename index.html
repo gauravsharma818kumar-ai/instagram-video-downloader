@@ -140,11 +140,11 @@
     .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
     .btn-secondary { margin-top: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; }
 
-    /* Centered Responsive Ad Container */
+    /* Centered Ad Containers */
     .ad-slot-container {
       width: 100%;
       max-width: 360px;
-      margin: 16px auto;
+      margin: 14px auto;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -255,7 +255,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <!-- 🚀 AD 1: पहली तस्वीर के अनुसार इनपुट बॉक्स और बटन के बीच वाला Native Banner -->
+        <!-- 🚀 1. होम स्क्रीन नेटिव बैनर ऐड -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
 
         <button class="btn" id="fetchBtn" onclick="handleFetch()">Get Download Link</button>
@@ -274,6 +274,9 @@
           <button class="btn" id="dlBtn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
+
+          <!-- 🚀 2. नया 300x250 बैनर ऐड (डाउनलोड बटन के ठीक नीचे) -->
+          <div class="ad-slot-container" id="resultBannerSlot"></div>
           
           <button class="btn-secondary" onclick="resetDownloader()">
             ↻ Download Another Video
@@ -423,27 +426,49 @@
       target.appendChild(script);
     }
 
-    // 2. नया Social Bar Injector (Android/Non-Apple यूज़र्स के लिए)
+    // 2. नया 300x250 बैनर इन्जेक्टर (रिजल्ट स्क्रीन के लिए)
+    function injectBanner300x250(targetElementId) {
+      const target = document.getElementById(targetElementId);
+      if (!target || target.hasChildNodes()) return;
+
+      const script1 = document.createElement("script");
+      script1.text = `
+        atOptions = {
+          'key' : '66c9a9d6d12860055170ed709f8ebe86',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      `;
+      target.appendChild(script1);
+
+      const script2 = document.createElement("script");
+      script2.async = true;
+      script2.src = "https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js";
+      target.appendChild(script2);
+    }
+
+    // 3. Social Bar Injector
     function injectSocialBar() {
       const s = document.createElement("script");
       s.src = "https://pl31241468.profitableratecpmnetwork.com/bc/4a/fd/bc4afdeae10cc7f16c4e9628468c9434.js";
       document.body.appendChild(s);
     }
 
-    // ऐप इनिशियलाइज़ेशन (सख्त सुरक्षा नियम)
+    // ऐप इनिशियलाइज़ेशन
     function setupAppEnvironment() {
       applyDynamicBranding();
 
       if (isAppleDevice()) {
-        // iOS पर विज्ञापन स्लॉट पूरी तरह हटा दिए जाते हैं
         document.querySelectorAll('.ad-slot-container').forEach(slot => slot.remove());
         return;
       }
 
-      // 🤖 Android पर पहला विज्ञापन (इनपुट बॉक्स और बटन के बीच)
+      // होम स्क्रीन नेटिव बैनर लोड
       injectNativeBanner("homeAdSlot");
 
-      // 🚀 Android पर नया हाई-सीपीएम Social Bar एक्टिवेट
+      // Social Bar लोड
       injectSocialBar();
     }
 
@@ -486,6 +511,11 @@
 
           document.getElementById("searchSection").style.display = "none";
           document.getElementById("resultSection").style.display = "block";
+
+          // रिजल्ट स्क्रीन खुलते ही डाउनलोड बटन के नीचे नया 300x250 बैनर लोड होगा
+          if (!isAppleDevice()) {
+            injectBanner300x250("resultBannerSlot");
+          }
         } else {
           alert(data.detail || "Unable to extract media. Verify link visibility.");
         }
