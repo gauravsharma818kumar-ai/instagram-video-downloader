@@ -98,7 +98,6 @@
 
   <script>
     let activeMediaUrl = "";
-    // Adsterra Smartlink (Monetization)
     const ADSTERRA_DIRECT_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
     async function handlePaste() {
@@ -120,7 +119,6 @@
         return;
       }
 
-      // Automatically clean query parameters (?igsh=...)
       const cleanUrl = rawUrl.split("?")[0].split("&")[0];
 
       btn.disabled = true;
@@ -150,32 +148,53 @@
       }
     }
 
-    // CROSS-PLATFORM DUAL ACTION: ADSTERRA JUMP + NATIVE DOWNLOAD
-    function executeSmartAction() {
+    // 100% गारंटीड डाउनलोड + ऐड जंप
+    async function executeSmartAction() {
       if (!activeMediaUrl) return;
 
-      // 1. ADSTERRA JUMP: बिना किसी देरी के पहली ही लाइन में नए टैब में लोड होगा
+      const btn = document.getElementById("dlBtn");
+      btn.innerText = "Saving to Device...";
+      btn.disabled = true;
+
+      // 1. ADSTERRA JUMP: यूज़र के क्लिक के 0ms पर नए टैब में ऐड खुलेगा (पॉप-अप ब्लॉक नहीं होगा)
       window.open(ADSTERRA_DIRECT_LINK, "_blank");
 
-      // 2. DEVICE AWARE DOWNLOAD ENGINE
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const downloadEndpoint = `/api/download?url=${encodeURIComponent(activeMediaUrl)}`;
+      // 2. GUARANTEED NATIVE FILE DOWNLOAD:
+      try {
+        // डायरेक्ट CDN फ़ाइल को Blob बनाकर सीधे मेमोरी में डाउनलोड करना
+        const response = await fetch(activeMediaUrl);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
 
-      if (isIOS) {
-        // iOS Safari Engine: direct navigation forces Safari's native download prompt
-        window.location.href = downloadEndpoint;
-      } else {
-        // Android / Desktop Engine: background frame + anchor
-        const tempLink = document.createElement("a");
-        tempLink.href = downloadEndpoint;
-        tempLink.setAttribute("download", "Instagram_Video.mp4");
-        tempLink.style.display = "none";
-        document.body.appendChild(tempLink);
-        tempLink.click();
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = blobUrl;
+        a.download = "Instagram_Video_" + Date.now() + ".mp4";
+        document.body.appendChild(a);
+        a.click();
 
+        // सफ़ाई
         setTimeout(() => {
-          document.body.removeChild(tempLink);
-        }, 3000);
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(blobUrl);
+          btn.innerText = "Download HD MP4";
+          btn.disabled = false;
+        }, 2000);
+
+      } catch (err) {
+        // अगर CDN डायरेक्ट blob ब्लॉक करे, तो बैकअप फ़ोर्स्ड ऐंकर चलाएँ
+        const fallback = document.createElement("a");
+        fallback.href = activeMediaUrl;
+        fallback.setAttribute("download", "Instagram_Video.mp4");
+        fallback.setAttribute("target", "_blank");
+        document.body.appendChild(fallback);
+        fallback.click();
+        
+        setTimeout(() => {
+          document.body.removeChild(fallback);
+          btn.innerText = "Download HD MP4";
+          btn.disabled = false;
+        }, 2000);
       }
     }
 
