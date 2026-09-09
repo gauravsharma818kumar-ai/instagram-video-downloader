@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Global SEO & Search Engine Optimization -->
+  <!-- Global SEO Optimization -->
   <title>AllSavePro™ — Universal HD Video Downloader & Saver</title>
   <meta name="description" content="Universal high-speed video downloader. Save reels, videos, and stories from Instagram, Facebook, TikTok, YouTube, and Pinterest in original 1080p Full HD quality. Free, fast, and secure online media downloader.">
   <meta name="keywords" content="video downloader, reels downloader, instagram video saver, facebook downloader, tiktok downloader, youtube saver, pinterest downloader, hd media saver">
@@ -26,7 +26,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="/logo.png">
   <link rel="apple-touch-icon" href="/logo.png">
 
-  <!-- Structured Data (Schema.org) -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -47,14 +47,18 @@
   }
   </script>
 
-  <!-- Pre-Render Hardware & Platform Detection (Zero Millisecond Execution) -->
+  <!-- Pre-DOM Hardware & OS Detection Engine (Zero-Millisecond Pre-Execution) -->
   <script>
     (function() {
       var ua = navigator.userAgent || navigator.vendor || window.opera;
+      
+      // Strict Detection for Android
       window.IS_ANDROID = /Android/i.test(ua);
+      
+      // Strict Detection for Apple iOS, iPadOS, and Desktop Safari with Touch
       window.IS_APPLE = (/iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 
-      // Immediately hide ad slots on non-Android platforms before the DOM paints
+      // Suppress ad banners instantly for iOS and Desktop (Windows / macOS) before paint
       if (!window.IS_ANDROID) {
         document.documentElement.classList.add('suppress-banners');
       }
@@ -102,7 +106,7 @@
       background-attachment: fixed;
     }
 
-    /* Guaranteed zero layout shift rule for Windows, macOS, and iOS */
+    /* Zero layout shift rule: Suppress ads entirely on non-Android platforms */
     html.suppress-banners .ad-slot-container {
       display: none !important;
     }
@@ -212,7 +216,7 @@
       margin-bottom: 8px; 
       background: var(--accent-grad); 
       -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: transparent; 
       text-shadow: 0 0 35px rgba(0, 243, 255, 0.4);
     }
 
@@ -514,20 +518,20 @@
     <div class="nav-badge"><span class="status-dot"></span> 100% Free & Safe</div>
   </nav>
 
-  <!-- Hardware Status Display -->
+  <!-- Hardware Compatibility Display -->
   <div class="device-support-bar">
     <div class="device-chip">📱 <strong>iPhone & iPad</strong> (Direct to Photos)</div>
     <div class="device-chip">🤖 <strong>Android</strong> (Direct to Gallery)</div>
     <div class="device-chip">💻 <strong>PC & Mac</strong> (All Browsers)</div>
   </div>
 
-  <!-- Primary Application Wrapper -->
+  <!-- Main Container -->
   <div class="core-wrapper">
     <main class="box">
       <h1>Universal Video Downloader</h1>
       <p class="sub" id="dynamicSubtitle">Save Reels, Videos, and Stories from Instagram, Facebook, TikTok, YouTube & Pinterest in original Full HD quality without watermarks.</p>
 
-      <!-- Search Section (Home Screen) -->
+      <!-- Input Area (Home Screen) -->
       <div id="searchSection" style="text-align: center;">
         <div class="input-wrapper">
           <input type="text" id="videoUrl" placeholder="Paste video or reel link here..." autocomplete="off" maxlength="300">
@@ -540,7 +544,7 @@
         <div class="ad-slot-container" id="homeAdSlot"></div>
       </div>
 
-      <!-- Result Section (Result Screen) -->
+      <!-- Result Screen -->
       <div id="resultSection">
         <div class="preview-card">
           <div class="thumb-container">
@@ -550,8 +554,8 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Universal Download Trigger -->
-          <button class="btn" onclick="routeOsSpecificDownload()">
+          <!-- Universal Action Trigger -->
+          <button class="btn" id="downloadBtn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
 
@@ -566,7 +570,7 @@
     </main>
   </div>
 
-  <!-- Instructions Section -->
+  <!-- Visual Guide -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title">How to Download in 3 Simple Steps</h2>
@@ -591,7 +595,7 @@
     </div>
   </section>
 
-  <!-- Value Propositions Section -->
+  <!-- Features Grid -->
   <section class="content-section">
     <div class="benefits-grid">
       <div class="benefit-card">
@@ -612,17 +616,16 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <p>© 2026 <span class="app-brand-name">AllSavePro</span>. Fast, Private & Unlimited Universal Video Downloader.</p>
   </footer>
 
-  <!-- Application Logic & Download Orchestration Engine -->
+  <!-- Application Engine Script -->
   <script>
     const APP_NAME = "AllSavePro"; 
     let activeMediaUrl = "";
 
-    // Adsterra Universal Direct Jumping Link
+    // Adsterra Universal Direct Jumping URL
     const AD_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
 
     function applyDynamicBranding() {
@@ -631,10 +634,9 @@
       });
     }
 
-    // Android-Exclusive Banner Injection Routine
+    // Android-Exclusive Banner Injection
     function initializeBannersIfAndroid() {
       if (!window.IS_ANDROID) {
-        // Complete structural removal on iOS, iPadOS, and Windows/macOS Desktop
         const homeSlot = document.getElementById('homeAdSlot');
         const resSlot = document.getElementById('resultBannerSlot');
         if (homeSlot) homeSlot.remove();
@@ -642,9 +644,9 @@
         return;
       }
 
-      // 1. Android Home Screen Native Banner Injection
+      // 1. Android Home Screen Native Banner
       const homeSlot = document.getElementById('homeAdSlot');
-      if (homeSlot) {
+      if (homeSlot && !homeSlot.hasChildNodes()) {
         const adDiv = document.createElement('div');
         adDiv.id = 'container-f8d81fa9ed172810af50c56f403d0f99';
         homeSlot.appendChild(adDiv);
@@ -656,12 +658,12 @@
         homeSlot.appendChild(adScript);
       }
 
-      // 2. Android Result Screen 300x250 Banner Injection
+      // 2. Android Result Screen 300x250 Banner
       const resSlot = document.getElementById('resultBannerSlot');
-      if (resSlot) {
+      if (resSlot && !resSlot.hasChildNodes()) {
         const optScript = document.createElement('script');
         optScript.type = "text/javascript";
-        optScript.text = "window.atOptions = { 'key' : '66c9a9d6d12860055170ed709f8ebe86', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };";
+        optScript.appendChild(document.createTextNode("window.atOptions = { 'key' : '66c9a9d6d12860055170ed709f8ebe86', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };"));
         resSlot.appendChild(optScript);
 
         const resScript = document.createElement('script');
@@ -723,23 +725,29 @@
       }
     }
 
-    // Universal OS-Specific Download Engine
+    // Universal Timed Download Execution Engine
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
-      // 1. Direct synchronous trigger of jumping URL on user click
+      const dlBtn = document.getElementById("downloadBtn");
+      if (dlBtn) {
+        dlBtn.disabled = true;
+        dlBtn.innerText = "Preparing Download (2s)...";
+      }
+
+      // Step 1: Open direct jumping ad link in a new tab immediately on user click
       window.open(AD_LINK, "_blank");
 
-      // 2. Strict 2000ms delay before triggering native OS download dialog
+      // Step 2: Precise 2000ms delay before triggering the OS-specific native download
       setTimeout(() => {
         const uniqueTimestamp = Date.now();
         const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
         if (window.IS_APPLE) {
-          // Native Safari prompt on iOS / iPadOS
-          window.location.href = streamEndpoint;
+          // iOS Safari native prompt trigger
+          window.location.assign(streamEndpoint);
         } else {
-          // Clean background frame routing on Android and Windows Chrome
+          // Android and Windows Chrome background download frame
           const dlFrame = document.createElement("iframe");
           dlFrame.style.display = "none";
           dlFrame.src = streamEndpoint;
@@ -757,11 +765,18 @@
             if (a.parentNode) document.body.removeChild(a);
           }, 5000);
         }
+
+        if (dlBtn) {
+          dlBtn.disabled = false;
+          dlBtn.innerText = "Download HD MP4";
+        }
       }, 2000);
     }
 
     function resetDownloader() {
       document.getElementById("videoUrl").value = "";
+      document.getElementById("thumbImg").src = "";
+      document.getElementById("videoTitle").textContent = "Media Video";
       document.getElementById("resultSection").style.display = "none";
       document.getElementById("searchSection").style.display = "block";
       activeMediaUrl = "";
