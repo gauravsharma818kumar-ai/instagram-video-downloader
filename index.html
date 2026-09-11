@@ -367,7 +367,7 @@
     .step-desc, .benefit-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
     .benefit-icon { font-size: 1.8rem; margin-bottom: 12px; display: inline-block; }
 
-    /* Universal Modal Classes (Used for both YouTube and Invalid URL warnings) */
+    /* Universal Modal Classes */
     .custom-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(2, 4, 10, 0.85); backdrop-filter: blur(12px);
@@ -479,7 +479,7 @@
     </div>
   </div>
 
-  <!-- Popup 2: Invalid URL Modal (Too short, too long, or no http/https) -->
+  <!-- Popup 2: Invalid URL Modal -->
   <div id="invalidUrlModal" class="custom-modal-overlay">
     <div class="custom-modal-box warning-orange">
       <div class="custom-modal-icon">⚠️</div>
@@ -597,7 +597,6 @@
       } catch (e) {}
     }
 
-    // High-Performance Crash-Proof Banner Initialization Engine with Absolute Multi-Crawler Shield
     function initializeBannersSafe() {
       try {
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
@@ -669,19 +668,16 @@
       } catch (e) {}
     }
 
-    // Function to close YouTube Warning Popup
     function closeYoutubeWarning() {
       var modal = document.getElementById("youtubeModal");
       var urlInput = document.getElementById("videoUrl");
       if (modal) modal.style.display = "none";
-      if (urlInput) urlInput.value = ""; // Clear input for YouTube restrictions
+      if (urlInput) urlInput.value = "";
     }
 
-    // Function to close Invalid URL Popup
     function closeInvalidUrlWarning() {
       var modal = document.getElementById("invalidUrlModal");
       if (modal) modal.style.display = "none";
-      // Keeps typed URL intact so user can fix typo
     }
 
     async function handleFetch() {
@@ -690,19 +686,17 @@
         let rawUrl = urlInput ? urlInput.value.trim() : "";
         const btn = document.getElementById("fetchBtn");
 
-        // Strict input validation for Invalid URLs (empty, <15, >450, or missing http/https)
         if (!rawUrl || rawUrl.length < 15 || rawUrl.length > 450 || (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://"))) {
           var invalidModal = document.getElementById("invalidUrlModal");
           if (invalidModal) invalidModal.style.display = "flex";
-          return; // Stop execution
+          return;
         }
 
-        // YouTube Restrictions Detection
         let checkUrl = rawUrl.toLowerCase();
         if (checkUrl.includes("youtube.com") || checkUrl.includes("youtu.be")) {
           var ytModal = document.getElementById("youtubeModal");
           if (ytModal) ytModal.style.display = "flex";
-          return; // Stop execution
+          return;
         }
 
         if (btn) {
@@ -742,7 +736,7 @@
       }
     }
 
-    // Universal Non-Blocking 2000ms Timed Download Execution Engine with Multi-Crawler Protection
+    // OPTIMIZED: Synchronized 2000ms Download Engine with Streaming Response Hook for Native Popup Prompt
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
@@ -764,24 +758,19 @@
           if (window.IS_APPLE_IOS) {
             window.location.assign(streamEndpoint);
           } else {
-            const dlFrame = document.createElement("iframe");
-            dlFrame.style.display = "none";
-            dlFrame.src = streamEndpoint;
-            document.body.appendChild(dlFrame);
-
             const a = document.createElement("a");
             a.href = streamEndpoint;
-            a.setAttribute("download", "Video_1080p.mp4");
+            a.setAttribute("download", "AllSavePro_Video.mp4");
+            a.target = "_self";
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();
 
             setTimeout(() => {
               try {
-                if (dlFrame && dlFrame.parentNode) dlFrame.parentNode.removeChild(dlFrame);
                 if (a && a.parentNode) a.parentNode.removeChild(a);
               } catch (cleanupErr) {}
-            }, 5000);
+            }, 1000);
           }
         } catch (downloadErr) {
           try { window.location.href = activeMediaUrl; } catch (ex) {}
