@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from urllib.parse import urlparse
 import requests
@@ -7,65 +7,86 @@ import re
 import html
 import yt_dlp
 
-app = FastAPI(title="Universal Secure Media Engine")
+app = FastAPI(
+    title="AllSavePro Media Core Engine",
+    description="Universal Production Media Extraction and Streaming Engine",
+    version="2.0.0"
+)
 
-# CORS पॉलिसी
+# ---------------------------------------------------------
+# Architecture Flag:
+# False = High-Speed Direct Redirect (Optimized for Vercel)
+# True  = Full Binary Proxy Stream (For Dedicated Servers / VPS)
+# ---------------------------------------------------------
+PROXY_MODE = False
+
+# Strict CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "OPTIONS"],
     allow_headers=["*"],
-    expose_headers=["Content-Disposition"]
+    expose_headers=["Content-Disposition", "Content-Length", "Content-Type"]
 )
 
-# भविष्य के विस्तार के लिए डोमेन सूची (भविष्य में facebook.com आदि जोड़ सकते हैं)
+# Authorized Target Domains
 ALLOWED_DOMAINS = [
     "instagram.com",
-    "www.instagram.com",
-    "cdninstagram.com"
+    "facebook.com",
+    "fb.watch",
+    "tiktok.com",
+    "pinterest.com",
+    "pin.it",
+    "twitter.com",
+    "x.com"
 ]
 
-def sanitize_and_validate(url: str) -> str:
-    """SSRF एवं दुर्भावनापूर्ण यूआरएल से सुरक्षा"""
-    if not url or len(url) > 300:
-        raise HTTPException(status_code=400, detail="Invalid link length.")
+@app.get("/")
+@app.get("/api/health")
+def health_probe():
+    """Health check endpoint for web crawlers and uptime monitoring"""
+    return JSONResponse(status_code=200, content={"status": "healthy", "engine": "running"})
+
+def validate_target_url(raw_url: str) -> str:
+    """Sanitize URL to prevent SSRF and filter unwanted payloads"""
+    if not raw_url or len(raw_url) > 500:
+        raise HTTPException(status_code=400, detail="Invalid target link length.")
     
-    parsed = urlparse(url.strip())
+    parsed = urlparse(raw_url.strip())
     if parsed.scheme not in ["http", "https"]:
-        raise HTTPException(status_code=400, detail="Invalid protocol.")
+        raise HTTPException(status_code=400, detail="Invalid URI scheme.")
     
     host = parsed.hostname
     if not host:
-        raise HTTPException(status_code=400, detail="Malformed URL.")
+        raise HTTPException(status_code=400, detail="Malformed host detected.")
     
-    is_allowed = any(host == d or host.endswith("." + d) for d in ALLOWED_DOMAINS)
-    if not is_allowed:
-        raise HTTPException(status_code=400, detail="Unsupported platform.")
+    is_authorized = any(host == domain or host.endswith("." + domain) for domain in ALLOWED_DOMAINS)
+    if not is_authorized:
+        raise HTTPException(status_code=400, detail="Platform host not supported.")
     
-    return f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+    return raw_url.strip()
 
-def fetch_graphql(shortcode: str):
-    """Tier 1: Instagram GraphQL API"""
-    target = f"https://www.instagram.com/graphql/query/?query_hash=b3055c01b4b222b8a47dc12b090e4e64&variables=%7B%22shortcode%22:%22{shortcode}%22%7D"
+def extract_instagram_graphql(shortcode: str):
+    """Tier 1: Direct High-Speed GraphQL Extractor for Instagram"""
+    query_url = f"https://www.instagram.com/graphql/query/?query_hash=b3055c01b4b222b8a47dc12b090e4e64&variables=%7B%22shortcode%22:%22{shortcode}%22%7D"
     headers = {
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15",
         "X-IG-App-ID": "936619743392459",
         "Accept": "*/*"
     }
     try:
-        r = requests.get(target, headers=headers, timeout=6)
-        if r.status_code == 200:
-            data = r.json()
-            media = data.get("data", {}).get("shortcode_media", {})
-            if media and media.get("is_video"):
-                video_url = media.get("video_url")
-                thumb = media.get("display_url", "")
-                title = "Video Media"
+        res = requests.get(query_url, headers=headers, timeout=5)
+        if res.status_code == 200:
+            data = res.json().get("data", {}).get("shortcode_media", {})
+            if data and data.get("is_video"):
+                video_url = data.get("video_url")
+                thumb = data.get("display_url", "")
+                title = "Instagram Media"
                 try:
-                    edges = media.get("edge_media_to_caption", {}).get("edges", [])
+                    edges = data.get("edge_media_to_caption", {}).get("edges", [])
                     if edges:
-                        title = edges[0].get("node", {}).get("text", "Video Media")[:40]
+                        title = edges[0].get("node", {}).get("text", "Instagram Media")[:40]
                 except Exception:
                     pass
                 return video_url, thumb, title
@@ -73,24 +94,24 @@ def fetch_graphql(shortcode: str):
         pass
     return None, None, None
 
-def fetch_meta_tags(url: str):
-    """Tier 2: Meta OpenGraph Tags"""
+def extract_opengraph_meta(clean_url: str):
+    """Tier 2: Meta OpenGraph Extractor for Facebook and Meta Assets"""
     headers = {
         "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
     }
     try:
-        r = requests.get(url, headers=headers, timeout=6)
-        if r.status_code == 200:
-            text = r.text
-            match = re.search(r'<meta property="og:video" content="([^"]+)"', text) or \
-                    re.search(r'"video_url":"([^"]+)"', text)
-            thumb_match = re.search(r'<meta property="og:image" content="([^"]+)"', text)
-            title_match = re.search(r'<meta property="og:title" content="([^"]+)"', text)
+        res = requests.get(clean_url, headers=headers, timeout=5)
+        if res.status_code == 200:
+            body = res.text
+            match = re.search(r'<meta property="og:video" content="([^"]+)"', body) or \
+                    re.search(r'"video_url":"([^"]+)"', body)
+            thumb_match = re.search(r'<meta property="og:image" content="([^"]+)"', body)
+            title_match = re.search(r'<meta property="og:title" content="([^"]+)"', body)
 
             if match:
-                raw_url = match.group(1).replace("\\u0026", "&").replace("&amp;", "&")
-                video_url = html.unescape(raw_url)
+                raw_media = match.group(1).replace("\\u0026", "&").replace("&amp;", "&")
+                video_url = html.unescape(raw_media)
                 thumb = html.unescape(thumb_match.group(1).replace("\\u0026", "&").replace("&amp;", "&")) if thumb_match else ""
                 title = html.unescape(title_match.group(1))[:40] if title_match else "Social Video"
                 return video_url, thumb, title
@@ -99,70 +120,77 @@ def fetch_meta_tags(url: str):
     return None, None, None
 
 @app.get("/api/info")
-def extract_media(url: str = Query(...)):
-    clean_url = sanitize_and_validate(url)
+def get_media_payload(url: str = Query(...)):
+    """Main extraction handler compatible with existing front-end structure"""
+    valid_url = validate_target_url(url)
 
-    shortcode = None
-    m = re.search(r'/(?:reel|p|tv)/([A-Za-z0-9_-]+)', clean_url)
-    if m:
-        shortcode = m.group(1)
+    # 1. Instagram Optimization Path
+    if "instagram.com" in valid_url:
+        shortcode_match = re.search(r'/(?:reel|p|tv)/([A-Za-z0-9_-]+)', valid_url)
+        if shortcode_match:
+            v_url, thumb, title = extract_instagram_graphql(shortcode_match.group(1))
+            if v_url:
+                return {"success": True, "download_url": v_url, "title": title, "thumbnail": thumb}
 
-    # 1. GraphQL
-    if shortcode:
-        v_url, thumb, title = fetch_graphql(shortcode)
+        v_url, thumb, title = extract_opengraph_meta(valid_url)
         if v_url:
             return {"success": True, "download_url": v_url, "title": title, "thumbnail": thumb}
 
-    # 2. OpenGraph Meta
-    v_url, thumb, title = fetch_meta_tags(clean_url)
-    if v_url:
-        return {"success": True, "download_url": v_url, "title": title, "thumbnail": thumb}
-
-    # 3. yt-dlp Backup
+    # 2. Universal Engine (Pinterest, Facebook, TikTok, X)
     try:
         ydl_opts = {
-            'format': 'best',
+            'format': 'best[ext=mp4]/best',
             'quiet': True,
             'no_warnings': True,
             'http_headers': {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(clean_url, download=False)
-            v_url = info.get('url')
-            if v_url:
+            info = ydl.extract_info(valid_url, download=False)
+            stream_target = info.get('url')
+
+            if not stream_target and 'formats' in info:
+                for fmt in reversed(info['formats']):
+                    if fmt.get('url'):
+                        stream_target = fmt['url']
+                        break
+
+            if stream_target:
                 return {
                     "success": True,
-                    "download_url": v_url,
-                    "title": info.get('title', 'Video Media'),
+                    "download_url": stream_target,
+                    "title": (info.get('title') or 'Social Video')[:40],
                     "thumbnail": info.get('thumbnail', '')
                 }
     except Exception:
         pass
 
-    raise HTTPException(status_code=400, detail="Unable to retrieve media stream. Verify public access.")
+    raise HTTPException(status_code=400, detail="Failed to fetch video. Please verify the link is public.")
 
 @app.get("/api/stream")
-def force_download_stream(url: str = Query(...)):
-    """iOS Safari एवं Android के लिए बाध्यकारी डाउनलोड हेडर स्ट्रीम"""
-    parsed = urlparse(url)
-    # केवल अधिकृत मीडिया होस्ट्स से प्रॉक्सी की अनुमति
-    if not (parsed.hostname and ("cdninstagram.com" in parsed.hostname or "fbcdn.net" in parsed.hostname)):
-        raise HTTPException(status_code=403, detail="Unauthorized streaming source.")
+def process_media_stream(url: str = Query(...)):
+    """Dual-mode streaming handler (Direct Redirect vs VPS Proxy Stream)"""
+    if not url:
+        raise HTTPException(status_code=400, detail="Target download URL is missing.")
 
+    # Mode 1: Vercel Direct Redirect (Prevents Payload Drop)
+    if not PROXY_MODE:
+        return RedirectResponse(url=url)
+
+    # Mode 2: Dedicated Server Binary Stream (Future VPS Mode)
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X)"}
-        req = requests.get(url, stream=True, headers=headers, timeout=25)
+        stream_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        upstream = requests.get(url, stream=True, headers=stream_headers, timeout=30)
         
-        response_headers = {
-            "Content-Disposition": 'attachment; filename="Instagram_Video.mp4"',
-            "Content-Type": "video/mp4",
+        downstream_headers = {
+            "Content-Disposition": 'attachment; filename="AllSavePro_Media.mp4"',
+            "Content-Type": upstream.headers.get("Content-Type", "video/mp4"),
             "Access-Control-Allow-Origin": "*"
         }
-        
+
         return StreamingResponse(
-            req.iter_content(chunk_size=1024 * 512),
+            upstream.iter_content(chunk_size=1024 * 512),
             media_type="video/mp4",
-            headers=response_headers
+            headers=downstream_headers
         )
     except Exception:
-        raise HTTPException(status_code=400, detail="Stream connection failed.")
+        raise HTTPException(status_code=500, detail="Proxy stream pipe failed.")
