@@ -168,29 +168,34 @@ def get_media_payload(url: str = Query(...)):
 
 @app.get("/api/stream")
 def process_media_stream(url: str = Query(...)):
-    """Dual-mode streaming handler (Direct Redirect vs VPS Proxy Stream)"""
+    """Cross-device universal download stream handler with forced attachment headers"""
     if not url:
         raise HTTPException(status_code=400, detail="Target download URL is missing.")
 
-    # Mode 1: Vercel Direct Redirect (Prevents Payload Drop)
-    if not PROXY_MODE:
-        return RedirectResponse(url=url)
+    # Dedicated Server Binary Stream Mode
+    if PROXY_MODE:
+        try:
+            stream_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+            upstream = requests.get(url, stream=True, headers=stream_headers, timeout=30)
+            
+            downstream_headers = {
+                "Content-Disposition": 'attachment; filename="AllSavePro_Video.mp4"',
+                "Content-Type": "application/octet-stream",
+                "Access-Control-Allow-Origin": "*"
+            }
 
-    # Mode 2: Dedicated Server Binary Stream (Future VPS Mode)
-    try:
-        stream_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-        upstream = requests.get(url, stream=True, headers=stream_headers, timeout=30)
-        
-        downstream_headers = {
-            "Content-Disposition": 'attachment; filename="AllSavePro_Media.mp4"',
-            "Content-Type": upstream.headers.get("Content-Type", "video/mp4"),
-            "Access-Control-Allow-Origin": "*"
-        }
+            return StreamingResponse(
+                upstream.iter_content(chunk_size=1024 * 512),
+                media_type="application/octet-stream",
+                headers=downstream_headers
+            )
+        except Exception:
+            raise HTTPException(status_code=500, detail="Proxy stream pipe failed.")
 
-        return StreamingResponse(
-            upstream.iter_content(chunk_size=1024 * 512),
-            media_type="video/mp4",
-            headers=downstream_headers
-        )
-    except Exception:
-        raise HTTPException(status_code=500, detail="Proxy stream pipe failed.")
+    # Vercel Production Mode: Forced Attachment Headers with Direct CDN Forwarding
+    response_headers = {
+        "Content-Disposition": 'attachment; filename="AllSavePro_Video.mp4"',
+        "Content-Type": "application/octet-stream",
+        "Access-Control-Allow-Origin": "*"
+    }
+    return RedirectResponse(url=url, headers=response_headers)
