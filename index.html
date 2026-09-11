@@ -132,25 +132,18 @@
         var platform = nav.platform || '';
         var maxTouch = (typeof nav.maxTouchPoints === 'number') ? nav.maxTouchPoints : 0;
         
-        // 1. Comprehensive Multi-Search Engine Crawler Protection
         var isGlobalCrawler = /Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|Lighthouse|HeadlessChrome|AdsBot-Google|Applebot|Yeti|Teoma|Gigabot|ia_archiver|Facebot|Twitterbot|LinkedInBot|NaverBot|Daum|Sogou|Exabot|MJ12bot/i.test(ua);
-
-        // 2. Strict Apple iOS & iPadOS Detection
         var isIOS = /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && maxTouch > 1);
-
-        // 3. Real Desktop PCs & Touch POS Terminals Detection (Windows, Mac, Linux, TVS Terminals)
         var isWindowsDesktop = /Windows NT|Windows/i.test(ua) && !/Phone|Mobile|Android/i.test(ua);
         var isMacBookDesktop = /Macintosh|MacIntel/i.test(ua) && !isIOS && maxTouch <= 1;
         var isLinuxDesktop = /Linux/i.test(platform) && !/Android|Mobile|Tablet/i.test(ua) && maxTouch <= 1;
 
         var isRealDesktopPC = isWindowsDesktop || isMacBookDesktop || isLinuxDesktop;
 
-        // Global Safety Flags Assignment
         window.IS_GLOBAL_CRAWLER = !!isGlobalCrawler;
         window.IS_APPLE_IOS = !!isIOS;
         window.IS_REAL_DESKTOP = !!isRealDesktopPC;
 
-        // Absolute Zero Ad Footprint for All Search Crawlers, iOS, Desktops and POS Terminals before paint
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
           if (document && document.documentElement) {
             document.documentElement.classList.add('suppress-banners');
@@ -178,6 +171,8 @@
       --text-main: #ffffff;
       --text-muted: #94a3b8;
       --success-green: #00ff66;
+      --warning-red: #ff3366;
+      --warning-orange: #ff9900;
       --radius: 18px;
     }
 
@@ -270,22 +265,10 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
-    .device-chip { 
-      font-size: 0.82rem; 
-      color: var(--text-muted); 
-      font-weight: 600; 
-    }
+    .device-chip { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+    .device-chip strong { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 243, 255, 0.4); }
 
-    .device-chip strong { 
-      color: var(--neon-cyan); 
-      text-shadow: 0 0 10px rgba(0, 243, 255, 0.4); 
-    }
-
-    .core-wrapper {
-      width: 100%;
-      max-width: 680px;
-      margin-bottom: 45px;
-    }
+    .core-wrapper { width: 100%; max-width: 680px; margin-bottom: 45px; }
 
     .box {
       background: var(--glass-surface);
@@ -299,313 +282,131 @@
     }
 
     .box::before {
-      content: '';
-      position: absolute;
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      height: 2px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
     }
 
     h1 { 
-      font-size: 2.1rem; 
-      font-weight: 800; 
-      margin-bottom: 8px; 
-      background: var(--accent-grad); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
+      font-size: 2.1rem; font-weight: 800; margin-bottom: 8px; 
+      background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
       text-shadow: 0 0 35px rgba(0, 243, 255, 0.4);
     }
 
-    p.sub { 
-      color: var(--text-muted); 
-      font-size: 0.92rem; 
-      line-height: 1.5; 
-      margin-bottom: 22px; 
-    }
+    p.sub { color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 22px; }
 
-    .input-wrapper { 
-      position: relative; 
-      width: 100%; 
-      display: flex; 
-      align-items: center; 
-      margin-bottom: 14px; 
-    }
+    .input-wrapper { position: relative; width: 100%; display: flex; align-items: center; margin-bottom: 14px; }
 
     input[type="text"] {
-      width: 100%;
-      padding: 16px 95px 16px 16px;
-      background: rgba(2, 4, 10, 0.85);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-      transition: all 0.3s ease;
+      width: 100%; padding: 16px 95px 16px 16px; background: rgba(2, 4, 10, 0.85);
+      border: 1px solid var(--glass-border); border-radius: 12px; color: #fff;
+      font-size: 0.95rem; outline: none; transition: all 0.3s ease;
     }
 
     input[type="text"]:focus { 
-      border-color: var(--neon-cyan); 
-      box-shadow: 0 0 22px var(--accent-glow), inset 0 0 10px rgba(0, 243, 255, 0.2); 
+      border-color: var(--neon-cyan); box-shadow: 0 0 22px var(--accent-glow), inset 0 0 10px rgba(0, 243, 255, 0.2); 
     }
 
     .paste-btn {
-      position: absolute;
-      right: 10px;
-      background: rgba(0, 243, 255, 0.15);
-      border: 1px solid rgba(0, 243, 255, 0.4);
-      color: var(--neon-cyan);
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      position: absolute; right: 10px; background: rgba(0, 243, 255, 0.15);
+      border: 1px solid rgba(0, 243, 255, 0.4); color: var(--neon-cyan);
+      padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
     }
 
-    .paste-btn:hover { 
-      background: rgba(0, 243, 255, 0.3); 
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); 
-    }
+    .paste-btn:hover { background: rgba(0, 243, 255, 0.3); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
 
     .btn-search {
-      display: inline-block;
-      width: auto;
-      min-width: 240px;
-      max-width: 100%;
-      margin: 4px auto 16px auto;
-      padding: 12px 28px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      border-radius: 30px;
-      border: 1px solid rgba(0, 243, 255, 0.5);
-      cursor: pointer;
-      color: white;
-      background: var(--accent-grad);
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.35);
-      transition: all 0.3s ease;
-      text-align: center;
-      letter-spacing: 0.3px;
+      display: inline-block; width: auto; min-width: 240px; max-width: 100%; margin: 4px auto 16px auto;
+      padding: 12px 28px; font-size: 0.92rem; font-weight: 700; border-radius: 30px;
+      border: 1px solid rgba(0, 243, 255, 0.5); cursor: pointer; color: white;
+      background: var(--accent-grad); box-shadow: 0 0 20px rgba(0, 243, 255, 0.35);
+      transition: all 0.3s ease; text-align: center; letter-spacing: 0.3px;
     }
 
-    .btn-search:hover {
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.7), 0 0 20px rgba(255, 0, 127, 0.5);
-      border-color: var(--neon-cyan);
-      transform: translateY(-1px);
-    }
-
+    .btn-search:hover { box-shadow: 0 0 30px rgba(0, 243, 255, 0.7), 0 0 20px rgba(255, 0, 127, 0.5); border-color: var(--neon-cyan); transform: translateY(-1px); }
     .btn-search:active { transform: scale(0.98); }
     .btn-search:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
     .btn {
-      width: 100%;
-      padding: 15px 20px;
-      font-size: 1.02rem;
-      font-weight: 700;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      color: white;
-      background: var(--accent-grad);
-      box-shadow: 0 0 30px rgba(157, 0, 255, 0.5);
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-      margin-bottom: 14px;
+      width: 100%; padding: 15px 20px; font-size: 1.02rem; font-weight: 700;
+      border-radius: 12px; border: none; cursor: pointer; color: white;
+      background: var(--accent-grad); box-shadow: 0 0 30px rgba(157, 0, 255, 0.5);
+      transition: all 0.3s ease; text-decoration: none; display: inline-block; text-align: center; margin-bottom: 14px;
     }
 
-    .btn:hover {
-      box-shadow: 0 0 35px rgba(0, 243, 255, 0.75), 0 0 35px rgba(255, 0, 127, 0.55);
-      filter: brightness(1.15);
-    }
-
+    .btn:hover { box-shadow: 0 0 35px rgba(0, 243, 255, 0.75), 0 0 35px rgba(255, 0, 127, 0.55); filter: brightness(1.15); }
     .btn:active { transform: scale(0.98); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
-    #resultSection { 
-      display: none; 
-      text-align: center; 
-    }
+    #resultSection { display: none; text-align: center; }
 
-    .preview-card { 
-      background: rgba(2, 4, 10, 0.85); 
-      border-radius: 14px; 
-      padding: 20px; 
-      border: 1px solid var(--glass-border); 
-    }
+    .preview-card { background: rgba(2, 4, 10, 0.85); border-radius: 14px; padding: 20px; border: 1px solid var(--glass-border); }
 
-    .thumb-container { 
-      position: relative; 
-      display: inline-block; 
-      width: 100%; 
-      max-width: 320px; 
-      margin-bottom: 16px; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      border: 1px solid var(--glass-border); 
-    }
+    .thumb-container { position: relative; display: inline-block; width: 100%; max-width: 320px; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border); }
+    .thumb-container img { width: 100%; max-height: 350px; object-fit: cover; display: block; }
+    .quality-badge { position: absolute; top: 10px; right: 10px; background: rgba(2, 4, 10, 0.9); border: 1px solid rgba(0, 255, 102, 0.5); color: var(--success-green); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; box-shadow: 0 0 12px rgba(0, 255, 102, 0.3); }
+    .video-info { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 
-    .thumb-container img { 
-      width: 100%; 
-      max-height: 350px; 
-      object-fit: cover; 
-      display: block; 
-    }
+    .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
+    .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    .quality-badge { 
-      position: absolute; 
-      top: 10px; 
-      right: 10px; 
-      background: rgba(2, 4, 10, 0.9); 
-      border: 1px solid rgba(0, 255, 102, 0.5); 
-      color: var(--success-green); 
-      font-size: 0.75rem; 
-      font-weight: 700; 
-      padding: 4px 8px; 
-      border-radius: 6px; 
-      box-shadow: 0 0 12px rgba(0, 255, 102, 0.3); 
+    .ad-slot-container { width: 100%; max-width: 360px; min-height: 90px; margin: 0 auto; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #ffffff; border-radius: 14px; padding: 10px; border: 2px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); }
+    #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
+
+    .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
+    .section-header { text-align: center; margin-bottom: 28px; }
+    .section-title { font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 8px; text-shadow: 0 0 20px rgba(0, 243, 255, 0.3); }
+    .section-sub { font-size: 0.9rem; color: var(--text-muted); }
+
+    .steps-grid, .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .step-card, .benefit-card { background: var(--glass-surface); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 22px; text-align: center; backdrop-filter: blur(15px); transition: all 0.3s ease; }
+    .benefit-card { text-align: left; padding: 24px; }
+    .step-card:hover, .benefit-card:hover { border-color: var(--glass-border-hover); transform: translateY(-2px); }
+
+    .step-badge { font-size: 0.75rem; font-weight: 700; color: var(--neon-magenta); text-transform: uppercase; margin-bottom: 6px; }
+    .step-heading, .benefit-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .step-desc, .benefit-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+    .benefit-icon { font-size: 1.8rem; margin-bottom: 12px; display: inline-block; }
+
+    /* Universal Modal Classes (Used for both YouTube and Invalid URL warnings) */
+    .custom-modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 4, 10, 0.85); backdrop-filter: blur(12px);
+      z-index: 9999; align-items: center; justify-content: center; padding: 20px;
     }
+    .custom-modal-box {
+      background: rgba(13, 19, 43, 0.95); border: 1px solid var(--warning-red);
+      border-radius: var(--radius); padding: 35px 24px; max-width: 420px; text-align: center;
+      box-shadow: 0 20px 60px rgba(255, 51, 102, 0.25), inset 0 0 25px rgba(255, 51, 102, 0.1);
+      animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .custom-modal-box.warning-orange {
+      border-color: var(--warning-orange);
+      box-shadow: 0 20px 60px rgba(255, 153, 0, 0.25), inset 0 0 25px rgba(255, 153, 0, 0.1);
+    }
+    .custom-modal-icon { font-size: 3.5rem; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(255, 51, 102, 0.6)); }
+    .warning-orange .custom-modal-icon { filter: drop-shadow(0 0 15px rgba(255, 153, 0, 0.6)); }
+    .custom-modal-title { font-size: 1.35rem; color: #fff; font-weight: 800; margin-bottom: 12px; }
+    .custom-modal-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; }
     
-    .video-info { 
-      font-size: 1rem; 
-      font-weight: 600; 
-      margin-bottom: 16px; 
-      color: #fff; 
-      text-overflow: ellipsis; 
-      overflow: hidden; 
-      white-space: nowrap; 
+    .btn-modal-close {
+      background: linear-gradient(135deg, #ff3366, #ff0033); border: none; color: white;
+      padding: 12px 30px; border-radius: 30px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.4); transition: 0.2s; font-size: 0.95rem;
+    }
+    .btn-modal-close:hover { box-shadow: 0 0 30px rgba(255, 51, 102, 0.7); transform: translateY(-1px); }
+    
+    .warning-orange .btn-modal-close {
+      background: linear-gradient(135deg, #ff9900, #ff6600);
+      box-shadow: 0 0 20px rgba(255, 153, 0, 0.4);
+    }
+    .warning-orange .btn-modal-close:hover { box-shadow: 0 0 30px rgba(255, 153, 0, 0.7); }
+
+    @keyframes modalPopIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    .btn-secondary { 
-      margin-top: 12px; 
-      background: rgba(255, 255, 255, 0.08); 
-      border: 1px solid var(--glass-border); 
-      color: #fff; 
-      padding: 11px; 
-      border-radius: 10px; 
-      font-size: 0.88rem; 
-      cursor: pointer; 
-      width: 100%; 
-      font-weight: 600; 
-      transition: 0.2s; 
-    }
-
-    .btn-secondary:hover { 
-      background: rgba(0, 243, 255, 0.15); 
-      border-color: var(--neon-cyan); 
-      color: var(--neon-cyan); 
-    }
-
-    .ad-slot-container {
-      width: 100%;
-      max-width: 360px;
-      min-height: 90px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background: #ffffff; 
-      border-radius: 14px;
-      padding: 10px;
-      border: 2px solid var(--neon-cyan);
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
-    }
-
-    #resultBannerSlot {
-      min-height: 250px;
-      width: 300px;
-      margin: 16px auto;
-    }
-
-    .content-section { 
-      width: 100%; 
-      max-width: 900px; 
-      margin-bottom: 35px; 
-    }
-
-    .section-header { 
-      text-align: center; 
-      margin-bottom: 28px; 
-    }
-
-    .section-title { 
-      font-size: 1.5rem; 
-      font-weight: 800; 
-      color: #fff; 
-      margin-bottom: 8px; 
-      text-shadow: 0 0 20px rgba(0, 243, 255, 0.3); 
-    }
-
-    .section-sub { 
-      font-size: 0.9rem; 
-      color: var(--text-muted); 
-    }
-
-    .steps-grid, .benefits-grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-      gap: 20px; 
-    }
-
-    .step-card, .benefit-card {
-      background: var(--glass-surface);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 22px;
-      text-align: center;
-      backdrop-filter: blur(15px);
-      transition: all 0.3s ease;
-    }
-
-    .benefit-card { 
-      text-align: left; 
-      padding: 24px; 
-    }
-
-    .step-card:hover, .benefit-card:hover { 
-      border-color: var(--glass-border-hover); 
-      transform: translateY(-2px); 
-    }
-
-    .step-badge { 
-      font-size: 0.75rem; 
-      font-weight: 700; 
-      color: var(--neon-magenta); 
-      text-transform: uppercase; 
-      margin-bottom: 6px; 
-    }
-
-    .step-heading, .benefit-title { 
-      font-size: 1.05rem; 
-      font-weight: 700; 
-      color: #fff; 
-      margin-bottom: 6px; 
-    }
-
-    .step-desc, .benefit-desc { 
-      font-size: 0.85rem; 
-      color: var(--text-muted); 
-      line-height: 1.5; 
-    }
-
-    .benefit-icon { 
-      font-size: 1.8rem; 
-      margin-bottom: 12px; 
-      display: inline-block; 
-    }
-
-    footer { 
-      width: 100%; 
-      max-width: 900px; 
-      border-top: 1px solid var(--glass-border); 
-      padding: 30px 0 40px 0; 
-      color: var(--text-muted); 
-      font-size: 0.82rem; 
-      text-align: center; 
-    }
+    footer { width: 100%; max-width: 900px; border-top: 1px solid var(--glass-border); padding: 30px 0 40px 0; color: var(--text-muted); font-size: 0.82rem; text-align: center; }
   </style>
 </head>
 <body>
@@ -632,7 +433,6 @@
       <!-- Input Area (Home Screen) -->
       <div id="searchSection" style="text-align: center;">
         <div class="input-wrapper">
-          <!-- Security Update: minlength="15" and maxlength="450" integrated seamlessly -->
           <input type="text" id="videoUrl" placeholder="Paste video or reel link here..." autocomplete="off" minlength="15" maxlength="450">
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
@@ -669,6 +469,26 @@
     </main>
   </div>
 
+  <!-- Popup 1: YouTube Restrictions Modal -->
+  <div id="youtubeModal" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <div class="custom-modal-icon">🚫</div>
+      <h3 class="custom-modal-title">Action Restricted</h3>
+      <p class="custom-modal-desc">According to YouTube's Guidelines and Terms of Service, downloading videos directly from their platform is not permitted.</p>
+      <button class="btn-modal-close" onclick="closeYoutubeWarning()">I Understand</button>
+    </div>
+  </div>
+
+  <!-- Popup 2: Invalid URL Modal (Too short, too long, or no http/https) -->
+  <div id="invalidUrlModal" class="custom-modal-overlay">
+    <div class="custom-modal-box warning-orange">
+      <div class="custom-modal-icon">⚠️</div>
+      <h3 class="custom-modal-title">Invalid Link Detected</h3>
+      <p class="custom-modal-desc">Please provide a valid video link. It must start with <strong>http://</strong> or <strong>https://</strong> and be between 15 to 450 characters long.</p>
+      <button class="btn-modal-close" onclick="closeInvalidUrlWarning()">Try Again</button>
+    </div>
+  </div>
+
   <!-- Visual Guide: Basic Steps -->
   <section class="content-section">
     <div class="section-header">
@@ -694,7 +514,7 @@
     </div>
   </section>
 
-  <!-- NEW SECTION: Platform-Specific Guides (Reusing your elegant box design) -->
+  <!-- Platform-Specific Guides -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title">Supported Platforms Guide</h2>
@@ -774,9 +594,7 @@
             if (el) el.textContent = APP_NAME;
           });
         }
-      } catch (e) {
-        // Safe silent fallback
-      }
+      } catch (e) {}
     }
 
     // High-Performance Crash-Proof Banner Initialization Engine with Absolute Multi-Crawler Shield
@@ -790,7 +608,6 @@
           return;
         }
 
-        // 1. Home Screen Native Banner Injection (Android Mobile Only)
         var homeSlot = document.getElementById('homeAdSlot');
         if (homeSlot && !homeSlot.hasChildNodes()) {
           var adDiv = document.createElement('div');
@@ -804,7 +621,6 @@
           homeSlot.appendChild(adScript);
         }
 
-        // 2. Result Screen 300x250 Banner Injection
         var resSlot = document.getElementById('resultBannerSlot');
         if (resSlot && !resSlot.hasChildNodes()) {
           var optScript = document.createElement('script');
@@ -817,9 +633,7 @@
           resScript.src = "https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js";
           resSlot.appendChild(resScript);
         }
-      } catch (err) {
-        // Absolute isolation: swallow error silently to prevent application thread crash
-      }
+      } catch (err) {}
     }
 
     if (document && document.addEventListener) {
@@ -852,9 +666,22 @@
           var urlInput = document.getElementById("videoUrl");
           if (urlInput) urlInput.value = manual.trim();
         }
-      } catch (e) {
-        // Safe fallback
-      }
+      } catch (e) {}
+    }
+
+    // Function to close YouTube Warning Popup
+    function closeYoutubeWarning() {
+      var modal = document.getElementById("youtubeModal");
+      var urlInput = document.getElementById("videoUrl");
+      if (modal) modal.style.display = "none";
+      if (urlInput) urlInput.value = ""; // Clear input for YouTube restrictions
+    }
+
+    // Function to close Invalid URL Popup
+    function closeInvalidUrlWarning() {
+      var modal = document.getElementById("invalidUrlModal");
+      if (modal) modal.style.display = "none";
+      // Keeps typed URL intact so user can fix typo
     }
 
     async function handleFetch() {
@@ -863,10 +690,19 @@
         let rawUrl = urlInput ? urlInput.value.trim() : "";
         const btn = document.getElementById("fetchBtn");
 
-        // Security Update: Strict input & URL validation check (empty, <15, >450, or missing http/https)
+        // Strict input validation for Invalid URLs (empty, <15, >450, or missing http/https)
         if (!rawUrl || rawUrl.length < 15 || rawUrl.length > 450 || (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://"))) {
-          alert("Please provide a valid video link (must start with http:// or https:// and be between 15 and 450 characters).");
-          return;
+          var invalidModal = document.getElementById("invalidUrlModal");
+          if (invalidModal) invalidModal.style.display = "flex";
+          return; // Stop execution
+        }
+
+        // YouTube Restrictions Detection
+        let checkUrl = rawUrl.toLowerCase();
+        if (checkUrl.includes("youtube.com") || checkUrl.includes("youtu.be")) {
+          var ytModal = document.getElementById("youtubeModal");
+          if (ytModal) ytModal.style.display = "flex";
+          return; // Stop execution
         }
 
         if (btn) {
@@ -916,27 +752,18 @@
         dlBtn.innerText = "Preparing Download (2s)...";
       }
 
-      // Step 1: Open direct jumping ad link immediately on user click in a new tab 
-      // (Strictly protected: All Search Engine Crawlers will NEVER execute or open ad links)
       if (!window.IS_GLOBAL_CRAWLER) {
-        try {
-          window.open(AD_LINK, "_blank");
-        } catch (e) {
-          // Fallback if popup blocker intercepts
-        }
+        try { window.open(AD_LINK, "_blank"); } catch (e) {}
       }
 
-      // Step 2: Precise 2000ms non-blocking safe execution timer
       setTimeout(() => {
         try {
           const uniqueTimestamp = Date.now();
           const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
           if (window.IS_APPLE_IOS) {
-            // iOS Safari native prompt trigger
             window.location.assign(streamEndpoint);
           } else {
-            // Android and Windows Chrome background download frame
             const dlFrame = document.createElement("iframe");
             dlFrame.style.display = "none";
             dlFrame.src = streamEndpoint;
@@ -957,9 +784,7 @@
             }, 5000);
           }
         } catch (downloadErr) {
-          try {
-            window.location.href = activeMediaUrl;
-          } catch (ex) {}
+          try { window.location.href = activeMediaUrl; } catch (ex) {}
         }
 
         if (dlBtn) {
@@ -983,9 +808,7 @@
         if (resultSec) resultSec.style.display = "none";
         if (searchSec) searchSec.style.display = "block";
         activeMediaUrl = "";
-      } catch (e) {
-        // Safe fallback
-      }
+      } catch (e) {}
     }
   </script>
 </body>
