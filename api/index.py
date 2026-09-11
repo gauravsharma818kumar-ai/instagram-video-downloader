@@ -13,11 +13,7 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# ---------------------------------------------------------
-# Architecture Flag:
-# False = High-Speed Direct Redirect (Optimized for Vercel)
-# True  = Full Binary Proxy Stream (For Dedicated Servers / VPS)
-# ---------------------------------------------------------
+# Vercel Production Mode Configuration
 PROXY_MODE = False
 
 # Strict CORS Configuration
@@ -121,7 +117,7 @@ def extract_opengraph_meta(clean_url: str):
 
 @app.get("/api/info")
 def get_media_payload(url: str = Query(...)):
-    """Main extraction handler compatible with existing front-end structure"""
+    """Main extraction handler compatible with front-end structure"""
     valid_url = validate_target_url(url)
 
     # 1. Instagram Optimization Path
@@ -168,34 +164,30 @@ def get_media_payload(url: str = Query(...)):
 
 @app.get("/api/stream")
 def process_media_stream(url: str = Query(...)):
-    """Cross-device universal download stream handler with forced attachment headers"""
+    """Stream handler optimized to trigger native download prompt popup"""
     if not url:
         raise HTTPException(status_code=400, detail="Target download URL is missing.")
 
-    # Dedicated Server Binary Stream Mode
-    if PROXY_MODE:
-        try:
-            stream_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-            upstream = requests.get(url, stream=True, headers=stream_headers, timeout=30)
-            
-            downstream_headers = {
+    try:
+        stream_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        upstream = requests.get(url, stream=True, headers=stream_headers, timeout=25)
+        
+        downstream_headers = {
+            "Content-Disposition": 'attachment; filename="AllSavePro_Video.mp4"',
+            "Content-Type": upstream.headers.get("Content-Type", "video/mp4"),
+            "Access-Control-Allow-Origin": "*"
+        }
+
+        return StreamingResponse(
+            upstream.iter_content(chunk_size=1024 * 64),
+            media_type="video/mp4",
+            headers=downstream_headers
+        )
+    except Exception:
+        return RedirectResponse(
+            url=url, 
+            headers={
                 "Content-Disposition": 'attachment; filename="AllSavePro_Video.mp4"',
-                "Content-Type": "application/octet-stream",
                 "Access-Control-Allow-Origin": "*"
             }
-
-            return StreamingResponse(
-                upstream.iter_content(chunk_size=1024 * 512),
-                media_type="application/octet-stream",
-                headers=downstream_headers
-            )
-        except Exception:
-            raise HTTPException(status_code=500, detail="Proxy stream pipe failed.")
-
-    # Vercel Production Mode: Forced Attachment Headers with Direct CDN Forwarding
-    response_headers = {
-        "Content-Disposition": 'attachment; filename="AllSavePro_Video.mp4"',
-        "Content-Type": "application/octet-stream",
-        "Access-Control-Allow-Origin": "*"
-    }
-    return RedirectResponse(url=url, headers=response_headers)
+        )
