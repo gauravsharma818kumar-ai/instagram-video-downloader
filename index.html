@@ -346,21 +346,22 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Sandboxed Banner Containers (90px height maintained) */
+    /* Sandboxed Banner Containers (Dark Theme & Proper Contrast) */
     .ad-slot-container { 
       width: 100%; 
-      max-width: 360px; 
-      min-height: 90px; 
-      margin: 10px auto; 
+      max-width: 350px; 
+      margin: 14px auto; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
       overflow: hidden; 
-      background: rgba(255, 255, 255, 0.03); 
+      background: #090e24; 
       border-radius: 14px; 
-      padding: 6px; 
+      padding: 8px; 
       border: 1px solid var(--glass-border); 
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), inset 0 0 15px rgba(0, 243, 255, 0.05);
     }
+    #homeAdSlot { min-height: 220px; }
     #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
 
     .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
@@ -525,7 +526,7 @@
     </div>
   </section>
 
-  <!-- Cleaned Supported Platforms Guide (No YouTube) -->
+  <!-- Supported Platforms Guide -->
   <section class="content-section">
     <div class="section-header">
       <h2 class="section-title">Supported Platforms Guide</h2>
@@ -602,7 +603,7 @@
       } catch (e) {}
     }
 
-    // Modern srcdoc-based Safe Sandboxed Iframe (Blocks top auto-redirection completely)
+    // Modern srcdoc-based Safe Sandboxed Iframe (Prevents redirects & maintains sharp dark contrast)
     function mountSafeBanner(containerId, htmlContent, width, height) {
       try {
         var container = document.getElementById(containerId);
@@ -611,15 +612,15 @@
 
         var iframe = document.createElement("iframe");
         iframe.style.width = width ? (typeof width === 'number' ? width + "px" : width) : "100%";
-        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "90px";
+        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "220px";
         iframe.style.border = "none";
         iframe.style.overflow = "hidden";
         iframe.setAttribute("scrolling", "no");
 
-        // allow-top-navigation is excluded so the ad cannot auto-jump or hijack your main site
+        // allow-top-navigation omitted to strictly block auto-jump hijacking
         iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
         
-        iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'></head><body style='margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;'>" + htmlContent + "</body></html>";
+        iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'><style>* { box-sizing: border-box; } body { margin:0; padding:6px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#090e24; color:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align:center; }</style></head><body>" + htmlContent + "</body></html>";
 
         container.appendChild(iframe);
       } catch (e) {}
@@ -635,10 +636,10 @@
           return;
         }
 
-        // Home Screen Native Banner (Kept strictly at original 90px height)
+        // Home Screen Native Banner: 220px height gives enough room for both ads & text
         var homeAdHtml = '<div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>' +
           '<script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>';
-        mountSafeBanner('homeAdSlot', homeAdHtml, 320, 90);
+        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", 220);
 
         // Result Screen 300x250 Banner
         var resAdHtml = '<script type="text/javascript">' +
@@ -751,7 +752,7 @@
       }
     }
 
-    // Secure Download with Real 2-Second Countdown & isTrusted Protection
+    // Secure Download with Real 2-Second Countdown & isTrusted Human Lock
     function routeOsSpecificDownload(event) {
       var evt = event || window.event;
       // 1. Blocks fake clicks injected by 3rd-party ad scripts
@@ -776,7 +777,7 @@
         } catch (e) {}
       }
 
-      // Visual 1-second countdown tick
+      // Live 1-second interval countdown
       const timerInterval = setInterval(() => {
         timeLeft -= 1;
         if (timeLeft > 0 && dlBtn) {
@@ -787,7 +788,7 @@
         }
       }, 1000);
 
-      // 3. Exactly at 2000ms, trigger the native browser download command
+      // 3. Exactly at 2000ms, trigger the native browser download prompt
       setTimeout(() => {
         clearInterval(timerInterval);
 
@@ -796,7 +797,7 @@
           const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
           if (window.IS_APPLE_IOS) {
-            // Safari iOS native download prompt
+            // Safari iOS native prompt
             window.location.assign(streamEndpoint);
           } else {
             // Android Chrome & Desktop PC native download trigger
