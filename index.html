@@ -346,29 +346,7 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* एड कंटेनर जंप और खाली बॉक्स का फिक्स */
-    .ad-slot-container { 
-      width: 100%; 
-      max-width: 360px; 
-      min-height: 90px; 
-      margin: 0 auto; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      overflow: hidden; 
-      background: #ffffff; 
-      border-radius: 14px; 
-      padding: 10px; 
-      border: 2px solid var(--neon-cyan); 
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); 
-      contain: layout;
-    }
-
-    /* जब एड न हो, तो खाली बॉक्स स्क्रीन पर जंप न करे */
-    .ad-slot-container:empty {
-      display: none !important;
-    }
-
+    .ad-slot-container { width: 100%; max-width: 360px; min-height: 90px; margin: 0 auto; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #ffffff; border-radius: 14px; padding: 10px; border: 2px solid var(--neon-cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); }
     #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
 
     .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
@@ -456,7 +434,7 @@
           <button type="button" class="paste-btn" onclick="handlePaste()">Paste</button>
         </div>
 
-        <button type="button" class="btn-search" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
+        <button class="btn-search" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
 
         <!-- Home Screen Native Banner Slot -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
@@ -473,14 +451,14 @@
           <div class="video-info" id="videoTitle">Media Video</div>
           
           <!-- Universal Action Trigger -->
-          <button type="button" class="btn" id="downloadBtn" onclick="routeOsSpecificDownload()">
+          <button class="btn" id="downloadBtn" onclick="routeOsSpecificDownload()">
             Download HD MP4
           </button>
 
           <!-- Result Screen 300x250 Banner Slot -->
           <div class="ad-slot-container" id="resultBannerSlot"></div>
           
-          <button type="button" class="btn-secondary" onclick="resetDownloader()">
+          <button class="btn-secondary" onclick="resetDownloader()">
             ↻ Download Another Video
           </button>
         </div>
@@ -494,7 +472,7 @@
       <div class="custom-modal-icon">🚫</div>
       <h3 class="custom-modal-title">Action Restricted</h3>
       <p class="custom-modal-desc">According to YouTube's Guidelines and Terms of Service, downloading videos directly from their platform is not permitted.</p>
-      <button type="button" class="btn-modal-close" onclick="closeYoutubeWarning()">I Understand</button>
+      <button class="btn-modal-close" onclick="closeYoutubeWarning()">I Understand</button>
     </div>
   </div>
 
@@ -504,7 +482,7 @@
       <div class="custom-modal-icon">⚠️</div>
       <h3 class="custom-modal-title">Invalid Link Detected</h3>
       <p class="custom-modal-desc">Please provide a valid video link. It must start with <strong>http://</strong> or <strong>https://</strong> and be between 15 to 450 characters long.</p>
-      <button type="button" class="btn-modal-close" onclick="closeInvalidUrlWarning()">Try Again</button>
+      <button class="btn-modal-close" onclick="closeInvalidUrlWarning()">Try Again</button>
     </div>
   </div>
 
@@ -755,6 +733,7 @@
       }
     }
 
+    // OPTIMIZED: Synchronized 2000ms Download Engine with Streaming Response Hook for Native Popup Prompt
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
