@@ -346,7 +346,7 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Sandboxed Banner Containers (Dark Theme & Proper Contrast) */
+    /* Sandboxed Banner Containers (Auto Height & Dark Background) */
     .ad-slot-container { 
       width: 100%; 
       max-width: 350px; 
@@ -354,14 +354,15 @@
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      overflow: hidden; 
       background: #090e24; 
       border-radius: 14px; 
       padding: 8px; 
       border: 1px solid var(--glass-border); 
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), inset 0 0 15px rgba(0, 243, 255, 0.05);
+      height: auto;
+      min-height: 0;
+      transition: height 0.25s ease;
     }
-    #homeAdSlot { min-height: 220px; }
     #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
 
     .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
@@ -451,7 +452,7 @@
 
         <button class="btn-search" id="fetchBtn" onclick="handleFetch()">🔍 Search & Get Download Link</button>
 
-        <!-- Home Screen Sandboxed Native Banner -->
+        <!-- Home Screen Auto-Responsive Native Banner -->
         <div class="ad-slot-container" id="homeAdSlot"></div>
       </div>
 
@@ -465,7 +466,6 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Event passed here to enforce isTrusted Human verification -->
           <button class="btn" id="downloadBtn" onclick="routeOsSpecificDownload(event)">
             Download HD MP4
           </button>
@@ -603,8 +603,8 @@
       } catch (e) {}
     }
 
-    // Modern srcdoc-based Safe Sandboxed Iframe (Prevents redirects & maintains sharp dark contrast)
-    function mountSafeBanner(containerId, htmlContent, width, height) {
+    // Dynamic Auto-Resizing Sandboxed Iframe (Adapts automatically to exact ad content)
+    function mountSafeBanner(containerId, htmlContent, width, defaultHeight) {
       try {
         var container = document.getElementById(containerId);
         if (!container) return;
@@ -612,19 +612,49 @@
 
         var iframe = document.createElement("iframe");
         iframe.style.width = width ? (typeof width === 'number' ? width + "px" : width) : "100%";
-        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "220px";
+        iframe.style.height = defaultHeight ? (typeof defaultHeight === 'number' ? defaultHeight + "px" : defaultHeight) : "auto";
         iframe.style.border = "none";
         iframe.style.overflow = "hidden";
         iframe.setAttribute("scrolling", "no");
 
-        // allow-top-navigation omitted to strictly block auto-jump hijacking
+        // allow-top-navigation is excluded to strictly prevent auto-redirect hijacking
         iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
-        
-        iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'><style>* { box-sizing: border-box; } body { margin:0; padding:6px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#090e24; color:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align:center; }</style></head><body>" + htmlContent + "</body></html>";
+
+        // Embedded self-measuring script inside the iframe
+        var autoResizeScript = 
+          "<script>" +
+          "function sendAdHeight() {" +
+          "  var body = document.body, html = document.documentElement;" +
+          "  var h = Math.max(body ? body.scrollHeight : 0, body ? body.offsetHeight : 0, html ? html.scrollHeight : 0);" +
+          "  if (h > 10) {" +
+          "    window.parent.postMessage({ type: 'AD_AUTO_HEIGHT', container: '" + containerId + "', height: h }, '*');" +
+          "  }" +
+          "}" +
+          "window.addEventListener('load', sendAdHeight);" +
+          "if (window.ResizeObserver) { new ResizeObserver(sendAdHeight).observe(document.body); }" +
+          "setInterval(sendAdHeight, 400);" +
+          "<\/script>";
+
+        iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'><style>* { box-sizing: border-box; } body { margin:0; padding:6px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#090e24; color:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align:center; }</style></head><body>" + htmlContent + autoResizeScript + "</body></html>";
 
         container.appendChild(iframe);
       } catch (e) {}
     }
+
+    // Parent Window Listener: Expands or contracts the iframe smoothly to match the ad
+    window.addEventListener('message', function(event) {
+      try {
+        if (event.data && event.data.type === 'AD_AUTO_HEIGHT') {
+          var container = document.getElementById(event.data.container);
+          if (container) {
+            var iframe = container.querySelector('iframe');
+            if (iframe && event.data.height > 20) {
+              iframe.style.height = (event.data.height + 4) + 'px';
+            }
+          }
+        }
+      } catch (e) {}
+    });
 
     function initializeBannersSafe() {
       try {
@@ -636,12 +666,12 @@
           return;
         }
 
-        // Home Screen Native Banner: 220px height gives enough room for both ads & text
+        // Home Screen Native Banner: Initial height 120px, dynamically auto-expands to full content
         var homeAdHtml = '<div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>' +
           '<script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>';
-        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", 220);
+        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", "120px");
 
-        // Result Screen 300x250 Banner
+        // Result Screen Standard 300x250 Banner
         var resAdHtml = '<script type="text/javascript">' +
           'atOptions = { "key" : "66c9a9d6d12860055170ed709f8ebe86", "format" : "iframe", "height" : 250, "width" : 300, "params" : {} };' +
           '<\/script>' +
@@ -755,7 +785,6 @@
     // Secure Download with Real 2-Second Countdown & isTrusted Human Lock
     function routeOsSpecificDownload(event) {
       var evt = event || window.event;
-      // 1. Blocks fake clicks injected by 3rd-party ad scripts
       if (evt && !evt.isTrusted) {
         return;
       }
@@ -770,14 +799,12 @@
         dlBtn.innerText = `Preparing Download (${timeLeft}s)...`;
       }
 
-      // 2. Open Direct Ad Link in new tab on human click
       if (!window.IS_GLOBAL_CRAWLER) {
         try { 
           window.open(AD_LINK, "_blank"); 
         } catch (e) {}
       }
 
-      // Live 1-second interval countdown
       const timerInterval = setInterval(() => {
         timeLeft -= 1;
         if (timeLeft > 0 && dlBtn) {
@@ -788,7 +815,6 @@
         }
       }, 1000);
 
-      // 3. Exactly at 2000ms, trigger the native browser download prompt
       setTimeout(() => {
         clearInterval(timerInterval);
 
@@ -797,10 +823,8 @@
           const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
           if (window.IS_APPLE_IOS) {
-            // Safari iOS native prompt
             window.location.assign(streamEndpoint);
           } else {
-            // Android Chrome & Desktop PC native download trigger
             const a = document.createElement("a");
             a.href = streamEndpoint;
             a.setAttribute("download", "AllSavePro_Video.mp4");
@@ -819,7 +843,6 @@
           try { window.location.href = activeMediaUrl; } catch (ex) {}
         }
 
-        // Restore button state
         if (dlBtn) {
           dlBtn.disabled = false;
           dlBtn.innerText = "Download HD MP4";
