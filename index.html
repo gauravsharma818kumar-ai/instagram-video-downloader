@@ -39,22 +39,17 @@
       font-weight: 700;
     }
 
-    /* बैनर स्लॉट स्टाइलिंग (सही फिटिंग के लिए) */
+    /* मूल बैनर स्लॉट (बिना लेआउट बिगड़े सही फ़िटिंग) */
     .ad-slot {
       margin: 15px 0;
       text-align: center;
       width: 100%;
-      min-height: 60px;
+      min-height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       overflow: hidden;
-    }
-
-    .ad-slot iframe {
-      width: 100%;
-      border: none;
-      display: block;
     }
 
     .card {
@@ -63,6 +58,8 @@
       padding: 20px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
       margin-bottom: 20px;
+      position: relative;
+      z-index: 10;
     }
 
     .input-group {
@@ -172,9 +169,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       overflow: hidden;
     }
 
+    /* मॉडल्स */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -228,7 +227,7 @@
       <h1 class="app-brand-name">AllSavePro</h1>
     </header>
 
-    <!-- होम बैनर -->
+    <!-- होम बैनर कंटेनर -->
     <div id="homeAdSlot" class="ad-slot"></div>
 
     <!-- सर्च सेक्शन -->
@@ -250,7 +249,7 @@
       <button id="downloadBtn" class="btn-main" onclick="routeOsSpecificDownload()">Download HD MP4</button>
       <button class="btn-reset" onclick="resetDownloader()">Download Another Video</button>
 
-      <!-- रिजल्ट बैनर 300x250 -->
+      <!-- रिजल्ट बैनर कंटेनर (300x250) -->
       <div id="resultBannerSlot" class="res-ad-slot"></div>
     </div>
   </div>
@@ -293,8 +292,8 @@
       } catch (e) {}
     }
 
-    // 1. होम बैनर (सुरक्षित सैंडबॉक्स और ऑटो-फिटिंग हाइट)
-    function initializeHomeBannerSafe() {
+    // 1. होम बैनर (सुरक्षित और ओरिजिनल लेआउट)
+    function initializeHomeBanner() {
       try {
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
           var homeSlot = document.getElementById('homeAdSlot');
@@ -304,35 +303,21 @@
 
         var homeSlot = document.getElementById('homeAdSlot');
         if (homeSlot && !homeSlot.hasChildNodes()) {
-          var iframe = document.createElement('iframe');
-          iframe.style.width = '100%';
-          iframe.style.height = '110px';
-          iframe.style.border = 'none';
-          iframe.style.overflow = 'hidden';
-          iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin');
+          var containerDiv = document.createElement('div');
+          containerDiv.id = 'container-f8d81fa9ed172810af50c56f403d0f99';
+          homeSlot.appendChild(containerDiv);
 
-          const homeAdHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent; overflow:hidden; }
-    img, iframe { max-width: 100% !important; height: auto !important; }
-  </style>
-</head>
-<body>
-  <div id="container-f8d81fa9ed172810af50c56f403d0f99" style="width:100%; text-align:center;"></div>
-  <script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
-</body>
-</html>`;
-
-          iframe.srcdoc = homeAdHtml;
-          homeSlot.appendChild(iframe);
+          var adScript = document.createElement('script');
+          adScript.async = true;
+          adScript.setAttribute('data-cfasync', 'false');
+          adScript.src = 'https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js';
+          homeSlot.appendChild(adScript);
         }
       } catch (err) {}
     }
 
     // 2. रिजल्ट बैनर 300x250
-    function initializeResultBannerSafe() {
+    function initializeResultBanner() {
       try {
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
           var resSlot = document.getElementById('resultBannerSlot');
@@ -342,34 +327,18 @@
 
         var resSlot = document.getElementById('resultBannerSlot');
         if (resSlot && !resSlot.hasChildNodes()) {
-          var iframe = document.createElement('iframe');
-          iframe.style.width = '300px';
-          iframe.style.height = '250px';
-          iframe.style.border = 'none';
-          iframe.style.overflow = 'hidden';
-          iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin');
+          window.atOptions = {
+            'key' : '66c9a9d6d12860055170ed709f8ebe86',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
 
-          const resAdHtml = `<!DOCTYPE html>
-<html>
-<head>
-  <style>body{margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;}</style>
-</head>
-<body>
-  <script type="text/javascript">
-    window.atOptions = {
-      'key' : '66c9a9d6d12860055170ed709f8ebe86',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  <\/script>
-  <script type="text/javascript" src="https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js"><\/script>
-</body>
-</html>`;
-
-          iframe.srcdoc = resAdHtml;
-          resSlot.appendChild(iframe);
+          var adScript = document.createElement('script');
+          adScript.type = 'text/javascript';
+          adScript.src = 'https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js';
+          resSlot.appendChild(adScript);
         }
       } catch (err) {}
     }
@@ -377,7 +346,7 @@
     if (document && document.addEventListener) {
       document.addEventListener('DOMContentLoaded', function() {
         applyDynamicBranding();
-        initializeHomeBannerSafe();
+        initializeHomeBanner();
       });
     }
 
@@ -462,7 +431,7 @@
           if (searchSec) searchSec.style.display = "none";
           if (resultSec) resultSec.style.display = "block";
 
-          initializeResultBannerSafe();
+          initializeResultBanner();
 
         } else {
           alert((data && data.detail) || "Unable to extract media. Verify link visibility.");
@@ -478,6 +447,7 @@
       }
     }
 
+    // 3. डाउनलोड बटन एक्शन: 1st Click = New Tab Ad, 2s later = Native Download
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
