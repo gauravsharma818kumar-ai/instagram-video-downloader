@@ -3,451 +3,269 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AllSavePro - Fast HD Video Downloader</title>
+  <title>AllSavePro</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
+      background-color: #0b1120; /* बैकग्राउंड डार्क शेड */
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 15px;
+      padding: 30px 15px;
     }
 
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 480px;
       margin: 0 auto;
     }
 
+    /* 1. हेडर (AllSavePro) */
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     header h1 {
-      font-size: 1.8rem;
-      color: #38bdf8;
-      font-weight: 700;
+      font-size: 2.2rem;
+      color: #38bdf8; /* स्क्रीनशॉट वाला ब्राइट ब्लू रंग */
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
-    /* मूल बैनर स्लॉट (बिना लेआउट बिगड़े सही फ़िटिंग) */
-    .ad-slot {
-      margin: 15px 0;
-      text-align: center;
+    /* 2. टॉप एड स्लॉट */
+    .ad-banner-top {
       width: 100%;
-      min-height: 50px;
+      margin-bottom: 18px;
+      border-radius: 6px;
+      overflow: hidden;
+      text-align: center;
+      min-height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
-      overflow: hidden;
     }
 
-    .card {
-      background-color: #1e293b;
+    /* 3. डार्क कार्ड (सर्च बॉक्स) */
+    .search-card {
+      background-color: #1a2332; /* स्क्रीनशॉट का कार्ड कलर */
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
 
-    .input-group {
+    /* इनपुट और पेस्ट बटन की रो */
+    .input-row {
       display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 15px;
     }
 
-    input[type="text"] {
+    .input-row input {
       flex: 1;
-      padding: 12px;
+      background-color: #0d1526;
+      border: 1px solid #2a364f;
       border-radius: 8px;
-      border: 1px solid #334155;
-      background-color: #0f172a;
-      color: #fff;
+      padding: 14px 16px;
+      color: #ffffff;
       font-size: 0.95rem;
       outline: none;
     }
 
-    input[type="text"]:focus {
-      border-color: #38bdf8;
+    .input-row input::placeholder {
+      color: #64748b;
     }
 
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: background 0.2s;
+    .input-row input:focus {
+      border-color: #38bdf8;
     }
 
     .btn-paste {
       background-color: #334155;
       color: #f8fafc;
-      padding: 0 14px;
-      font-size: 0.9rem;
+      border: none;
+      border-radius: 8px;
+      padding: 0 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
     }
 
     .btn-paste:hover {
       background-color: #475569;
     }
 
-    .btn-main {
+    /* मुख्य सर्च बटन */
+    .btn-search {
       width: 100%;
-      background-color: #0284c7;
-      color: #fff;
+      background-color: #0284c7; /* स्क्रीनशॉट वाला ब्लू बटन */
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
       padding: 14px;
       font-size: 1rem;
-      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .btn-main:hover {
+    .btn-search:hover {
       background-color: #0369a1;
     }
 
-    .btn-main:disabled {
-      background-color: #64748b;
-      cursor: not-allowed;
+    /* रिजल्ट कार्ड */
+    .result-card {
+      display: none;
+      background-color: #1a2332;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .thumb-box {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .thumb-box img {
+      width: 100%;
+      display: block;
+    }
+
+    .video-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #e2e8f0;
     }
 
     .btn-reset {
       width: 100%;
       background-color: #334155;
       color: #fff;
+      border: none;
+      border-radius: 8px;
       padding: 10px;
       margin-top: 10px;
       font-size: 0.9rem;
-    }
-
-    .btn-reset:hover {
-      background-color: #475569;
-    }
-
-    .result-box {
-      display: none;
-      text-align: center;
-    }
-
-    .thumb-container {
-      width: 100%;
-      max-height: 320px;
-      overflow: hidden;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      background-color: #000;
-    }
-
-    .thumb-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .video-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: #e2e8f0;
-      line-height: 1.4;
-      word-break: break-word;
-    }
-
-    .res-ad-slot {
-      margin: 20px auto 10px auto;
-      min-height: 250px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* मॉडल्स */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 15px;
-    }
-
-    .modal-content {
-      background: #1e293b;
-      padding: 22px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content h3 {
-      margin-bottom: 10px;
-      color: #ef4444;
-      font-size: 1.2rem;
-    }
-
-    .modal-content p {
-      font-size: 0.9rem;
-      color: #cbd5e1;
-      margin-bottom: 18px;
-      line-height: 1.4;
-    }
-
-    .btn-modal {
-      background: #38bdf8;
-      color: #0f172a;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- हेडर -->
     <header>
-      <h1 class="app-brand-name">AllSavePro</h1>
+      <h1>AllSavePro</h1>
     </header>
 
-    <!-- होम बैनर कंटेनर -->
-    <div id="homeAdSlot" class="ad-slot"></div>
+    <!-- टॉप एड स्लॉट -->
+    <div class="ad-banner-top" id="homeAdSlot">
+      <!-- यहाँ आपकी बैनर एड स्क्रिप्ट लोड होगी -->
+    </div>
 
-    <!-- सर्च सेक्शन -->
-    <div id="searchSection" class="card">
-      <div class="input-group">
+    <!-- सर्च सेक्शन (स्क्रीनशॉट के अनुसार) -->
+    <div class="search-card" id="searchSection">
+      <div class="input-row">
         <input type="text" id="videoUrl" placeholder="Paste media link here..." onkeydown="if(event.key==='Enter') handleFetch()">
         <button class="btn-paste" onclick="handlePaste()">Paste</button>
       </div>
-      <button id="fetchBtn" class="btn-main" onclick="handleFetch()">🔍 Search & Get Download Link</button>
+      <button class="btn-search" id="fetchBtn" onclick="handleFetch()">
+        🔍 Search & Get Download Link
+      </button>
     </div>
 
     <!-- रिजल्ट सेक्शन -->
-    <div id="resultSection" class="card result-box">
-      <div class="thumb-container">
+    <div class="result-card" id="resultSection">
+      <div class="thumb-box">
         <img id="thumbImg" src="" alt="Thumbnail">
       </div>
-      <div id="videoTitle" class="video-title">Media Video</div>
-      
-      <button id="downloadBtn" class="btn-main" onclick="routeOsSpecificDownload()">Download HD MP4</button>
+      <div class="video-title" id="videoTitle">Media Video</div>
+      <button class="btn-search" id="downloadBtn" onclick="routeOsSpecificDownload()">Download HD MP4</button>
       <button class="btn-reset" onclick="resetDownloader()">Download Another Video</button>
-
-      <!-- रिजल्ट बैनर कंटेनर (300x250) -->
-      <div id="resultBannerSlot" class="res-ad-slot"></div>
-    </div>
-  </div>
-
-  <!-- YouTube वार्निंग मॉडल -->
-  <div id="youtubeModal" class="modal-overlay">
-    <div class="modal-content">
-      <h3>Not Supported</h3>
-      <p>YouTube video downloading is restricted. Please try a link from another supported platform.</p>
-      <button class="btn-modal" onclick="closeYoutubeWarning()">OK</button>
-    </div>
-  </div>
-
-  <!-- अमान्य URL मॉडल -->
-  <div id="invalidUrlModal" class="modal-overlay">
-    <div class="modal-content">
-      <h3>Invalid URL</h3>
-      <p>Please enter a valid HTTP or HTTPS video URL.</p>
-      <button class="btn-modal" onclick="closeInvalidUrlWarning()">OK</button>
+      
+      <div id="resultBannerSlot" style="margin-top: 15px;"></div>
     </div>
   </div>
 
   <script>
-    window.IS_GLOBAL_CRAWLER = /bot|google|baidu|bing|msn|teoma|slurp|yandex/i.test(navigator.userAgent);
-    window.IS_APPLE_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    window.IS_REAL_DESKTOP = !(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent));
-
-    const APP_NAME = "AllSavePro"; 
-    let activeMediaUrl = "";
     const AD_LINK = "https://www.profitableratecpmnetwork.com/x2qz4nip?key=d355fb2b34af3a9f086ff05f70e1da29";
+    let activeMediaUrl = "";
 
-    function applyDynamicBranding() {
-      try {
-        var brandElements = document.querySelectorAll('.app-brand-name');
-        if (brandElements && brandElements.length > 0) {
-          brandElements.forEach(el => {
-            if (el) el.textContent = APP_NAME;
-          });
-        }
-      } catch (e) {}
-    }
-
-    // 1. होम बैनर (सुरक्षित और ओरिजिनल लेआउट)
-    function initializeHomeBanner() {
-      try {
-        if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
-          var homeSlot = document.getElementById('homeAdSlot');
-          if (homeSlot && homeSlot.parentNode) homeSlot.parentNode.removeChild(homeSlot);
-          return;
-        }
-
-        var homeSlot = document.getElementById('homeAdSlot');
-        if (homeSlot && !homeSlot.hasChildNodes()) {
-          var containerDiv = document.createElement('div');
-          containerDiv.id = 'container-f8d81fa9ed172810af50c56f403d0f99';
-          homeSlot.appendChild(containerDiv);
-
-          var adScript = document.createElement('script');
-          adScript.async = true;
-          adScript.setAttribute('data-cfasync', 'false');
-          adScript.src = 'https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js';
-          homeSlot.appendChild(adScript);
-        }
-      } catch (err) {}
-    }
-
-    // 2. रिजल्ट बैनर 300x250
-    function initializeResultBanner() {
-      try {
-        if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
-          var resSlot = document.getElementById('resultBannerSlot');
-          if (resSlot && resSlot.parentNode) resSlot.parentNode.removeChild(resSlot);
-          return;
-        }
-
-        var resSlot = document.getElementById('resultBannerSlot');
-        if (resSlot && !resSlot.hasChildNodes()) {
-          window.atOptions = {
-            'key' : '66c9a9d6d12860055170ed709f8ebe86',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
-          };
-
-          var adScript = document.createElement('script');
-          adScript.type = 'text/javascript';
-          adScript.src = 'https://www.highrevenueformat.com/66c9a9d6d12860055170ed709f8ebe86/invoke.js';
-          resSlot.appendChild(adScript);
-        }
-      } catch (err) {}
-    }
-
-    if (document && document.addEventListener) {
-      document.addEventListener('DOMContentLoaded', function() {
-        applyDynamicBranding();
-        initializeHomeBanner();
-      });
-    }
-
+    // पेस्ट बटन फ़ंक्शन
     async function handlePaste() {
       try {
-        if (navigator && navigator.clipboard && navigator.clipboard.readText) {
+        if (navigator.clipboard && navigator.clipboard.readText) {
           const text = await navigator.clipboard.readText();
           if (text) {
-            var urlInput = document.getElementById("videoUrl");
-            if (urlInput) urlInput.value = text.trim();
+            document.getElementById("videoUrl").value = text.trim();
             return;
           }
         }
-        fallbackPaste();
+        const manual = prompt("Paste your video link here:");
+        if (manual) document.getElementById("videoUrl").value = manual.trim();
       } catch (err) {
-        fallbackPaste();
+        const manual = prompt("Paste your video link here:");
+        if (manual) document.getElementById("videoUrl").value = manual.trim();
       }
     }
 
-    function fallbackPaste() {
-      try {
-        const manual = prompt("Paste your video link here:");
-        if (manual) {
-          var urlInput = document.getElementById("videoUrl");
-          if (urlInput) urlInput.value = manual.trim();
-        }
-      } catch (e) {}
-    }
-
-    function closeYoutubeWarning() {
-      var modal = document.getElementById("youtubeModal");
-      var urlInput = document.getElementById("videoUrl");
-      if (modal) modal.style.display = "none";
-      if (urlInput) urlInput.value = "";
-    }
-
-    function closeInvalidUrlWarning() {
-      var modal = document.getElementById("invalidUrlModal");
-      if (modal) modal.style.display = "none";
-    }
-
+    // एपीआई फेच फ़ंक्शन
     async function handleFetch() {
+      const urlInput = document.getElementById("videoUrl");
+      const rawUrl = urlInput ? urlInput.value.trim() : "";
+      const btn = document.getElementById("fetchBtn");
+
+      if (!rawUrl || !rawUrl.startsWith("http")) {
+        alert("Please enter a valid video link.");
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+      }
+
       try {
-        var urlInput = document.getElementById("videoUrl");
-        let rawUrl = urlInput ? urlInput.value.trim() : "";
-        const btn = document.getElementById("fetchBtn");
-
-        if (!rawUrl || rawUrl.length < 15 || rawUrl.length > 450 || (!rawUrl.startsWith("http://") && !rawUrl.startsWith("https://"))) {
-          var invalidModal = document.getElementById("invalidUrlModal");
-          if (invalidModal) invalidModal.style.display = "flex";
-          return;
-        }
-
-        let checkUrl = rawUrl.toLowerCase();
-        if (checkUrl.includes("youtube.com") || checkUrl.includes("youtu.be")) {
-          var ytModal = document.getElementById("youtubeModal");
-          if (ytModal) ytModal.style.display = "flex";
-          return;
-        }
-
-        if (btn) {
-          btn.disabled = true;
-          btn.innerText = "Processing HD Stream...";
-        }
-
         const response = await fetch(`/api/info?url=${encodeURIComponent(rawUrl)}`);
         const data = await response.json();
 
         if (response.ok && data && data.success) {
           activeMediaUrl = data.download_url;
+          document.getElementById("videoTitle").textContent = data.title || "Media Video";
+          document.getElementById("thumbImg").src = data.thumbnail || "";
           
-          var titleEl = document.getElementById("videoTitle");
-          if (titleEl) titleEl.textContent = data.title || "Media Video";
-
-          var thumbEl = document.getElementById("thumbImg");
-          if (thumbEl && data.thumbnail) {
-            thumbEl.src = data.thumbnail;
-          }
-
-          var searchSec = document.getElementById("searchSection");
-          var resultSec = document.getElementById("resultSection");
-          if (searchSec) searchSec.style.display = "none";
-          if (resultSec) resultSec.style.display = "block";
-
-          initializeResultBanner();
-
+          document.getElementById("searchSection").style.display = "none";
+          document.getElementById("resultSection").style.display = "block";
         } else {
-          alert((data && data.detail) || "Unable to extract media. Verify link visibility.");
+          alert((data && data.detail) || "Unable to fetch video.");
         }
       } catch (err) {
-        alert("Network error. Please verify the URL and try again.");
+        alert("Network error. Try again.");
       } finally {
-        var btn = document.getElementById("fetchBtn");
         if (btn) {
           btn.disabled = false;
-          btn.innerText = "🔍 Search & Get Download Link";
+          btn.innerHTML = "🔍 Search & Get Download Link";
         }
       }
     }
 
-    // 3. डाउनलोड बटन एक्शन: 1st Click = New Tab Ad, 2s later = Native Download
+    // डाउनलोड बटन और एड रीडायरेक्ट
     function routeOsSpecificDownload() {
       if (!activeMediaUrl) return;
 
@@ -457,35 +275,20 @@
         dlBtn.innerText = "Preparing Download (2s)...";
       }
 
-      if (!window.IS_GLOBAL_CRAWLER) {
-        try { window.open(AD_LINK, "_blank"); } catch (e) {}
-      }
+      // 1st Action: नए टैब में एड खोलना
+      try { window.open(AD_LINK, "_blank"); } catch (e) {}
 
+      // 2nd Action: बैकग्राउंड में नेटिव फ़ाइल डाउनलोड शुरू करना
       setTimeout(() => {
-        try {
-          const uniqueTimestamp = Date.now();
-          const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
-
-          if (window.IS_APPLE_IOS) {
-            window.location.assign(streamEndpoint);
-          } else {
-            const a = document.createElement("a");
-            a.href = streamEndpoint;
-            a.setAttribute("download", "AllSavePro_Video.mp4");
-            a.target = "_self";
-            a.style.display = "none";
-            document.body.appendChild(a);
-            a.click();
-
-            setTimeout(() => {
-              try {
-                if (a && a.parentNode) a.parentNode.removeChild(a);
-              } catch (cleanupErr) {}
-            }, 1000);
-          }
-        } catch (downloadErr) {
-          try { window.location.href = activeMediaUrl; } catch (ex) {}
-        }
+        const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${Date.now()}`;
+        const a = document.createElement("a");
+        a.href = streamEndpoint;
+        a.setAttribute("download", "Video.mp4");
+        a.target = "_self";
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => { document.body.removeChild(a); }, 1000);
 
         if (dlBtn) {
           dlBtn.disabled = false;
@@ -495,20 +298,10 @@
     }
 
     function resetDownloader() {
-      try {
-        var urlInput = document.getElementById("videoUrl");
-        var thumbEl = document.getElementById("thumbImg");
-        var titleEl = document.getElementById("videoTitle");
-        var resultSec = document.getElementById("resultSection");
-        var searchSec = document.getElementById("searchSection");
-
-        if (urlInput) urlInput.value = "";
-        if (thumbEl) thumbEl.src = "";
-        if (titleEl) titleEl.textContent = "Media Video";
-        if (resultSec) resultSec.style.display = "none";
-        if (searchSec) searchSec.style.display = "block";
-        activeMediaUrl = "";
-      } catch (e) {}
+      document.getElementById("videoUrl").value = "";
+      document.getElementById("resultSection").style.display = "none";
+      document.getElementById("searchSection").style.display = "block";
+      activeMediaUrl = "";
     }
   </script>
 </body>
