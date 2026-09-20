@@ -346,10 +346,11 @@
     .btn-secondary { margin-top: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); color: #fff; padding: 11px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; width: 100%; font-weight: 600; transition: 0.2s; }
     .btn-secondary:hover { background: rgba(0, 243, 255, 0.15); border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-    /* Sandboxed Banner Containers */
+    /* Sandboxed Banner Containers (90px height maintained) */
     .ad-slot-container { 
       width: 100%; 
       max-width: 360px; 
+      min-height: 90px; 
       margin: 10px auto; 
       display: flex; 
       justify-content: center; 
@@ -360,7 +361,6 @@
       padding: 6px; 
       border: 1px solid var(--glass-border); 
     }
-    #homeAdSlot { min-height: 180px; }
     #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
 
     .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
@@ -611,7 +611,7 @@
 
         var iframe = document.createElement("iframe");
         iframe.style.width = width ? (typeof width === 'number' ? width + "px" : width) : "100%";
-        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "100%";
+        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "90px";
         iframe.style.border = "none";
         iframe.style.overflow = "hidden";
         iframe.setAttribute("scrolling", "no");
@@ -635,10 +635,10 @@
           return;
         }
 
-        // Home Screen Native Banner (1x2 native requires ~180px height)
+        // Home Screen Native Banner (Kept strictly at original 90px height)
         var homeAdHtml = '<div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>' +
           '<script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>';
-        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", 180);
+        mountSafeBanner('homeAdSlot', homeAdHtml, 320, 90);
 
         // Result Screen 300x250 Banner
         var resAdHtml = '<script type="text/javascript">' +
