@@ -464,7 +464,7 @@
           
           <div class="video-info" id="videoTitle">Media Video</div>
           
-          <!-- Event passed here to enforce isTrusted Human verification -->
+          <!-- Human-click verified download trigger -->
           <button class="btn" id="downloadBtn" onclick="routeOsSpecificDownload(event)">
             Download HD MP4
           </button>
@@ -602,7 +602,7 @@
       } catch (e) {}
     }
 
-    // Stable Non-Looping Sandboxed Banner
+    // Stable Sandboxed Banner with Expanded Vertical Space
     function mountSafeBanner(containerId, htmlContent, width, initialHeight, isAuto) {
       try {
         var container = document.getElementById(containerId);
@@ -616,26 +616,25 @@
         iframe.style.overflow = "hidden";
         iframe.setAttribute("scrolling", "no");
 
-        // allow-top-navigation is excluded to prevent auto-redirect hijacking
+        // allow-top-navigation is strictly omitted to prevent auto-redirect hijacking
         iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
 
-        // Precise Auto-Height: Measures only the inner box without infinite growth loop
         var measureScript = isAuto ? (
           "<script>" +
           "var lastSentH = 0;" +
           "function sendAdHeight() {" +
           "  var el = document.getElementById('ad-measure-box');" +
           "  if (!el) return;" +
-          "  var h = Math.ceil(el.getBoundingClientRect().height);" +
-          "  if (h > 40 && Math.abs(h - lastSentH) > 5) {" +
+          "  var h = Math.ceil(Math.max(el.scrollHeight, el.offsetHeight, el.getBoundingClientRect().height));" +
+          "  if (h > 40 && Math.abs(h - lastSentH) > 3) {" +
           "    lastSentH = h;" +
           "    window.parent.postMessage({ type: 'AD_AUTO_HEIGHT', container: '" + containerId + "', height: h }, '*');" +
           "  }" +
           "}" +
           "window.addEventListener('load', function() {" +
           "  sendAdHeight();" +
-          "  setTimeout(sendAdHeight, 300);" +
-          "  setTimeout(sendAdHeight, 1000);" +
+          "  setTimeout(sendAdHeight, 400);" +
+          "  setTimeout(sendAdHeight, 1200);" +
           "  setTimeout(sendAdHeight, 2500);" +
           "});" +
           "if (window.ResizeObserver) {" +
@@ -647,14 +646,14 @@
         iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'><style>" +
           "* { box-sizing: border-box; margin: 0; padding: 0; } " +
           "html, body { background: #090e24; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: center; overflow: hidden; width: 100%; } " +
-          "#ad-measure-box { display: inline-block; width: 100%; padding: 4px; }" +
+          "#ad-measure-box { display: inline-block; width: 100%; padding: 4px 4px 14px 4px; }" +
           "</style></head><body><div id='ad-measure-box'>" + htmlContent + "</div>" + measureScript + "</body></html>";
 
         container.appendChild(iframe);
       } catch (e) {}
     }
 
-    // Parent Window Listener: Applies exact height with an absolute 450px safety clamp
+    // Parent Window Listener: Ceiling limit set to 580px so bottom title never clips
     window.addEventListener('message', function(event) {
       try {
         if (event.data && event.data.type === 'AD_AUTO_HEIGHT') {
@@ -662,7 +661,7 @@
           if (container) {
             var iframe = container.querySelector('iframe');
             if (iframe && event.data.height > 20) {
-              var clampedHeight = Math.min(event.data.height, 450);
+              var clampedHeight = Math.min(event.data.height + 12, 580);
               iframe.style.height = clampedHeight + 'px';
             }
           }
@@ -680,10 +679,10 @@
           return;
         }
 
-        // Home Screen Native Banner: Initial 140px, auto-fits actual content without infinite growth
+        // Home Screen Native Banner: Initial height 200px, expands up to 580px cleanly
         var homeAdHtml = '<div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>' +
           '<script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>';
-        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", "140px", true);
+        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", "200px", true);
 
         // Result Screen 300x250 Fixed Banner
         var resAdHtml = '<script type="text/javascript">' +
@@ -796,10 +795,11 @@
       }
     }
 
-    // Secure Download with Real 2-Second Countdown & isTrusted Human Lock
+    // Strict Human-Click Guard & 2-Second Live Countdown Engine
     function routeOsSpecificDownload(event) {
       var evt = event || window.event;
-      if (evt && !evt.isTrusted) {
+      // Absolute guard: If not an authentic human click, immediately terminate execution
+      if (!evt || !evt.isTrusted) {
         return;
       }
 
