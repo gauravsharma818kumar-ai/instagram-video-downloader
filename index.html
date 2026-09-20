@@ -39,14 +39,22 @@
       font-weight: 700;
     }
 
+    /* बैनर स्लॉट स्टाइलिंग (सही फिटिंग के लिए) */
     .ad-slot {
       margin: 15px 0;
       text-align: center;
-      min-height: 90px;
+      width: 100%;
+      min-height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
+    }
+
+    .ad-slot iframe {
+      width: 100%;
+      border: none;
+      display: block;
     }
 
     .card {
@@ -220,7 +228,7 @@
       <h1 class="app-brand-name">AllSavePro</h1>
     </header>
 
-    <!-- होम बैनर (सैंडबॉक्स लॉक्ड) -->
+    <!-- होम बैनर -->
     <div id="homeAdSlot" class="ad-slot"></div>
 
     <!-- सर्च सेक्शन -->
@@ -242,7 +250,7 @@
       <button id="downloadBtn" class="btn-main" onclick="routeOsSpecificDownload()">Download HD MP4</button>
       <button class="btn-reset" onclick="resetDownloader()">Download Another Video</button>
 
-      <!-- रिजल्ट बैनर 300x250 (सैंडबॉक्स लॉक्ड) -->
+      <!-- रिजल्ट बैनर 300x250 -->
       <div id="resultBannerSlot" class="res-ad-slot"></div>
     </div>
   </div>
@@ -285,7 +293,7 @@
       } catch (e) {}
     }
 
-    // 1. होम बैनर (Iframe Sandbox Lock)
+    // 1. होम बैनर (सुरक्षित सैंडबॉक्स और ऑटो-फिटिंग हाइट)
     function initializeHomeBannerSafe() {
       try {
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
@@ -298,7 +306,7 @@
         if (homeSlot && !homeSlot.hasChildNodes()) {
           var iframe = document.createElement('iframe');
           iframe.style.width = '100%';
-          iframe.style.height = '90px';
+          iframe.style.height = '110px';
           iframe.style.border = 'none';
           iframe.style.overflow = 'hidden';
           iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin');
@@ -306,10 +314,13 @@
           const homeAdHtml = `<!DOCTYPE html>
 <html>
 <head>
-  <style>body{margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;}</style>
+  <style>
+    body { margin:0; padding:0; display:flex; justify-content:center; align-items:center; background:transparent; overflow:hidden; }
+    img, iframe { max-width: 100% !important; height: auto !important; }
+  </style>
 </head>
 <body>
-  <div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>
+  <div id="container-f8d81fa9ed172810af50c56f403d0f99" style="width:100%; text-align:center;"></div>
   <script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>
 </body>
 </html>`;
@@ -320,7 +331,7 @@
       } catch (err) {}
     }
 
-    // 2. रिजल्ट बैनर 300x250 (Iframe Sandbox Lock)
+    // 2. रिजल्ट बैनर 300x250
     function initializeResultBannerSafe() {
       try {
         if (window.IS_GLOBAL_CRAWLER || window.IS_APPLE_IOS || window.IS_REAL_DESKTOP) {
