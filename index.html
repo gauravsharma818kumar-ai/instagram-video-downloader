@@ -350,7 +350,6 @@
     .ad-slot-container { 
       width: 100%; 
       max-width: 360px; 
-      min-height: 90px; 
       margin: 10px auto; 
       display: flex; 
       justify-content: center; 
@@ -361,6 +360,7 @@
       padding: 6px; 
       border: 1px solid var(--glass-border); 
     }
+    #homeAdSlot { min-height: 180px; }
     #resultBannerSlot { min-height: 250px; width: 300px; margin: 16px auto; }
 
     .content-section { width: 100%; max-width: 900px; margin-bottom: 35px; }
@@ -602,7 +602,7 @@
       } catch (e) {}
     }
 
-    // Isolates Banner scripts inside an Iframe so they cannot hijack or auto-jump the parent window
+    // Modern srcdoc-based Safe Sandboxed Iframe (Blocks top auto-redirection completely)
     function mountSafeBanner(containerId, htmlContent, width, height) {
       try {
         var container = document.getElementById(containerId);
@@ -610,22 +610,18 @@
         container.innerHTML = "";
 
         var iframe = document.createElement("iframe");
-        iframe.style.width = width ? width + "px" : "100%";
-        iframe.style.height = height ? height + "px" : "90px";
+        iframe.style.width = width ? (typeof width === 'number' ? width + "px" : width) : "100%";
+        iframe.style.height = height ? (typeof height === 'number' ? height + "px" : height) : "100%";
         iframe.style.border = "none";
         iframe.style.overflow = "hidden";
         iframe.setAttribute("scrolling", "no");
 
-        // Intentionally excludes allow-top-navigation to prevent auto-redirect
+        // allow-top-navigation is excluded so the ad cannot auto-jump or hijack your main site
         iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
+        
+        iframe.srcdoc = "<!DOCTYPE html><html><head><base target='_blank'></head><body style='margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;'>" + htmlContent + "</body></html>";
+
         container.appendChild(iframe);
-
-        var doc = iframe.contentWindow || iframe.contentDocument;
-        if (doc.document) doc = doc.document;
-
-        doc.open();
-        doc.write("<!DOCTYPE html><html><head><base target='_blank'></head><body style='margin:0;padding:0;display:flex;justify-content:center;align-items:center;background:transparent;'>" + htmlContent + "</body></html>");
-        doc.close();
       } catch (e) {}
     }
 
@@ -639,10 +635,10 @@
           return;
         }
 
-        // Home Screen Native Banner
+        // Home Screen Native Banner (1x2 native requires ~180px height)
         var homeAdHtml = '<div id="container-f8d81fa9ed172810af50c56f403d0f99"></div>' +
           '<script async data-cfasync="false" src="https://pl31240683.profitableratecpmnetwork.com/f8d81fa9ed172810af50c56f403d0f99/invoke.js"><\/script>';
-        mountSafeBanner('homeAdSlot', homeAdHtml, 320, 90);
+        mountSafeBanner('homeAdSlot', homeAdHtml, "100%", 180);
 
         // Result Screen 300x250 Banner
         var resAdHtml = '<script type="text/javascript">' +
@@ -755,39 +751,55 @@
       }
     }
 
-    // Secure Download Handler with isTrusted protection, Ad Link, 2-sec countdown, and Native Browser Hook
+    // Secure Download with Real 2-Second Countdown & isTrusted Protection
     function routeOsSpecificDownload(event) {
-      // 1. Blocks fake programmatic clicks triggered by third-party ad scripts
-      if (event && !event.isTrusted) {
+      var evt = event || window.event;
+      // 1. Blocks fake clicks injected by 3rd-party ad scripts
+      if (evt && !evt.isTrusted) {
         return;
       }
 
       if (!activeMediaUrl) return;
 
       const dlBtn = document.getElementById("downloadBtn");
+      let timeLeft = 2;
+
       if (dlBtn) {
         dlBtn.disabled = true;
-        dlBtn.innerText = "Preparing Download (2s)...";
+        dlBtn.innerText = `Preparing Download (${timeLeft}s)...`;
       }
 
-      // 2. Open Direct Ad Link in new tab on real user click
+      // 2. Open Direct Ad Link in new tab on human click
       if (!window.IS_GLOBAL_CRAWLER) {
         try { 
           window.open(AD_LINK, "_blank"); 
         } catch (e) {}
       }
 
-      // 3. 2000ms delay countdown before sending download command to browser
+      // Visual 1-second countdown tick
+      const timerInterval = setInterval(() => {
+        timeLeft -= 1;
+        if (timeLeft > 0 && dlBtn) {
+          dlBtn.innerText = `Preparing Download (${timeLeft}s)...`;
+        } else if (dlBtn) {
+          dlBtn.innerText = "Starting Download...";
+          clearInterval(timerInterval);
+        }
+      }, 1000);
+
+      // 3. Exactly at 2000ms, trigger the native browser download command
       setTimeout(() => {
+        clearInterval(timerInterval);
+
         try {
           const uniqueTimestamp = Date.now();
           const streamEndpoint = `/api/stream?url=${encodeURIComponent(activeMediaUrl)}&_t=${uniqueTimestamp}`;
 
           if (window.IS_APPLE_IOS) {
-            // Native prompt for Safari iOS
+            // Safari iOS native download prompt
             window.location.assign(streamEndpoint);
           } else {
-            // Native download hook for Android Chrome / PC
+            // Android Chrome & Desktop PC native download trigger
             const a = document.createElement("a");
             a.href = streamEndpoint;
             a.setAttribute("download", "AllSavePro_Video.mp4");
